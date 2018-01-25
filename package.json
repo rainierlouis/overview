@@ -1,0 +1,25 @@
+{
+ "name": "overview",
+ "version": "1.0.0",
+ "description": "\"creates a visual file for the chosen application structure\"",
+ "scripts": {
+  "test": "echo \"Error: no test specified\" && exit 1"
+ },
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/rainierlouis/overview.git"
+ },
+ "keywords": [
+  "overview"
+ ],
+ "author": "",
+ "preferGlobal": true,
+ "bin": {
+  "ov": "index.js"
+ },
+ "license": "ISC",
+ "bugs": {
+  "url": "https://github.com/rainierlouis/overview/issues"
+ },
+ "homepage": "https://github.com/rainierlouis/overview#readme"
+}
