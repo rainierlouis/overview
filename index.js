@@ -2,19 +2,33 @@
 const userArgs = process.argv.slice(2);
 const patternSearch = userArgs[0] || [];
 
-const userConf = require('./userConfig');
+const userConf = require('./userConfig'); // userConfig -- create user.config
 const user = userConf.userConfig;
 
 const woofwoof = require('woofwoof');
+const chalk = require('chalk');
 
 const cli = woofwoof(
  `
-    Usage
-    $ ov <entry> Declare entry point for the visualisation
+${chalk.bold.blue('"OVERVIEW"')} - ${chalk.dim(
+  'creates a visual file for your application structure'
+ )}
 
-				Options
-				<full|single> -f, -s Declare what to visualise, full structure by default
+${chalk.dim('Usage')}
+	${chalk.green(
+  '$ ov <entry>'
+ )} Declare entry point for the visualisation ${chalk.red.bold('required')}
 
+${chalk.dim('Options')}
+	${chalk.green('<full|single>')} ${chalk.cyan(
+  '[-f -s]'
+ )} Declare what to visualise, full structure by default
+
+${chalk.dim('Help')}
+	${chalk.green('<help>')} ${chalk.cyan('[-h]')} Further detailing on options
+
+${chalk.dim('Reset')}
+	${chalk.green('<reset>')} ${chalk.cyan('[-r]')} Reset + delete visual folder
 `,
  {
   flags: {
@@ -30,7 +44,6 @@ const cli = woofwoof(
  },
  {
   alias: {
-   e: 'entry',
    f: 'full',
    s: 'single'
   },
@@ -43,16 +56,14 @@ const cli = woofwoof(
 );
 
 const ov = (input, flags) => {
- console.log(`ov intialised -- ${flags.name}`);
+ if (Object.keys(flags).filter(el => el === 's').length > 0) {
+  // do -s flag
+  console.log('s flag!');
+ } else {
+  // do default
+  console.log('default!');
+  user.createFile(input);
+ }
 };
 
 ov(cli.input[0], cli.flags);
-
-// const exec = require('child_process').exec;
-
-// const createFile = async (...args) => {
-//  await exec(`mkdir visual/`);
-//  await exec(`echo ${args} > visual/index.html`);
-// };
-
-// createFile(userArgs);
