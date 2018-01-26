@@ -2,47 +2,57 @@
 const userArgs = process.argv.slice(2);
 const patternSearch = userArgs[0] || [];
 
-/*jshint node:true */
-/*jshint esversion:6 */
-('use strict');
+const userConf = require('./userConfig');
+const user = userConf.userConfig;
 
 const woofwoof = require('woofwoof');
 
 const cli = woofwoof(
  `
     Usage
-    $ ov <input>
+    $ ov <entry> Declare entry point for the visualisation
 
-				Help
-				[--help, -h] detailed description and usage
-
-    Options
-    [--name, -n]  Who should I greet
+				Options
+				<full|single> -f, -s Declare what to visualise, full structure by default
 
 `,
  {
+  flags: {
+   full: {
+    type: 'boolean',
+    alias: 'f'
+   },
+   single: {
+    type: 'boolean',
+    alias: 's'
+   }
+  }
+ },
+ {
   alias: {
-   n: 'name'
+   e: 'entry',
+   f: 'full',
+   s: 'single'
   },
   default: {
-   name: 'empty'
+   name: 'App.js',
+   full: true,
+   single: false
   }
  }
 );
 
 const ov = (input, flags) => {
- console.log('ov intialised -- ' + flags.name);
+ console.log(`ov intialised -- ${flags.name}`);
 };
 
 ov(cli.input[0], cli.flags);
 
-const exec = require('child_process').exec;
+// const exec = require('child_process').exec;
 
-const createFile = async (...args) => {
- await exec(`mkdir visual/`);
- await exec(`echo ${args} > visual/index.html`);
-};
+// const createFile = async (...args) => {
+//  await exec(`mkdir visual/`);
+//  await exec(`echo ${args} > visual/index.html`);
+// };
 
 // createFile(userArgs);
-// console.log(userArgs);
-hello(cli.input[0], cli.flags);
