@@ -1,14 +1,23 @@
 const path = require('path');
 
 module.exports = {
- entry: './app.js',
+ entry: `./test.js`,
  output: {
   path: path.resolve(__dirname, 'dist'),
-  filename: 'build/visual.html'
+  filename: 'ovNpm.js'
  },
  module: {
-  rules: [{ test: /\(app|index)$/, use: './Parsers/parse.js' }]
+  rules: [
+   {
+    test: /\.js$/,
+    exclude: /(node_modules|bower_components|visual)/,
+    use: {
+     loader: 'babel-loader',
+     options: {
+      presets: ['@babel/preset-env', 'env', 'es2015', 'stage-0', 'react']
+     }
+    }
+   }
+  ]
  }
 };
-
-module.exports = config;
