@@ -17,7 +17,7 @@ const cli = woofwoof(
 				[--help, -h] detailed description and usage
 
     Options
-    []--name, -n]  Who should I greet
+    [--name, -n]  Who should I greet
 
 `,
  {
@@ -25,16 +25,16 @@ const cli = woofwoof(
    n: 'name'
   },
   default: {
-   name: 'world'
+   name: 'empty'
   }
  }
 );
 
-function hello(input, flags) {
- console.log('hello ' + flags.name);
-}
+const ov = (input, flags) => {
+ console.log('ov intialised -- ' + flags.name);
+};
 
-hello(cli.input[0], cli.flags);
+ov(cli.input[0], cli.flags);
 
 const exec = require('child_process').exec;
 
