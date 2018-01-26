@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="960" height="260"></canvas>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script>
+  document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+  ':35729/livereload.js?snipver=1"></' + 'script>')
+</script>
+<body>
+
+  <script>
+  // https://bl.ocks.org/d3noob/b024fcce8b4b9264011a1c3e7c7d70dc
+
+  var treeData =
+  {
+    "name": "Eve",
+    "children": [
+      {
+        "name": "Cain"
+      },
+      {
+        "name": "Seth",
+        "children": [
+          {
+            "name": "Enos"
+          },
+          {
+            "name": "Noam"
+          }
+        ]
+      },
+      {
+        "name": "Abel"
+      },
+      {
+        "name": "Awan",
+        "children": [
+          {
+            "name": "Enoch"
+          }
+        ]
+      },
+      {
+        "name": "Azura"
+      }
+    ]
+  }
+  // set the dimensions and margins of the diagram
+  var margin = {top: 20, right: 40, bottom: 10, left: 40},
+      width = 660 - margin.left - margin.right,
+      height = 500 - margin.top - margin.bottom;
+
+  // declares a tree layout and assigns the size
+  var treemap = d3.tree()
+      .size([width, height]);
+
+  var nodes = d3.hierarchy(treeData)
+  nodes = treemap(nodes)
+
+  var svg =  d3.select("body").append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  //
+  var g = svg.append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+
+  var link = g.selectAll(".link")
+  .data(nodes.descendants().slice(1))
+  .enter()
+  .append("path")
+  .attr("class","link")
+  .attr("d", function(d){ // svg path.d = description
+    // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
+    return "M" + d.x + "," + d.y
+         + "C" + d.x + "," + (d.y + d.parent.y) / 2
+         + " " + d.parent.x + "," +  (d.y + d.parent.y) / 2
+         + " " + d.parent.x + "," + d.parent.y;
+       })
+
+  // adds each node as a group
+var node = g.selectAll(".node")
+    .data(nodes.descendants())
+  .enter().append("g")
+    .attr("class", function(d) {
+      return "node" +
+        (d.children ? " node--internal" : " node--leaf"); })
+    .attr("transform", function(d) {
+      return "translate(" + d.x + "," + d.y + ")"; });
+
+// adds the text to the node
+node.append("text")
+  .attr("dy", ".35em")
+  .attr("y", function(d) { return d.children ? -20 : 20; })
+  .style("text-anchor", "middle")
+  .text(function(d) { return d.data.name; });
+
+  </script>
+
+</body>

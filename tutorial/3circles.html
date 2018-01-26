@@ -4,7 +4,7 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 <script>
   document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
-  ':35729/livereload.js?snipver=1"></' + 'script>')
+  ':35728/livereload.js?snipver=1"></' + 'script>')
 </script>
 <body>
   <div id="graph" >use npm install -g livereload to see changes immediately</div>
@@ -42,7 +42,7 @@
     .attr("y2", function(d){return d.target.y})
     .style("stroke", "rgb(6,120,155)")
 
-    vis.selectAll("rectangle .nodes")
+    vis.selectAll("rect .nodes")
     .data(nodes)
     .enter()
     .append("svg:rect")
