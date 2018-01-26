@@ -7,14 +7,12 @@
   ':35729/livereload.js?snipver=1"></' + 'script>')
 </script>
 <body>
-  before graph
-  <div id="graph" >I'm the graph</div>
+  <div id="graph" >use npm install -g livereload to see changes immediately</div>
   <div class="other"><span class="text">other graph</span></div>
-  after graph
 
   <script>
     // http://thinkingonthinking.com/Getting-Started-With-D3/
-    var vis = d3.select(".other")
+    var vis = d3.select("#graph")
     .append("svg")
 
     var w=900
@@ -28,18 +26,6 @@
       {x:50,y:80},
       {x:90,y:120}
     ];
-
-    vis.selectAll("circle .nodes")
-    .data(nodes)
-    .enter()
-    .append("svg:rect")
-    .attr("class","nodes")
-    .attr("x", function(d){return d.x-20})
-    .attr("y", function(d){return d.y-12})
-    .attr("width", "40px")
-    .attr("height", "25px")
-    .attr("fill", "black")
-    .attr("rx", 5)
 
     var links=[
       {source: nodes[0], target: nodes[1]},
@@ -56,7 +42,28 @@
     .attr("y2", function(d){return d.target.y})
     .style("stroke", "rgb(6,120,155)")
 
-    d3.selectAll(".nodes").call(d3.drag().on("start", ()=>console.log("drag")))
+    vis.selectAll("rectangle .nodes")
+    .data(nodes)
+    .enter()
+    .append("svg:rect")
+    .attr("class","nodes")
+    .attr("x", function(d){return d.x-20})
+    .attr("y", function(d){return d.y-12})
+    .attr("width", "40px")
+    .attr("height", "25px")
+    .attr("fill", "black")
+    .attr("rx", 5)
+
+    // only one node blue - redrawn every time?
+    var nodes = d3.selectAll(".nodes").each(
+      function(d){
+        var current = d3.select(this)
+        .style("fill", "blue")
+        // vis.appendNode(current)
+      }
+    )
+
+    // d3.selectAll(".nodes").call(d3.drag().on("start", ()=>console.log("drag")))
   </script>
 
 </body>
