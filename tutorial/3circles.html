@@ -32,12 +32,14 @@
     vis.selectAll("circle .nodes")
     .data(nodes)
     .enter()
-    .append("svg:circle")
+    .append("svg:rect")
     .attr("class","nodes")
-    .attr("cx", function(d){return d.x})
-    .attr("cy", function(d){return d.y})
-    .attr("r", "10px")
+    .attr("x", function(d){return d.x-20})
+    .attr("y", function(d){return d.y-12})
+    .attr("width", "40px")
+    .attr("height", "25px")
     .attr("fill", "black")
+    .attr("rx", 5)
 
     var links=[
       {source: nodes[0], target: nodes[1]},
