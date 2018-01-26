@@ -2,47 +2,68 @@
 const userArgs = process.argv.slice(2);
 const patternSearch = userArgs[0] || [];
 
-/*jshint node:true */
-/*jshint esversion:6 */
-('use strict');
+const userConf = require('./userConfig'); // userConfig -- create user.config
+const user = userConf.userConfig;
 
 const woofwoof = require('woofwoof');
+const chalk = require('chalk');
 
 const cli = woofwoof(
  `
-    Usage
-    $ ov <input>
+${chalk.bold.blue('"OVERVIEW"')} - ${chalk.dim(
+  'creates a visual file for your application structure'
+ )}
 
-				Help
-				[--help, -h] detailed description and usage
+${chalk.dim('Usage')}
+	${chalk.green(
+  '$ ov <entry>'
+ )} Declare entry point for the visualisation ${chalk.red.bold('required')}
 
-    Options
-    []--name, -n]  Who should I greet
+${chalk.dim('Options')}
+	${chalk.green('<full|single>')} ${chalk.cyan(
+  '[-f -s]'
+ )} Declare what to visualise, full structure by default
 
+${chalk.dim('Help')}
+	${chalk.green('<help>')} ${chalk.cyan('[-h]')} Further detailing on options
+
+${chalk.dim('Reset')}
+	${chalk.green('<reset>')} ${chalk.cyan('[-r]')} Reset + delete visual folder
 `,
  {
+  flags: {
+   full: {
+    type: 'boolean',
+    alias: 'f'
+   },
+   single: {
+    type: 'boolean',
+    alias: 's'
+   }
+  }
+ },
+ {
   alias: {
-   n: 'name'
+   f: 'full',
+   s: 'single'
   },
   default: {
-   name: 'world'
+   name: 'App.js',
+   full: true,
+   single: false
   }
  }
 );
 
-function hello(input, flags) {
- console.log('hello ' + flags.name);
-}
-
-hello(cli.input[0], cli.flags);
-
-const exec = require('child_process').exec;
-
-const createFile = async (...args) => {
- await exec(`mkdir visual/`);
- await exec(`echo ${args} > visual/index.html`);
+const ov = (input, flags) => {
+ if (Object.keys(flags).filter(el => el === 's').length > 0) {
+  // do -s flag
+  console.log('s flag!');
+ } else {
+  // do default
+  console.log('default!');
+  user.createFile(input);
+ }
 };
 
-// createFile(userArgs);
-// console.log(userArgs);
-hello(cli.input[0], cli.flags);
+ov(cli.input[0], cli.flags);

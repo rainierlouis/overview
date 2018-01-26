@@ -1,7 +1,7 @@
 {
  "name": "overview",
  "version": "1.0.0",
- "description": "\"creates a visual file for the chosen application structure\"",
+ "description": "",
  "scripts": {
   "test": "echo \"Error: no test specified\" && exit 1",
   "build": "webpack"
@@ -10,9 +10,7 @@
   "type": "git",
   "url": "git+https://github.com/rainierlouis/overview.git"
  },
- "keywords": [
-  "overview"
- ],
+ "keywords": ["overview"],
  "author": "",
  "preferGlobal": true,
  "bin": {
@@ -27,6 +25,7 @@
   "@babel/core": "^7.0.0-beta.38",
   "@babel/preset-env": "^7.0.0-beta.38",
   "babel-loader": "^8.0.0-beta.0",
+  "chalk": "^2.3.0",
   "meow": "^4.0.0",
   "webpack": "^3.10.0",
   "woofwoof": "^3.6.7"
