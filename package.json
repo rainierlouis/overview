@@ -3,7 +3,8 @@
  "version": "1.0.0",
  "description": "\"creates a visual file for the chosen application structure\"",
  "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1"
+  "test": "echo \"Error: no test specified\" && exit 1",
+  "build": "webpack"
  },
  "repository": {
   "type": "git",
@@ -21,5 +22,13 @@
  "bugs": {
   "url": "https://github.com/rainierlouis/overview/issues"
  },
- "homepage": "https://github.com/rainierlouis/overview#readme"
+ "homepage": "https://github.com/rainierlouis/overview#readme",
+ "devDependencies": {
+  "@babel/core": "^7.0.0-beta.38",
+  "@babel/preset-env": "^7.0.0-beta.38",
+  "babel-loader": "^8.0.0-beta.0",
+  "meow": "^4.0.0",
+  "webpack": "^3.10.0",
+  "woofwoof": "^3.6.7"
+ }
 }
