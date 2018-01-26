@@ -10,7 +10,9 @@
   "type": "git",
   "url": "git+https://github.com/rainierlouis/overview.git"
  },
- "keywords": ["overview"],
+ "keywords": [
+  "overview"
+ ],
  "author": "",
  "preferGlobal": true,
  "bin": {
@@ -27,6 +29,7 @@
   "babel-loader": "^8.0.0-beta.0",
   "chalk": "^2.3.0",
   "meow": "^4.0.0",
+  "mkdirp": "^0.5.1",
   "webpack": "^3.10.0",
   "woofwoof": "^3.6.7"
  }
