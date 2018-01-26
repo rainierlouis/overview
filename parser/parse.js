@@ -10,13 +10,13 @@ const readFile = filePath => new Promise((resolve, reject) => {
 });
 
 const parse = async (filePath, babelPlugins) => {
-   const input = await readFile(filePath)
+  const input = await readFile(filePath)
     .then((fileContents) => {
-      babel.transform(fileContents, babelPlugins)
+      return babel.transform(fileContents, babelPlugins).code;
     })
     .catch(err => console.log(err));
 
-   return esprima.parseModule(input, {jsx: true});
+  return esprima.parseModule(input, {jsx: true});
 };
 
 module.exports = parse;

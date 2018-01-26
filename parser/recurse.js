@@ -1,11 +1,10 @@
 const parse = require('./parse.js');
 
-const recurse = crit => {
-
+const recurse = (entryPoint, recurCrit, babelPlugins) => {
   parse(entryPoint, babelPlugins)
     .then((data) => {
       for (let el of data.body) {
-        if (el.type === crit) {
+        if (el.type === recurCrit) {
           console.log(el.source.raw);
         }
       }
