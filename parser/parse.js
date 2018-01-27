@@ -10,26 +10,26 @@ const readFile = filePath => new Promise((resolve, reject) => {
 });
 
 const parse = async (filePath, recurCrit, babelPlugins) => {
-  const input = await readFile(filePath)
+  const extractedData = await readFile(filePath)
     .then(fileContents => babel.transform(fileContents, babelPlugins).code)
-    .then(data => {
-      const res = [];
-      esprima.parseModule(data, {jsx: true}, node => analyseNode(node, recurCrit, res))
-      return res;
+    .then(transpiledData => {
+      const nodeCollection = [];
+      esprima.parseModule(transpiledData, {jsx: true}, node => analyseNode(node, recurCrit, nodeCollection))
+      return nodeCollection;
     })
     .catch(err => console.log(err));
 
-  return input;
+  return extractedData;
 };
 
-const analyseNode = function (node, recurCrit, res) {
+const analyseNode = function (node, recurCrit, nodeCollection) {
 
   if (node.type === recurCrit.compareType) {
-    res.push({
+    nodeCollection.push({
       filePath: node.source.value,
     });
   }
-  return res;
+  return nodeCollection;
 }
 
 module.exports = parse;

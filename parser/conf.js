@@ -4,7 +4,6 @@ const  babelPlugins = {
     "transform-react-jsx",
   ],
   "presets": [
-    // "react",
     "stage-2",
   ]
 };
