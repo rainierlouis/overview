@@ -1,9 +1,12 @@
 const chalk = require('chalk');
 
 const help = {
- helperData: `${chalk.bold.blue('"OVERVIEW"')} - ${chalk.dim(
+ menu: `
+
+	${chalk.bold.blue('"OVERVIEW"')} - ${chalk.dim(
   'creates a visual file for your application structure'
  )}
+
 
 	${chalk.dim('Usage')}
 		${chalk.green(
@@ -15,14 +18,16 @@ const help = {
   '[-f -s]'
  )} Declare what to visualise, full structure by default
 
+	${chalk.dim('Reset')}
+		${chalk.green('<reset>')} ${chalk.cyan('[-r]')} Reset + delete visual folder
+
 	${chalk.dim('Help')}
 		${chalk.green('<help>')} ${chalk.cyan('[-h]')} Further detailing on options
 
-	${chalk.dim('Reset')}
-		${chalk.green('<reset>')} ${chalk.cyan('[-r]')} Reset + delete visual folder
+
 	`
 };
 
 module.exports = {
- help
+ menu: help.menu
 };
