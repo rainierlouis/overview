@@ -12,8 +12,8 @@ const reset = {
  },
  percent: (p, t, b = false, c) => {
   readline.cursorTo(process.stdout, 0);
-  reset.resetTick(t);
-  reset.resetTick(t, '    ');
+  reset.resetTick(`[ ${t}`);
+  reset.resetTick(`${t} ]     `);
   process.stdout.write(`${chalk.green('Cleaning')} ... ${chalk[c](`${p} %`)}`);
   b ? readline.cursorTo(process.stdout, 0) : null;
  },
@@ -29,6 +29,13 @@ const reset = {
   await reset.timerFunc(() => reset.percent(100, '|', true, 'green'), 3000);
   await reset.timerFunc(() => {
    reset.reset();
+   log(
+    `${chalk.green(
+     `[ ${chalk.bold('Removed')} ${chalk.grey(
+      '--'
+     )} Input entry point to start again! ]`
+    )}`
+   );
    log(menu);
   }, 3500);
  }
