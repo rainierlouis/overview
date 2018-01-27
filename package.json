@@ -1,36 +1,41 @@
 {
- "name": "overview",
- "version": "1.0.0",
- "description": "",
- "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1",
-  "build": "webpack"
- },
- "repository": {
-  "type": "git",
-  "url": "git+https://github.com/rainierlouis/overview.git"
- },
- "keywords": [
-  "overview"
- ],
- "author": "",
- "preferGlobal": true,
- "bin": {
-  "ov": "index.js"
- },
- "license": "ISC",
- "bugs": {
-  "url": "https://github.com/rainierlouis/overview/issues"
- },
- "homepage": "https://github.com/rainierlouis/overview#readme",
- "devDependencies": {
-  "@babel/core": "^7.0.0-beta.38",
-  "@babel/preset-env": "^7.0.0-beta.38",
-  "babel-loader": "^8.0.0-beta.0",
-  "chalk": "^2.3.0",
-  "meow": "^4.0.0",
-  "mkdirp": "^0.5.1",
-  "webpack": "^3.10.0",
-  "woofwoof": "^3.6.7"
- }
+  "name": "overview",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainierlouis/overview.git"
+  },
+  "keywords": ["overview"],
+  "author": "",
+  "preferGlobal": true,
+  "bin": {
+    "ov": "index.js"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rainierlouis/overview/issues"
+  },
+  "homepage": "https://github.com/rainierlouis/overview#readme",
+  "devDependencies": {
+    "@babel/core": "^7.0.0-beta.38",
+    "@babel/preset-env": "^7.0.0-beta.38",
+    "babel-loader": "^8.0.0-beta.0",
+    "chalk": "^2.3.0",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "meow": "^4.0.0",
+    "mkdirp": "^0.5.1",
+    "prettier": "^1.10.2",
+    "webpack": "^3.10.0",
+    "woofwoof": "^3.6.7"
+  }
 }
