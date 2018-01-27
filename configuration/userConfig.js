@@ -1,7 +1,6 @@
-#! /usr/bin/env node
-const exec = require('child_process').exec;
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const path = require('path');
 
 const fileContent = entry => `
 	const path = require('path');
@@ -16,16 +15,14 @@ const fileContent = entry => `
 	  rules: [{ test: /\(${entry.split('.')[0]})$/, use: './Parsers/parse.js' }]
 	 }
 	};
-
-	module.exports = config;
-
 `;
 
-const filePath = `${__dirname}/visual/user.config.js`;
+const filePath = path.join(__dirname, '../Visual/user.config.js');
+const folderPath = path.join(__dirname, '../Visual');
 
 const userConfig = {
  createFile: async entry => {
-  await mkdirp(`${__dirname}/visual`, err => {
+  await mkdirp(folderPath, err => {
    if (err) throw err;
   });
   await fs.writeFile(filePath, fileContent(entry), err => {
