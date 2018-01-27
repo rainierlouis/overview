@@ -66,12 +66,6 @@ ${chalk.dim('Reset')}
  }
 );
 
-function writeWaitingPercent(p) {
- //readline.clearLine(process.stdout);
- readline.cursorTo(process.stdout, 0);
- process.stdout.write(`waiting ... ${p}%`);
-}
-
 const ov = async (input, flags) => {
  const keys = await Object.keys(flags);
  keys.forEach(async el => {
@@ -81,10 +75,14 @@ const ov = async (input, flags) => {
     await log(consHelp.helperData);
     break;
    case 'r': // reset
-    await setTimeout(() => consReset.percent(0), 0);
-    await setTimeout(() => consReset.percent(33), 1500);
-    await setTimeout(() => consReset.percent(66), 3000);
-    await setTimeout(() => consReset.percent(99), 4500);
+    await consReset.reset();
+    await setTimeout(() => consReset.percent(0, '|', false, 'red'), 0);
+    await setTimeout(() => consReset.percent(21, '/', false, 'red'), 500);
+    await setTimeout(() => consReset.percent(43, '|', false, 'yellow'), 1000);
+    await setTimeout(() => consReset.percent(65, '\\', false, 'yellow'), 1500);
+    await setTimeout(() => consReset.percent(87, '|', false, 'green'), 2000);
+    await setTimeout(() => consReset.percent(99, '/', false, 'green'), 2500);
+    await setTimeout(() => consReset.percent(100, '|', true), 3000);
     break;
    case 's': // single traversal
     // await consReset.reset();
