@@ -8,15 +8,22 @@ const help = {
  )}
 
 
-	${chalk.dim('Usage')}
+	${chalk.dim('Entry')}
 		${chalk.green(
    '$ ov <entry>'
-  )} Declare entry point for the visualisation ${chalk.red.bold('required')}
+  )} Declare entry point for the visualisation ${chalk.red.bold(
+  'required first'
+ )}
+
+	${chalk.dim('Begin')}
+		${chalk.green('<begin>')} ${chalk.cyan(
+  '[-b]'
+ )} Once entry is declared, you can start the visual creation
 
 	${chalk.dim('Options')}
 		${chalk.green('<full|single>')} ${chalk.cyan(
   '[-f -s]'
- )} Declare what to visualise, full structure by default
+ )} Declare what to visualise, ${chalk.red('-f')} by default
 
 	${chalk.dim('Reset')}
 		${chalk.green('<reset>')} ${chalk.cyan('[-r]')} Reset + delete visual folder
