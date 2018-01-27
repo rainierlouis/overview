@@ -1,6 +1,10 @@
 const readline = require('readline');
 const chalk = require('chalk');
 
+const consHelp = require('./consoleHelp').help; // consoleHelp -- provide help data on terminal
+
+const log = console.log;
+
 const reset = {
  reset: () => process.stdout.write('\x1B[2J\x1B[0f'),
  resetTick: (tick, space = '') => {
@@ -12,9 +16,27 @@ const reset = {
   reset.resetTick(t, '    ');
   process.stdout.write(`${chalk.green('Cleaning')} ... ${chalk[c](`${p} %`)}`);
   b ? readline.cursorTo(process.stdout, 0) : null;
+ },
+ timerFunc: (func, time) => {
+  return setTimeout(func, time);
+ },
+ resetMethod: async () => {
+  await reset.reset();
+  await reset.timerFunc(() => reset.percent(0, '|', false, 'red'), 0);
+  await reset.timerFunc(() => reset.percent(21, '/', false, 'red'), 500);
+  await reset.timerFunc(() => reset.percent(43, '|', false, 'yellow'), 1000);
+  await reset.timerFunc(() => reset.percent(65, '\\', false, 'yellow'), 1500);
+  await reset.timerFunc(() => reset.percent(87, '|', false, 'green'), 2000);
+  await reset.timerFunc(() => reset.percent(99, '/', false, 'green'), 2500);
+  await reset.timerFunc(() => reset.percent(100, '|', true, 'green'), 3000);
+  await reset.timerFunc(() => {
+   reset.reset();
+   log(consHelp.helperData);
+  }, 3500);
  }
 };
 
 module.exports = {
- reset
+ reset: reset.reset,
+ resetEntire: reset.resetMethod
 };
