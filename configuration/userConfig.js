@@ -33,7 +33,7 @@ ${chalk.red.bold('ERR:')}\n An entry point is ${chalk.green(
  'required'
 )} - Please input one and try again. ${chalk.grey(
  '(e.g. ov App.js)'
-)}\n\n	For more help, enter ${chalk.green('ov -h')} 
+)}\n\n	For more help, enter ${chalk.green('ov -h')}
 
 
 
@@ -79,15 +79,19 @@ const userConfig = {
   await userConfig.timerFunc(() => {
    reset();
    log(
-    `${chalk.green(`${chalk.bold('Finished')} -- Enjoy your visualisation!`)}`
+    `${chalk.green(
+     `[ ${chalk.bold('Finished')} ${chalk.grey(
+      '--'
+     )} Config file created, ready to start! ]`
+    )}`
    );
    log(menu);
   }, 3500);
  },
  percent: (p, t, b = false, c) => {
   readline.cursorTo(process.stdout, 0);
-  tick(t);
-  tick(t, '    ');
+  tick(`[ ${t}`);
+  tick(`${t} ]     `);
   process.stdout.write(`${chalk.green('Building')} ... ${chalk[c](`${p} %`)}`);
   b ? readline.cursorTo(process.stdout, 0) : null;
  }
