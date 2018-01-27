@@ -1,0 +1,22 @@
+{
+  "index.js": {
+    "path": "index.js",
+    "children": {
+      "App.js": {
+        "path": "App.js",
+        "children": {
+          "FirstComponent": {
+            "path": "components/FirstComponent.js",
+            "dispatchers": "(link)=>dispatch(newLink(link))",
+            "dunno": "Younameit"
+          },
+          "SecondComponent": {
+            "path": "components/SecondComponent.js",
+            "dispatchers": "(blah)=>dispatch(newBlah(sponk))",
+            "dunno": "Nobloodyidea"
+          },
+        }
+      }
+    }
+  }
+}
