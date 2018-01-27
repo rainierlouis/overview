@@ -4,7 +4,7 @@ const chalk = require('chalk');
 const reset = {
  reset: () => process.stdout.write('\x1B[2J\x1B[0f'),
  resetTick: (tick, space = '') => {
-  return process.stdout.write(`${chalk.grey(tick)}${space}`);
+  return process.stdout.write(`${chalk.green.cyan(tick)}${space}`);
  },
  percent: (p, t, b = false, c) => {
   readline.cursorTo(process.stdout, 0);
