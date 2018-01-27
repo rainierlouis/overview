@@ -1,15 +1,19 @@
 const parse = require('./parse.js');
 
 const recurse = (entryPoint, recurCrit, babelPlugins) => {
-  parse(entryPoint, babelPlugins)
+
+  if (entryPoint.includes('/')) visited[entryPoint] = true;
+
+  parse(entryPoint, recurCrit, babelPlugins)
     .then((data) => {
-      for (let el of data.body) {
-        if (el.type === recurCrit) {
-          console.log(el.source.raw);
+      data.forEach(el => {
+        if (el.filePath.includes('/') && !visited.el) {
+          console.log('parsing ', el);
         }
-      }
+      })
     })
     .catch(err => console.log(err));
 }
 
 module.exports = recurse;
+

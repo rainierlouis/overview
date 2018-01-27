@@ -1,5 +1,5 @@
-const recurse = require('./recurse');
-const conf = require('./conf');
+const recurse = require('./parser/recurse');
+const conf = require('./parser/conf');
 
 const analyze = (entryPoint, recurCrit, babelPlugins) => {
   const res = {};

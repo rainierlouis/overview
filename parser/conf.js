@@ -1,11 +1,17 @@
 const  entryPoint = '/test_data/src/containers/Viewer.js';
 const  babelPlugins = {
+  "plugins": [
+    "transform-react-jsx",
+  ],
   "presets": [
-    "react",
-    "stage-2"
+    // "react",
+    "stage-2",
   ]
 };
-const  recurCrit = 'ImportDeclaration';
+const  recurCrit = {
+  compareType: 'ImportDeclaration',
+  saveValue: 'source',
+};
 
 module.exports = {
   entryPoint: entryPoint,

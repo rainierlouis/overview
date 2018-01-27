@@ -9,14 +9,25 @@ const readFile = filePath => new Promise((resolve, reject) => {
   });
 });
 
-const parse = async (filePath, babelPlugins) => {
+const parse = async (filePath, recurCrit, babelPlugins) => {
   const input = await readFile(filePath)
     .then((fileContents) => {
       return babel.transform(fileContents, babelPlugins).code;
     })
+    .then(data => {
+      var imports = [];
+      esprima.parseModule(data, {jsx: true}, node => {
+        if (node.type === recurCrit.compareType) {
+          imports.push({
+            filePath: node.source.value,
+          });
+        }
+      });
+      return imports;
+    })
     .catch(err => console.log(err));
 
-  return esprima.parseModule(input, {jsx: true});
+  return input;
 };
 
 module.exports = parse;
