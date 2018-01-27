@@ -1,7 +1,7 @@
 const chalk = require('chalk');
 
 const help = {
- helperData: `
+ menu: `
 
 	${chalk.bold.blue('"OVERVIEW"')} - ${chalk.dim(
   'creates a visual file for your application structure'
@@ -29,5 +29,5 @@ const help = {
 };
 
 module.exports = {
- help
+ menu: help.menu
 };
