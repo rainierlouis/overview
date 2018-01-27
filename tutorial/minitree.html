@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<canvas width="960" height="260"></canvas>
+<!-- <canvas width="960" height="260"></canvas> -->
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
 <script src="https://d3js.org/d3.v4.js"></script>
 <script>
   document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
@@ -10,43 +11,51 @@
 
   <script>
   // https://bl.ocks.org/d3noob/b024fcce8b4b9264011a1c3e7c7d70dc
-
   var treeData =
   {
     "name": "Eve",
+    "sex": "female",
     "children": [
       {
-        "name": "Cain"
+        "name": "Cain",
+        "sex": "male",
       },
       {
         "name": "Seth",
+        "sex": "male",
         "children": [
           {
-            "name": "Enos"
+            "name": "Enos",
+            "sex": "male",
           },
           {
-            "name": "Noam"
+            "name": "Noam",
+            "sex": "male",
           }
         ]
       },
       {
-        "name": "Abel"
+        "name": "Abel",
+        "sex": "male",
       },
       {
         "name": "Awan",
+        "sex": "male",
         "children": [
           {
-            "name": "Enoch"
+            "name": "Enoch",
+            "sex": "male",
           }
         ]
       },
       {
-        "name": "Azura"
+        "name": "Azura",
+        "sex": "female",
       }
     ]
   }
   // set the dimensions and margins of the diagram
-  var margin = {top: 20, right: 40, bottom: 10, left: 40},
+  var margin = {top: 40, right: 90, bottom: 50, left: 90},
       width = 660 - margin.left - margin.right,
       height = 500 - margin.top - margin.bottom;
 
@@ -67,15 +76,15 @@
   var link = g.selectAll(".link")
   .data(nodes.descendants().slice(1))
   .enter()
-  .append("path")
+  .append("line")
   .attr("class","link")
-  .attr("d", function(d){ // svg path.d = description
-    // https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d
-    return "M" + d.x + "," + d.y
-         + "C" + d.x + "," + (d.y + d.parent.y) / 2
-         + " " + d.parent.x + "," +  (d.y + d.parent.y) / 2
-         + " " + d.parent.x + "," + d.parent.y;
-       })
+  .attr("x1", function(d){
+    console.log(d)
+    return d.x})
+  .attr("y1", function(d){return d.y})
+  .attr("x2", function(d){return d.parent.x})
+  .attr("y2", function(d){return d.parent.y})
+  .attr("style","stroke:lightgrey")
 
   // adds each node as a group
 var node = g.selectAll(".node")
@@ -86,6 +95,15 @@ var node = g.selectAll(".node")
         (d.children ? " node--internal" : " node--leaf"); })
     .attr("transform", function(d) {
       return "translate(" + d.x + "," + d.y + ")"; });
+
+node.append("circle")
+  .attr("r", 10)
+  .attr("style",function(d){
+    var color = d.data.sex==="male"?"lightblue":"pink"
+    return "fill:"+color+"; stroke:darkgrey; stroke-width:3"
+  })
+
+
 
 // adds the text to the node
 node.append("text")

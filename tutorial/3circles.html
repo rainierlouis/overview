@@ -2,6 +2,7 @@
 <meta charset="utf-8">
 <canvas width="960" height="260"></canvas>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-force.v1.min.js"></script>
 <script>
   document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
   ':35728/livereload.js?snipver=1"></' + 'script>')
@@ -62,6 +63,11 @@
         // vis.appendNode(current)
       }
     )
+
+    var force=d3.forceSimulation(nodes) //
+    force.force('center', d3.forceCenter())
+    // .size([w,h])
+    // .links(links)
 
     // d3.selectAll(".nodes").call(d3.drag().on("start", ()=>console.log("drag")))
   </script>
