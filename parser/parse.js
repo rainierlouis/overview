@@ -11,23 +11,25 @@ const readFile = filePath => new Promise((resolve, reject) => {
 
 const parse = async (filePath, recurCrit, babelPlugins) => {
   const input = await readFile(filePath)
-    .then((fileContents) => {
-      return babel.transform(fileContents, babelPlugins).code;
-    })
+    .then(fileContents => babel.transform(fileContents, babelPlugins).code)
     .then(data => {
-      var imports = [];
-      esprima.parseModule(data, {jsx: true}, node => {
-        if (node.type === recurCrit.compareType) {
-          imports.push({
-            filePath: node.source.value,
-          });
-        }
-      });
-      return imports;
+      const res = [];
+      esprima.parseModule(data, {jsx: true}, node => analyseNode(node, recurCrit, res))
+      return res;
     })
     .catch(err => console.log(err));
 
   return input;
 };
+
+const analyseNode = function (node, recurCrit, res) {
+
+  if (node.type === recurCrit.compareType) {
+    res.push({
+      filePath: node.source.value,
+    });
+  }
+  return res;
+}
 
 module.exports = parse;
