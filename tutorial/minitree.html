@@ -101,7 +101,7 @@ body: {
   .attr("height", height + margin.top + margin.bottom)
   //
   var g = svg.append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+  // .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
   var link = g.selectAll(".link")
   .data(nodes.descendants().slice(1))
@@ -142,17 +142,19 @@ g.selectAll(".node").call(d3.drag()
 //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
 function dragstarted(d) {
   console.log(d.data.name)
-  console.log(d)
+  console.log(d.x, d.y)
   console.log(d3.event);
   d3.select(this).raise().classed("active", true);
 }
 
 function dragged(d) {
+  d.x = d3.event.x;
+  d.y = d3.event.y;
+  console.log("dragged", d.x, d3.event.x, d.y, d3.event.y)
   d3.select(this)
     .attr("transform", function(d) {
           return "translate(" + d3.event.x + "," + d3.event.y + ")";
         })
-    .attr("y", d3.event.subject.y = d3.event.y);
 }
 
 function dragended(d) {
