@@ -7,51 +7,81 @@
   document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
   ':35729/livereload.js?snipver=1"></' + 'script>')
 </script>
+<style>
+body: {
+  background-color: #f4f2e2;
+  font-family: 'Montserrat', sans-serif;
+}
+</style>
 <body>
 
   <script>
   // https://bl.ocks.org/d3noob/b024fcce8b4b9264011a1c3e7c7d70dc
   var treeData =
   {
-    "name": "Eve",
-    "sex": "female",
+    "name": "App",
+    "type": "component",
     "children": [
       {
-        "name": "Cain",
-        "sex": "male",
-      },
-      {
-        "name": "Seth",
-        "sex": "male",
+        "name": "Haeder",
+        "type": "component",
         "children": [
-          {
-            "name": "Enos",
-            "sex": "male",
-          },
-          {
-            "name": "Noam",
-            "sex": "male",
-          }
-        ]
+             {
+                "name": "Something",
+                "type": "component",
+                "children": [
+                  {
+                    "name": "SomeSubThing",
+                    "type": "component",
+                  }
+                ]
+              },
+              {
+                "name": "Button",
+                "type": "component",
+              }
+            ]
+
       },
       {
-        "name": "Abel",
-        "sex": "male",
+        "name": "Navigation",
+        "type": "component",
+        "children":[{
+          "name": "NaviData",
+          "type": "container",
+          "children": [
+            {
+              "name": "Logo",
+              "type": "component",
+            },
+            {
+              "name": "Menue",
+              "type": "component",
+            }
+          ]
+        }
+      ]
       },
       {
-        "name": "Awan",
-        "sex": "male",
+        "name": "Main",
+        "type": "container",
         "children": [
-          {
-            "name": "Enoch",
-            "sex": "male",
-          }
-        ]
+             {
+                "name": "Something",
+                "type": "component",
+                "children": [
+                  {
+                    "name": "SomeSubThing",
+                    "type": "component",
+                  }
+                ]
+              },
+              {
+                "name": "Button",
+                "type": "component",
+              }
+            ]
       },
-      {
-        "name": "Azura",
-        "sex": "female",
-      }
     ]
   }
   // set the dimensions and margins of the diagram
@@ -79,7 +109,7 @@
   .append("line")
   .attr("class","link")
   .attr("x1", function(d){
-    console.log(d)
+    // console.log(d)
     return d.x})
   .attr("y1", function(d){return d.y})
   .attr("x2", function(d){return d.parent.x})
@@ -94,29 +124,39 @@ var node = g.selectAll(".node")
       return "node" +
         (d.children ? " node--internal" : " node--leaf"); })
     .attr("transform", function(d) {
-      return "translate(" + d.x + "," + d.y + ")"; });
+      return "translate(" + d.x + "," + d.y + ")";
+    })
 
 node.append("circle")
   .attr("r", 10)
   .attr("style",function(d){
-    var color = d.data.sex==="male"?"lightblue":"pink"
+    // http://www.color-hex.com/color-palette/53835
+    var color = d.data.type==="container"?"#b4e2f4":"#f9eeb8"
     return "fill:"+color+"; stroke:darkgrey; stroke-width:3"
   })
-  .call(d3.drag()
+g.selectAll(".node").call(d3.drag()
     .on("start", dragstarted)
     .on("drag", dragged)
-    .on("end", dragended));
+    .on("end", dragended))
 
+//https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
 function dragstarted(d) {
-d3.select(this).raise().classed("active", true);
+  console.log(d.data.name)
+  console.log(d)
+  console.log(d3.event);
+  d3.select(this).raise().classed("active", true);
 }
 
 function dragged(d) {
-d3.select(this).attr("cx", d.x = d3.event.x).attr("cy", d.y = d3.event.y);
+  d3.select(this)
+    .attr("transform", function(d) {
+          return "translate(" + d3.event.x + "," + d3.event.y + ")";
+        })
+    .attr("y", d3.event.subject.y = d3.event.y);
 }
 
 function dragended(d) {
-d3.select(this).classed("active", false);
+  d3.select(this).classed("active", false);
 }
 
 
