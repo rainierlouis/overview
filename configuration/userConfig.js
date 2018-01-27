@@ -32,5 +32,5 @@ const userConfig = {
 };
 
 module.exports = {
- userConfig
+ createUserConf: userConfig.createFile
 };
