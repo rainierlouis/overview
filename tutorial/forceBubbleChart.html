@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<canvas width="960" height="260"></canvas>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-force.v1.min.js"></script>
+<!-- <script>
+  document.write('<script src="http://' + (location.host || 'localhost').split(':')[0] +
+  ':3000/livereload.js?snipver=1"></' + 'script>')
+</script> -->
+<body>
+  <div class="other"><span class="text">the graph</span></div>
+  <div id="chart" style="border: 1px solid grey;height:500px"></div>
+
+  <script>
+  var width=500
+  var height=500
+
+  var svg=d3.select("#chart")
+  .append("svg")
+  .attr("height", height)
+  .attr("width", width)
+  .append("g")
+  .attr("transform","translate(0,0)") // "+width/2+","+height/2+"
+
+  var simulation = d3.forceSimulation()
+  .force("x", d3.forceX(width/2).strength(0.05))
+  .force("y", d3.forceY(height/2).strength(0.05))
+  .force("collide", d3.forceCollide(function(d){
+    return radiusScale(d.sales)+1
+  }))//circle radius = touch
+
+  var radiusScale = d3.scaleSqrt().domain([1,300]).range([10,80])
+
+  d3.queue()
+  .defer(d3.csv,"forceBubble.csv")
+  .await(ready)
+
+  function ready(error, datapoints){
+    var circles = svg.selectAll('.artist')
+    .data(datapoints)
+    .enter().append("circle")
+    .attr("class", "artist")
+    .attr("r",function(d){return radiusScale(d.sales)})
+    .attr("fill","lightblue")
+    .attr("cx",200)
+    .attr("cy",300)
+    //.attr("name", function(data){return data[1]})
+
+    simulation.nodes(datapoints)
+    .on("tick", ticked)
+
+    function ticked() {
+      circles
+      .attr("cx", function(d){return d.x})
+      .attr("cy", function(d){return d.y})
+    }
+  }
+  </script>
+</body>
