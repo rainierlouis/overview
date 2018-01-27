@@ -82,7 +82,7 @@ const ov = async (input, flags) => {
     await setTimeout(() => consReset.percent(65, '\\', false, 'yellow'), 1500);
     await setTimeout(() => consReset.percent(87, '|', false, 'green'), 2000);
     await setTimeout(() => consReset.percent(99, '/', false, 'green'), 2500);
-    await setTimeout(() => consReset.percent(100, '|', true), 3000);
+    await setTimeout(() => consReset.percent(100, '|', true, 'green'), 3000);
     break;
    case 's': // single traversal
     // await consReset.reset();
