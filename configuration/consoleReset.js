@@ -2,6 +2,7 @@ const readline = require('readline');
 const chalk = require('chalk');
 
 const { menu } = require('./consoleHelp');
+const { remove } = require('./consoleRemove');
 
 const log = console.log;
 
@@ -25,6 +26,7 @@ const reset = {
   await reset.timerFunc(() => reset.percent(43, '|', false, 'yellow'), 1000);
   await reset.timerFunc(() => reset.percent(65, '\\', false, 'yellow'), 1500);
   await reset.timerFunc(() => reset.percent(87, '|', false, 'green'), 2000);
+  await remove();
   await reset.timerFunc(() => reset.percent(99, '/', false, 'green'), 2500);
   await reset.timerFunc(() => reset.percent(100, '|', true, 'green'), 3000);
   await reset.timerFunc(() => {
