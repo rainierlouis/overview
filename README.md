@@ -21,9 +21,9 @@ An invaluable tool for developers who will be able to immediately see the layout
 
 ## Team
 
-Achim Bode - [github](https://github.com/achimbode)
-Karsten Balogh - [github](https://github.com/karstenba)
-Nikita Kudryavtsev - [github](https://github.com/palevoo)
+Achim Bode - [github](https://github.com/achimbode)  
+Karsten Balogh - [github](https://github.com/karstenba)  
+Nikita Kudryavtsev - [github](https://github.com/palevoo)  
 Rainier Louis - [github](https://github.com/rainierlouis)
 
 ## License
