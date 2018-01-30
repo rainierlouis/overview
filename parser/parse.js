@@ -1,23 +1,9 @@
-const acorn = require('acorn-jsx');
-const walk = require('acorn/dist/walk');
+const babylon = require('babylon');
+const walk = require('babylon-walk');
 const fs = require('fs');
 const path = require('path');
-const babel = require('babel-core');
 const conf = require('./conf');
 const uuid = require('uuid');
-
-// output file structure
-// {
-//   UUID: {
-//     name: String,
-//     type: Component || File,
-//     path: String,
-//     children: Array[UUID]
-//   },
-//   UUID: {
-//     ...
-//   }
-// }
 
 class Entity {
   constructor (id, name, type, path, children) {
@@ -30,28 +16,28 @@ class Entity {
 }
 
 const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
+  console.log('JAJAJAJAJAJAJAJA');
   return readFile(filePath)
-    .then(fileContents => babel.transform(fileContents, {
-      "plugins": [
-        "transform-react-jsx",
-      ],
-      "presets": [
-        "stage-2",
-      ]
-    }).code)
     .then(data => {
       const components = [];
       const files = [];
-      walk.simple(acorn.parse(data, {
-        sourceType: 'module',
-      }), {
+
+      let ast = babylon.parse(data, {
+        sourceType: "module",
+        plugins: [
+          "jsx",
+        ]
+      });
+
+      walk.simple(ast, {
         ImportDeclaration(node) {
           files.push(node);
         },
         JSXOpeningElement(node) {
-          components.push(node);
-        }
+          components.push(node.name);
+        },
       });
+
       let temp = filePath.split('/');
       structure[selfID] = new Entity(
         selfID,
@@ -74,9 +60,27 @@ const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
           []
         );
         structure[selfID].children.push(myID);
+
+        if (!visited.includes(url)) {
+          visited.push(url);
+          parse(url, visited, structure, selfID = myID);
+        }
       });
-      console.log(structure);
+
+      components.forEach(node => {
+        let myID = uuid();
+        structure[myID] = new Entity(
+          myID,
+          node.name,
+          'component',
+          null,
+          []
+        );
+        structure[selfID].children.push(myID);
+      });
+      return structure;
     })
+    .then(data => data)
     .catch(e => console.log(e));
 };
 
@@ -84,7 +88,8 @@ const parseFilePath = url => {
   if (!url[0] === '.') return null;
   url = conf.entryFolder + url;
   url = path.normalize(url);
-  if (path.parse(url).ext === '.js' || path.parse(url).ext === '.jsx') return url;
+  if (path.parse(url).ext === '.js' ||
+    path.parse(url).ext === '.jsx') return url;
 
   if (path.parse(url).ext === '') {
     try {
@@ -113,6 +118,7 @@ const readFile = filePath => new Promise((resolve, reject) => {
   });
 });
 
-parse(conf.entryPoint);
+parse(conf.entryPoint)
+.then(data => console.log(data));
 
 module.exports = parse;
