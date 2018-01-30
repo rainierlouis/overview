@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <title>From letters with Love</title>
+</head>
+
+<style>
+circle {
+  fill: cadetblue;
+}
+line {
+  stroke: #ccc;
+}
+text {
+  text-anchor: middle;
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  fill: #666;
+  font-size: 16px;
+}
+</style>
+
+<body>
+  <div id="content">
+    <svg width="400" height="300">
+      <g class="links"></g>
+      <g class="nodes"></g>
+    </svg>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+
+  <script>
+    var width = 400, height = 300
+
+    var nodes = [
+     {name: 'A', x:100, y:100},
+     {name: 'B'},
+     {name: 'C'},
+     {name: 'D'},
+     {name: 'E'},
+     {name: 'F'},
+     {name: 'G'},
+     {name: 'H'},
+    ]
+
+    var links = [
+      {source: 0, target: 1},
+      {source: 0, target: 2},
+      {source: 0, target: 3},
+      {source: 1, target: 6},
+      {source: 3, target: 4},
+      {source: 3, target: 7},
+      {source: 4, target: 5},
+      {source: 4, target: 7}
+    ]
+
+    var simulation = d3.forceSimulation(nodes)
+      .force('charge', d3.forceManyBody().strength(-100))
+      .force('center', d3.forceCenter(width / 2, height / 2))
+      .force('link', d3.forceLink().links(links))
+      .on('tick', ticked);
+
+    function updateLinks() {
+      var u = d3.select('.links')
+        .selectAll('line')
+        .data(links)
+
+      u.enter()
+        .append('line')
+        .merge(u)
+        .attr('x1', function(d) {
+          return d.source.x
+        })
+        .attr('y1', function(d) {
+          return d.source.y
+        })
+        .attr('x2', function(d) {
+          return d.target.x
+        })
+        .attr('y2', function(d) {
+          return d.target.y
+        })
+
+      u.exit().remove()
+    }
+
+    function updateNodes() {
+      var something = d3.select('body #content svg g.nodes') // svg -> g.nodes !!!
+      var nodesTag = d3.select('g.nodes') // svg -> g.nodes !!!
+
+      var groups = nodesTag.selectAll('g')
+        .data(nodes);
+
+       groups.enter().append('g')
+        .merge(groups)
+        .attr('transform', function(d) {
+          return 'translate('+d.x+','+d.y+')'
+        })
+        .attr('class', 'groups')
+
+      groups.append("text")
+        .attr("dy", ".35em")
+        .attr("y", function(d) { return d.children ? -20 : 20; })
+        .style("text-anchor", "middle")
+        .text(function(d) { return d.name; });
+
+      groups.append("circle")
+        .attr("r", 10)
+        .attr("style",function(d){
+          // http://www.color-hex.com/color-palette/53835
+          var color = d.type==="container"?"#b4e2f4":"#f9eeb8"
+          return "fill:"+color+"; stroke:darkgrey; stroke-width:3"
+        })
+
+      groups.exit().remove()
+    }
+
+    function ticked() {
+      updateLinks()
+      updateNodes()
+    }
+
+    ticked()
+  </script>
+</body>
+</html>
