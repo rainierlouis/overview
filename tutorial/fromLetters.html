@@ -65,25 +65,26 @@ text {
 
     forceYByLevelValues = [50,100,150,200,250,300]
     var simulation = d3.forceSimulation(nodes)
-      .force('collision', d3.forceCollide(20))
+      .force('collision', d3.forceCollide(10))
       .force('center', d3.forceX().x(width / 2))
-      .force('levelLines', d3.forceY().y(function(d){
+      .force('levelLines', d3.forceY(100).y(function(d){
         return generateYLevelValues(d.depth)
       }))
-      // .force('link', d3.forceLink().links(links))
+      .force('link', d3.forceLink().links(links).strength(0.1))
       .on('tick', ticked);
 
     drawLevelLines()
 
     function updateLinks() {
-      var u = d3.select('.links')
+      var edges = d3.select('.links')
         .selectAll('line')
         .data(links)
 
-      u.enter()
+      edges.enter()
         .append('line')
-        .merge(u)
+        .merge(edges)
         .attr('x1', function(d) {
+          console.log(d);
           return d.source.x
         })
         .attr('y1', function(d) {
@@ -96,7 +97,7 @@ text {
           return d.target.y
         })
 
-      u.exit().remove()
+      edges.exit().remove()
     }
 
     function updateNodes() {
@@ -106,7 +107,7 @@ text {
       var groups = nodesTag.selectAll('g.groups')
         .data(nodes);
 
-       groups.enter().append('g')
+      groups.enter().append('g')
         .merge(groups)
         .attr('transform', function(d) {
           return 'translate('+d.x+','+d.y+')'
@@ -131,10 +132,10 @@ text {
       groups.exit().remove()
 
       groups
-          .call(d3.drag()
-          .on('start', dragstarted)
-          .on('drag', dragged)
-          .on('end', dragended))
+        .call(d3.drag()
+        .on('start', dragstarted)
+        .on('drag', dragged)
+        .on('end', dragended))
 
       //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
       function dragstarted(d) {
@@ -151,9 +152,7 @@ text {
           .attr('transform', function(d) {
             return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
           })
-        // var links = g
-        // groups.selectAll('line.link')
-        // update()
+        updateLinks()
       }
 
       function dragended(d) {
