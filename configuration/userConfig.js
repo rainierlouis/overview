@@ -27,8 +27,6 @@ const fileContent = entry => `
 const invalidLog = `
 
 
-
-
 ${chalk.red.bold("ERR:")}\n An entry point is ${chalk.green(
   "required"
 )} - Please input one and try again. ${chalk.grey(
@@ -67,7 +65,7 @@ const userConfig = {
       () => userConfig.percent(76, "|", false, "yellow"),
       1500
     );
-    // await userConfig.createFile(entry);
+    await userConfig.createFile(entry);
     await userConfig.timerFunc(
       () => userConfig.percent(99, "\\", false, "green"),
       2000
