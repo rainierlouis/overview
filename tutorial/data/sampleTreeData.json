@@ -12,13 +12,13 @@
               "children": [
                 {
                   "name": "SomeSubThing",
-                  "type": "component",
+                  "type": "component"
                 }
               ]
             },
             {
               "name": "Button",
-              "type": "component",
+              "type": "component"
             }
           ]
 
@@ -32,11 +32,11 @@
         "children": [
           {
             "name": "Logo",
-            "type": "component",
+            "type": "component"
           },
           {
             "name": "Menue",
-            "type": "component",
+            "type": "component"
           }
         ]
       }
@@ -46,21 +46,21 @@
       "name": "Main",
       "type": "container",
       "children": [
-           {
-              "name": "Something",
-              "type": "component",
-              "children": [
-                {
-                  "name": "SomeSubThing",
-                  "type": "component",
-                }
-              ]
-            },
-            {
-              "name": "Button",
-              "type": "component",
-            }
-          ]
-    },
+         {
+            "name": "Something",
+            "type": "component",
+            "children": [
+              {
+                "name": "SomeSubThing",
+                "type": "component"
+              }
+            ]
+          },
+          {
+            "name": "Button",
+            "type": "component"
+          }
+      ]
+    }
   ]
 }
