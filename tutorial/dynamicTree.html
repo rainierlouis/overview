@@ -1,8 +1,8 @@
 <!-- <!DOCTYPE html> -->
-<meta charset="utf-8">
+<meta charset='utf-8'>
 <head>
   <title>Force layout (foci)</title>
-  <link rel="preload" href="/data/graph.json" as="prefetch">
+  <link rel='preload' href='/data/graph.json' as='prefetch'>
 </head>
 
 <style>
@@ -10,7 +10,7 @@
 
 <body>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
 
   <script>
 
@@ -43,66 +43,66 @@
 
 var treeData =
 {
-  "name": "App",
-  "type": "component",
-  "children": [
+  'name': 'App',
+  'type': 'component',
+  'children': [
     {
-      "name": "Haeder",
-      "type": "component",
-      "children": [
+      'name': 'Haeder',
+      'type': 'component',
+      'children': [
            {
-              "name": "Something",
-              "type": "component",
-              "children": [
+              'name': 'Something',
+              'type': 'component',
+              'children': [
                 {
-                  "name": "SomeSubThing",
-                  "type": "component",
+                  'name': 'SomeSubThing',
+                  'type': 'component',
                 }
               ]
             },
             {
-              "name": "Button",
-              "type": "component",
+              'name': 'Button',
+              'type': 'component',
             }
           ]
 
     },
     {
-      "name": "Navigation",
-      "type": "component",
-      "children":[{
-        "name": "NaviData",
-        "type": "container",
-        "children": [
+      'name': 'Navigation',
+      'type': 'component',
+      'children':[{
+        'name': 'NaviData',
+        'type': 'container',
+        'children': [
           {
-            "name": "Logo",
-            "type": "component",
+            'name': 'Logo',
+            'type': 'component',
           },
           {
-            "name": "Menue",
-            "type": "component",
+            'name': 'Menue',
+            'type': 'component',
           }
         ]
       }
     ]
     },
     {
-      "name": "Main",
-      "type": "container",
-      "children": [
+      'name': 'Main',
+      'type': 'container',
+      'children': [
            {
-              "name": "Something",
-              "type": "component",
-              "children": [
+              'name': 'Something',
+              'type': 'component',
+              'children': [
                 {
-                  "name": "SomeSubThing",
-                  "type": "component",
+                  'name': 'SomeSubThing',
+                  'type': 'component',
                 }
               ]
             },
             {
-              "name": "Button",
-              "type": "component",
+              'name': 'Button',
+              'type': 'component',
             }
           ]
     },
@@ -135,65 +135,65 @@ var simulation = d3.forceSimulation(nodes)
   }))
   .on('tick', ticked);
 
-var svg =  d3.select("body").append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
+var svg =  d3.select('body').append('svg')
+  .attr('width', width + margin.left + margin.right)
+  .attr('height', height + margin.top + margin.bottom)
   //
-var g = svg.append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+var g = svg.append('g')
+  .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
 function ticked() {
   var node = svg.select('g').selectAll('.node')
       .data(nodes.descendants())
-    .enter().append("g")
-      .attr("transform", function(d) {
-        return "translate(" + d.x + "," + d.y + ")";
+    .enter().append('g')
+      .attr('transform', function(d) {
+        return 'translate(' + d.x + ',' + d.y + ')';
       })
-      .attr("class", function(d) {
-        return "node" +
-          (d.children ? " node--internal" : " node--leaf"); })
+      .attr('class', function(d) {
+        return 'node' +
+          (d.children ? ' node--internal' : ' node--leaf'); })
 
-  node.append("circle")
-    .attr("r", 10)
-    .attr("style",function(d){
+  node.append('circle')
+    .attr('r', 10)
+    .attr('style',function(d){
       // http://www.color-hex.com/color-palette/53835
-      var color = d.data.type==="container"?"#b4e2f4":"#f9eeb8"
-      return "fill:"+color+"; stroke:darkgrey; stroke-width:3"
+      var color = d.data.type==='container'?'#b4e2f4':'#f9eeb8'
+      return 'fill:'+color+'; stroke:darkgrey; stroke-width:3'
     })
-  g.selectAll(".node").call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended))
+  g.selectAll('.node').call(d3.drag()
+      .on('start', dragstarted)
+      .on('drag', dragged)
+      .on('end', dragended))
 
   //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
   function dragstarted(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
-    d3.select(this).raise().classed("active", true);
+    d3.select(this).raise().classed('active', true);
   }
 
   function dragged(d) {
     d.fx = d3.event.x;
     d.fy = d3.event.y;
     d3.select(this)
-      .attr("transform", function(d) {
-        return "translate(" + d3.event.x + "," + d3.event.y + ")";
+      .attr('transform', function(d) {
+        return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
       })
-    var links = g.selectAll("line.link")
+    var links = g.selectAll('line.link')
   }
 
   function dragended(d) {
     d.fx = null;
     d.fy = null;
-    d3.select(this).classed("active", false);
+    d3.select(this).classed('active', false);
   }
 
 
   // adds the text to the node
-  node.append("text")
-    .attr("dy", ".35em")
-    .attr("y", function(d) { return d.children ? -20 : 20; })
-    .style("text-anchor", "middle")
+  node.append('text')
+    .attr('dy', '.35em')
+    .attr('y', function(d) { return d.children ? -20 : 20; })
+    .style('text-anchor', 'middle')
     .text(function(d) { return d.data.name; });
 }
   </script>
