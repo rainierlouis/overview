@@ -1,124 +1,68 @@
-#! /usr/bin/env node
-const userArgs = process.argv.slice(2);
-const patternSearch = userArgs[0] || [];
+#!/usr/bin/env node
 
-//-- MODULES --//
-const { reset, resetEntire } = require('./configuration/consoleReset');
-const { menu } = require('./configuration/consoleHelp');
-const { create, missingEntry } = require('./configuration/userConfig');
-//-------------//
+// TODO:
+// 'ov App.js' builds the user config AND runs the visualisation at once - DONE
+// Create script logic that will start the npm process
+// Receive the parsed data from PARSE team
+// Pass the parsed data to VISUAL team
+// Refactor help menu - DONE
 
-//-- PACKAGES --//
-const woofwoof = require('woofwoof');
-const chalk = require('chalk');
-const readline = require('readline');
-//--------------//
-
+const cla = require("command-line-args");
 const log = console.log;
 
-const cli = woofwoof(
- `
-${chalk.bold.blue('"OVERVIEW"')} - ${chalk.dim(
-  'creates a visual file for your application structure'
- )}
+const optionDefinitions = [
+  { name: "entry", type: String },
+  { name: "help", alias: "h", type: Boolean },
+  { name: "reset", alias: "r", type: Boolean }
+];
 
-${chalk.dim('Entry')}
-	${chalk.green(
-  '$ ov <entry>'
- )} Declare entry point for the visualisation ${chalk.red.bold('required')}
+// access flags (options._unknown for user entry)
+const options = cla(optionDefinitions, { partial: true });
 
-	${chalk.dim('Begin')}
-		${chalk.green('<begin>')} ${chalk.cyan(
-  '[-b]'
- )} Once entry is declared, you can start the visual creation
+//-- MODULES --//
+const { reset, resetEntire } = require("./configuration/consoleReset");
+const { menu } = require("./configuration/consoleHelp");
+const { create, missingEntry } = require("./configuration/userConfig");
+//-------------//
 
-${chalk.dim('Options')}
-	${chalk.green('<full|single>')} ${chalk.cyan(
-  '[-f -s]'
- )} Declare what to visualise, full structure by default
+const userEntry = entryObj =>
+  entryObj._unknown && entryObj._unknown.length > 0
+    ? entryObj._unknown[0]
+    : entryObj;
 
-	${chalk.dim('Reset')}
-		${chalk.green('<reset>')} ${chalk.cyan('[-r]')} Reset + delete visual folder
+const parse = input =>
+  typeof input === "string" ? `entry ${input}` : concatObj(input);
 
-${chalk.dim('Help')}
-	${chalk.green('<help>')} ${chalk.cyan('[-h]')} Further detailing on options
+const concatObj = optionObj => Object.keys(optionObj).map(key => key)[0];
 
+const entryKeyExtractor = entryKey => entryKey.split(" ")[0];
 
-`,
- {
-  flags: {
-   full: {
-    type: 'boolean',
-    alias: 'f'
-   },
-   single: {
-    type: 'boolean',
-    alias: 's'
-   },
-   reset: {
-    type: 'boolean',
-    alias: 'r'
-   },
-   help: {
-    alias: 'h'
-   },
-   start: {
-    alias: 'b'
-   }
+const entryValueExtractor = entryValue => entryValue.split(" ")[1];
+
+const ov = async data => {
+  let entryPoint;
+
+  if (data.split(" ")[0] === "entry") {
+    entryPoint = entryValueExtractor(data);
+    data = entryKeyExtractor(data);
   }
- },
- {
-  alias: {
-   f: 'full',
-   s: 'single',
-   r: 'reset',
-   h: 'help',
-   b: 'begin'
-  },
-  default: {
-   name: 'App.js',
-   full: true,
-   single: false,
-   reset: false
-  }
- }
-);
 
-const ov = async (input, flags) => {
- const keys = await Object.keys(flags).filter(
-  el => el === 'h' || el === 'r' || el === 's' || el === 'f' || el === 'b'
- );
- if (!input && keys.length === 0) {
-  await reset();
-  await log(missingEntry());
- } else if (input && keys.length === 0) {
-  await reset();
-  // await create(input);
- }
-
- keys.forEach(async el => {
-  switch (el) {
-   case 'h':
-    await reset();
-    await log(menu);
-    break;
-   case 'r':
-    await resetEntire();
-    break;
-   case 's':
-    await log('s flag!');
-    break;
-   case 'f':
-    await reset();
-    await create(input);
-    break;
-   case 'b':
-    log('start flag wooooh');
-    break;
-   default:
-    break;
+  switch (data) {
+    case "help":
+      reset();
+      log(menu);
+      break;
+    case "reset":
+      resetEntire();
+      break;
+    case "entry":
+      reset();
+      create(entryPoint);
+      setTimeout(() => {
+        // Ready for visual module consumption
+        log("---START THE VISUALISATION---");
+      }, 4000);
   }
- });
 };
 
-ov(cli.input[0], cli.flags);
+ov(parse(userEntry(options)));
