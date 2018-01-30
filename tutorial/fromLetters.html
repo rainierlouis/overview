@@ -49,28 +49,30 @@ text {
     ]
 
     var links = [
-      {source: 0, target: 1},
-      {source: 0, target: 2},
-      {source: 0, target: 3},
-      {source: 1, target: 6},
-      {source: 3, target: 4},
-      {source: 3, target: 7},
-      {source: 4, target: 5},
-      {source: 4, target: 7}
+      {source: nodes[0], target: nodes[1]},
+      {source: nodes[0], target: nodes[2]},
+      {source: nodes[0], target: nodes[3]},
+      {source: nodes[1], target: nodes[6]},
+      {source: nodes[3], target: nodes[4]},
+      {source: nodes[3], target: nodes[7]},
+      {source: nodes[4], target: nodes[5]},
+      {source: nodes[4], target: nodes[7]}
     ]
 
+    // forceYByLevelValues = [50,100,150,200,250,300]
     var generateYLevelValues = d3.scaleLinear()
       .domain([0, 5])
       .range([30, height - 30])
 
-    forceYByLevelValues = [50,100,150,200,250,300]
     var simulation = d3.forceSimulation(nodes)
-      .force('collision', d3.forceCollide(10))
-      .force('bias x to center', d3.forceX().x(width / 2))
-      .force('levelLines', d3.forceY(100).y(function(d){
+      // .force('collision', d3.forceCollide(10))
+      .force('bias x to center', d3.forceX().x(function(d){
         return generateYLevelValues(d.depth)
       }))
-      .force('link', d3.forceLink().links(links).strength(0.1))
+      // .force('levelLines', d3.forceY(100).y(function(d){
+      //   return generateYLevelValues(d.depth)
+      // }))
+      // .force('link', d3.forceLink().links(links).strength(0.1))
       .on('tick', ticked);
 
     drawLevelLines()
