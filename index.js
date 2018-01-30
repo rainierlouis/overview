@@ -50,7 +50,7 @@ const ov = async data => {
   switch (data) {
     case "help":
       reset();
-      log(menu);
+      menu();
       break;
     case "reset":
       resetEntire();
@@ -58,9 +58,11 @@ const ov = async data => {
     case "entry":
       reset();
       create(entryPoint);
-      setTimeout(() => {
-        // Ready for visual module consumption
-        log("---START THE VISUALISATION---");
+      setTimeout(async () => {
+        // -- Ready for visual module consumption -- //
+        // TODO: Call Parse module, pass entryPoint in
+        // TODO: Await return, then pass Parsed Data to Visual module for folder/file creation
+        await log("---START THE VISUALISATION---");
       }, 4000);
   }
 };
