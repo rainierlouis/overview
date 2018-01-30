@@ -16,77 +16,79 @@ class Entity {
 }
 
 const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
-  console.log('JAJAJAJAJAJAJAJA');
-  return readFile(filePath)
-    .then(data => {
-      const components = [];
-      const files = [];
+  visited.push(filePath);
+  // console.log(filePath);
+  // console.log(visited);
+  const fileContent = fs.readFileSync(filePath, 'UTF8');
+  const components = [];
+  const files = [];
+  let ast = babylon.parse(fileContent, {
+    sourceType: "module",
+    plugins: [
+      "jsx",
+      "objectRestSpread",
+      "classProperties",
+    ]
+  });
 
-      let ast = babylon.parse(data, {
-        sourceType: "module",
-        plugins: [
-          "jsx",
-        ]
-      });
+  walk.simple(ast, {
+    ImportDeclaration(node) {
+      files.push(node);
+    },
+    JSXOpeningElement(node) {
+      components.push(node.name);
+    },
+  });
 
-      walk.simple(ast, {
-        ImportDeclaration(node) {
-          files.push(node);
-        },
-        JSXOpeningElement(node) {
-          components.push(node.name);
-        },
-      });
+  let temp = filePath.split('/');
 
-      let temp = filePath.split('/');
-      structure[selfID] = new Entity(
-        selfID,
-        temp[temp.length - 1],
-        'file',
-        filePath,
-        []
-      );
+  let currentPath = temp.slice(0, temp.length - 1).join('/') + '/';
 
-      files.forEach(node => {
-        let url = parseFilePath(node.source.value);
-        if (!url) return;
-        let myID = uuid();
-        let temp = url.split('/');
-        structure[myID] = new Entity(
-          myID,
-          temp[temp.length - 1],
-          'file',
-          url,
-          []
-        );
-        structure[selfID].children.push(myID);
+  structure[selfID] = new Entity(
+    selfID,
+    temp[temp.length - 1],
+    'file',
+    filePath,
+    []
+  );
 
-        if (!visited.includes(url)) {
-          visited.push(url);
-          parse(url, visited, structure, selfID = myID);
-        }
-      });
+  components.forEach(node => {
+    let myID = uuid();
+    structure[myID] = new Entity(
+      myID,
+      node.name,
+      'component',
+      null,
+      []
+    );
+    structure[selfID].children.push(myID);
+  });
 
-      components.forEach(node => {
-        let myID = uuid();
-        structure[myID] = new Entity(
-          myID,
-          node.name,
-          'component',
-          null,
-          []
-        );
-        structure[selfID].children.push(myID);
-      });
-      return structure;
-    })
-    .then(data => data)
-    .catch(e => console.log(e));
+  files.forEach(node => {
+    let url = parseFilePath(node.source.value, currentPath);
+    if (!url) return;
+    let myID = uuid();
+    let temp = url.split('/');
+    structure[myID] = new Entity(
+      myID,
+      temp[temp.length - 1],
+      'file',
+      url,
+      []
+    );
+    structure[selfID].children.push(myID);
+
+    if (!visited.includes(url)) {
+      parse(url, visited, structure, myID);
+    }
+  });
+
+  return structure;
 };
 
-const parseFilePath = url => {
+const parseFilePath = (url, entryFolder = conf.entryFolder) => {
   if (!url[0] === '.') return null;
-  url = conf.entryFolder + url;
+  url = entryFolder + url;
   url = path.normalize(url);
   if (path.parse(url).ext === '.js' ||
     path.parse(url).ext === '.jsx') return url;
@@ -118,7 +120,7 @@ const readFile = filePath => new Promise((resolve, reject) => {
   });
 });
 
-parse(conf.entryPoint)
-.then(data => console.log(data));
+console.log(parse(conf.entryPoint));
+// parse(conf.entryPoint);
 
 module.exports = parse;
