@@ -1,0 +1,66 @@
+{
+  "name": "App",
+  "type": "component",
+  "children": [
+    {
+      "name": "Haeder",
+      "type": "component",
+      "children": [
+           {
+              "name": "Something",
+              "type": "component",
+              "children": [
+                {
+                  "name": "SomeSubThing",
+                  "type": "component",
+                }
+              ]
+            },
+            {
+              "name": "Button",
+              "type": "component",
+            }
+          ]
+
+    },
+    {
+      "name": "Navigation",
+      "type": "component",
+      "children":[{
+        "name": "NaviData",
+        "type": "container",
+        "children": [
+          {
+            "name": "Logo",
+            "type": "component",
+          },
+          {
+            "name": "Menue",
+            "type": "component",
+          }
+        ]
+      }
+    ]
+    },
+    {
+      "name": "Main",
+      "type": "container",
+      "children": [
+           {
+              "name": "Something",
+              "type": "component",
+              "children": [
+                {
+                  "name": "SomeSubThing",
+                  "type": "component",
+                }
+              ]
+            },
+            {
+              "name": "Button",
+              "type": "component",
+            }
+          ]
+    },
+  ]
+}
