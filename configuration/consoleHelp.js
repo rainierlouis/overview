@@ -8,7 +8,7 @@ const log = console.log;
 const help = {
   menu: async () => {
     await asciimo.write("Overview", "isometric1", async art => {
-      await log(art.rainbow);
+      await log(art.cyan);
       await log(`
 
 	${chalk.dim("creates a visual file for your application structure - v0.3.0")}
@@ -17,7 +17,7 @@ const help = {
 	${chalk.dim("Entry")}
 		${chalk.green(
       "$ overview <entry>"
-    )} Declare entry point for the visualisation ${chalk.red.bold(
+    )} Declare entry point for the visualisation ${chalk.magenta.bold(
         "required first"
       )}
 
