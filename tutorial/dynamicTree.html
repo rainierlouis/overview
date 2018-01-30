@@ -132,12 +132,19 @@ var nodes = treemap(nodesHierarchy)
 var links = nodesHierarchy.links()
 
 var simulation = d3.forceSimulation(nodes)
-  .force('link', d3.forceLink().links(links).strength(0.1))
-  .force('charge', d3.forceManyBody().strength(-80))
-  .force('y', d3.forceY().strength(200).y(height/2))
-  .force('collision', d3.forceCollide().radius(function(d) {
-    return d.radius;
-  }))
+  .force(
+    'center x to treepositions',
+    d3.forceX(function(d){return d.x})
+  )
+  .force(
+    'center y to treepositions',
+    d3.forceY(function(d){return d.y})
+  )
+  // .force('charge', d3.forceManyBody().strength(-80))
+  // .force('y', d3.forceY().strength(200).y(height/2))
+  // .force('collision', d3.forceCollide().radius(function(d) {
+  //   return d.radius;
+  // }))
   .on('tick', ticked);
 
 var svg =  d3.select('body').append('svg')
@@ -198,24 +205,25 @@ function ticked() {
 
   //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
   function dragstarted(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
+    d.x += d3.event.x;
+    d.y += d3.event.y;
     d3.select(this).raise().classed('active', true);
   }
 
   function dragged(d) {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
+    d.x = d3.event.x;
+    d.y = d3.event.y;
     d3.select(this)
       .attr('transform', function(d) {
+        console.log(d3.event);
         return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
       })
     var links = g.selectAll('line.link')
   }
 
   function dragended(d) {
-    d.fx = null;
-    d.fy = null;
+    d.x = d3.event.x;
+    d.y = d3.event.y;
     d3.select(this).classed('active', false);
   }
 

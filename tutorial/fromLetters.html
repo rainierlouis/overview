@@ -66,7 +66,7 @@ text {
     forceYByLevelValues = [50,100,150,200,250,300]
     var simulation = d3.forceSimulation(nodes)
       .force('collision', d3.forceCollide(10))
-      .force('center', d3.forceX().x(width / 2))
+      .force('bias x to center', d3.forceX().x(width / 2))
       .force('levelLines', d3.forceY(100).y(function(d){
         return generateYLevelValues(d.depth)
       }))
