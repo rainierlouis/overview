@@ -15,13 +15,19 @@ class Entity {
   }
 }
 
-const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
-  visited.push(filePath);
-  // console.log(filePath);
-  // console.log(visited);
+const parse = (
+  filePath,
+  intel = {visited: []},
+  structure = {},
+  selfID = uuid()
+) => {
+  intel.visited.push(filePath);
   const fileContent = fs.readFileSync(filePath, 'UTF8');
+
   const components = [];
   const files = [];
+  const componentNames = [];
+
   let ast = babylon.parse(fileContent, {
     sourceType: "module",
     plugins: [
@@ -33,6 +39,14 @@ const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
 
   walk.simple(ast, {
     ImportDeclaration(node) {
+      for (let i = 0; i < node.specifiers.length; i++) {
+        if (node.specifiers[i].type === 'ImportDefaultSpecifier' ||
+        node.specifiers[i].type === 'ImportSpecifier') {
+          if (!componentNames.includes(node.specifiers[i].local.name)) {
+            componentNames.push(node.specifiers[i].local.name);
+          }
+        }
+      }
       files.push(node);
     },
     JSXOpeningElement(node) {
@@ -53,6 +67,11 @@ const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
   );
 
   components.forEach(node => {
+    if (!componentNames.includes(node.name)) return;
+    for (let i = 0; i < structure[selfID].children.length; i++) {
+      if (structure[structure[selfID].children[i]].name === node.name) return;
+    }
+
     let myID = uuid();
     structure[myID] = new Entity(
       myID,
@@ -67,23 +86,23 @@ const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
   files.forEach(node => {
     let url = parseFilePath(node.source.value, currentPath);
     if (!url) return;
-    let myID = uuid();
-    let temp = url.split('/');
-    structure[myID] = new Entity(
-      myID,
-      temp[temp.length - 1],
-      'file',
-      url,
-      []
-    );
-    structure[selfID].children.push(myID);
 
-    if (!visited.includes(url)) {
-      parse(url, visited, structure, myID);
+    if (!intel.visited.includes(url)) {
+      let myID = uuid();
+      let temp = url.split('/');
+      structure[myID] = new Entity(
+        myID,
+        temp[temp.length - 1],
+        'file',
+        url,
+        []
+      );
+      structure[selfID].children.push(myID);
+      parse(url, intel, structure, myID);
     }
   });
 
-  return structure;
+  return JSON.stringify(structure);
 };
 
 const parseFilePath = (url, entryFolder = conf.entryFolder) => {
