@@ -143,15 +143,15 @@ var g = svg.append("g")
   .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
 
 function ticked() {
-  var node = g.selectAll(".node")
+  var node = svg.select('g').selectAll('.node')
       .data(nodes.descendants())
     .enter().append("g")
-      .attr("class", function(d) {
-        return "node" +
-          (d.children ? " node--internal" : " node--leaf"); })
       .attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
       })
+      .attr("class", function(d) {
+        return "node" +
+          (d.children ? " node--internal" : " node--leaf"); })
 
   node.append("circle")
     .attr("r", 10)
