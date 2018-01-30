@@ -27,12 +27,13 @@ const fileContent = entry => `
 const invalidLog = `
 
 
-${chalk.red.bold("ERR:")}\n An entry point is ${chalk.green(
+	${chalk.red.bold(
+    "ERR - Invalid input or flag:"
+  )}\n\n 	An entry point is ${chalk.green(
   "required"
 )} - Please input one and try again. ${chalk.grey(
-  "(e.g. ov App.js)"
-)}\n\n	For more help, enter ${chalk.green("ov -h")}
-
+  "(e.g. overview App.js)"
+)}\n\n	For more help, enter ${chalk.green("overview -h")}
 
 
 			`;
@@ -80,10 +81,10 @@ const userConfig = {
         `${chalk.green(
           `[ ${chalk.bold("Finished")} ${chalk.grey(
             "--"
-          )} Config file created, ready to start! ]`
-        )}`
+          )} Visual folder created - Enjoy! ]`
+        )}\n\n`
       );
-      log(menu);
+      menu();
     }, 3500);
   },
   percent: (p, t, b = false, c) => {

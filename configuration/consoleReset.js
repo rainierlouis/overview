@@ -40,7 +40,7 @@ const reset = {
           )} Input entry point to start again! ]`
         )}`
       );
-      log(menu);
+      menu();
     }, 3500);
   }
 };
