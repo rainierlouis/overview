@@ -52,51 +52,59 @@ const parse = (filePath, visited = [], structure = {}, selfID = uuid()) => {
           components.push(node);
         }
       });
-      structure[selfID] = new Entity(selfID, filePath.split('/')[filePath.length - 1], 'file', filePath, []);
-      return Promise.all(files.map(node => new Promise(resolve =>
-        resolve(
-          parseFilePath(node.source.value)
-            .then(url => {
-              if (!url) return resolve(null);
-              let myID = uuid();
-              structure[myID] = new Entity(myID, url.split('/')[url.length - 1], 'file', url, []);
-              structure[selfID].children.push(myID);
-              // console.log('DEPP', structure);
-              return resolve(null);
-            })
-          // .catch(err => console.log(err))
-      ))))
-        // .then(console.log('Here we go: ', structure))
+      let temp = filePath.split('/');
+      structure[selfID] = new Entity(
+        selfID,
+        temp[temp.length - 1],
+        'file',
+        filePath,
+        []
+      );
+
+      files.forEach(node => {
+        let url = parseFilePath(node.source.value);
+        if (!url) return;
+        let myID = uuid();
+        let temp = url.split('/');
+        structure[myID] = new Entity(
+          myID,
+          temp[temp.length - 1],
+          'file',
+          url,
+          []
+        );
+        structure[selfID].children.push(myID);
+      });
+      console.log(structure);
     })
-    .then(data => console.log(data, structure))
-    // .then(data => {
-    //   data.forEach(el => {
-    //     parseFilePath(el.filePath, visited);
-    //   })
-    // })
-    .catch(err => console.log(err));
+    .catch(e => console.log(e));
 };
 
-const parseFilePath = url => new Promise((resolve, reject) => {
-  if (url[0] === '.') {
-    url = conf.entryFolder + url;
-    url = path.normalize(url);
-    if (path.parse(url).ext === '.js' || path.parse(url).ext === '.jsx') {
-      resolve(url);
-    } else if (path.parse(url).ext === '') {
-      fs.access(url + '.js', err => {
-        if (!err) resolve(url + '.js');
-        fs.access(url + 'jsx', err => {
-          if (!err) resolve(url + '.jsx');
-          fs.access(url + '/index.js', err => {
-            if (!err) resolve(url + '/index.js');
-            reject(err);
-           })
-        })
-      })
+const parseFilePath = url => {
+  if (!url[0] === '.') return null;
+  url = conf.entryFolder + url;
+  url = path.normalize(url);
+  if (path.parse(url).ext === '.js' || path.parse(url).ext === '.jsx') return url;
+
+  if (path.parse(url).ext === '') {
+    try {
+      fs.accessSync(url + '.js');
+      return url + '.js';
+    } catch (e) {
+      try {
+        fs.accessSync(url + '.jsx');
+        return url + '.jsx';
+      } catch (e) {
+        try {
+          fs.accessSync(url + '/index.js');
+          return url + '/index.js';
+        } catch (e) {
+          return null;
+        }
+      }
     }
-  } else resolve(null);
-})
+  } else return null;
+};
 
 const readFile = filePath => new Promise((resolve, reject) => {
   fs.readFile(filePath, 'UTF8', (err, data) => {
