@@ -7,6 +7,9 @@ const folderPath = path.join(__dirname, "../Visual");
 
 const remove = {
   remDir: async () => {
+    // await fs.rmdir(folderPath, err => {
+    //  if (err) throw err;
+    // });
     await fs.rmdir(folderPath, err => {
       if (err) throw err;
     });
@@ -15,7 +18,6 @@ const remove = {
     await fs.unlink(`${folderPath}/user.config.js`, err => {
       if (err) throw err;
     });
-    // -- delete visual.index -- //
     // await fs.unlick(`${folderPath}/visual.html`, err => {
     //  if (err) throw err;
     // });
