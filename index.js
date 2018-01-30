@@ -6,6 +6,7 @@
 // Receive the parsed data from PARSE team
 // Pass the parsed data to VISUAL team
 // Refactor help menu - DONE
+// Take nested paths into account with entry file
 
 const cla = require("command-line-args");
 const log = console.log;
@@ -42,7 +43,7 @@ const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 const ov = async data => {
   let entryPoint;
 
-  if (data.split(" ")[0] === "entry") {
+  if (data && data.split(" ")[0] === "entry") {
     entryPoint = entryValueExtractor(data);
     data = entryKeyExtractor(data);
   }
@@ -64,6 +65,10 @@ const ov = async data => {
         // TODO: Await return, then pass Parsed Data to Visual module for folder/file creation
         await log("---START THE VISUALISATION---");
       }, 4000);
+      break;
+    default:
+      reset();
+      log(missingEntry());
   }
 };
 
