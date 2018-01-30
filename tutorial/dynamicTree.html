@@ -128,6 +128,7 @@ var nodes = treemap(nodesHierarchy)
 var links = nodesHierarchy.links()
 
 var simulation = d3.forceSimulation(nodes)
+  .force('link', d3.forceLink().links(links).strength(0.1))
   .force('charge', d3.forceManyBody().strength(-80))
   .force('y', d3.forceY().strength(200).y(height/2))
   .force('collision', d3.forceCollide().radius(function(d) {
@@ -143,6 +144,30 @@ var g = svg.append('g')
   .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
 function ticked() {
+  var edges = d3.select('svg g')
+    .selectAll('line')
+    .data(links)
+
+  edges.enter()
+    .append('line')
+    .merge(edges)
+    .attr('x1', function(d) {
+      return d.source.x
+    })
+    .attr('y1', function(d) {
+      return d.source.y
+    })
+    .attr('x2', function(d) {
+      return d.target.x
+    })
+    .attr('y2', function(d) {
+      return d.target.y
+    })
+    .attr('stroke', 'grey')
+    .attr('stroke-width', 0.4)
+
+  edges.exit().remove()
+
   var node = svg.select('g').selectAll('.node')
       .data(nodes.descendants())
     .enter().append('g')
