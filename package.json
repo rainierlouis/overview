@@ -1,6 +1,6 @@
 {
-  "name": "overview",
-  "version": "1.0.0",
+  "name": "app-overview",
+  "version": "0.0.1",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -36,7 +36,6 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-0": "^6.24.1",
     "chalk": "^2.3.0",
-    "command-line-args": "^5.0.1",
     "gm": "^1.23.1",
     "husky": "^0.14.3",
     "lint-staged": "^6.1.0",
@@ -48,12 +47,14 @@
     "shelljs": "^0.8.1",
     "standard": "^10.0.3",
     "tap": "^11.0.1",
-    "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1",
     "woofwoof": "^3.6.7"
   },
   "dependencies": {
     "asciiart-logo": "^0.1.7",
-    "image-to-ascii": "^3.0.11"
+    "image-to-ascii": "^3.0.11",
+    "command-line-args": "^5.0.1",
+    "webpack": "^3.10.0",
+    "chalk": "^2.3.0"
   }
 }
