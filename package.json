@@ -27,6 +27,9 @@
   },
   "homepage": "https://github.com/rainierlouis/overview#readme",
   "devDependencies": {
+    "webpack": "^3.10.0",
+    "command-line-args": "^5.0.1",
+    "asciiart-logo": "^0.1.7",
     "babel": "^6.23.0",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
@@ -39,22 +42,13 @@
     "gm": "^1.23.1",
     "husky": "^0.14.3",
     "lint-staged": "^6.1.0",
-    "meow": "^4.0.0",
     "mkdirp": "^0.5.1",
     "node-cmd": "^3.0.0",
     "nyc": "^11.4.1",
     "prettier": "^1.10.2",
-    "shelljs": "^0.8.1",
     "standard": "^10.0.3",
     "tap": "^11.0.1",
-    "webpack-dev-server": "^2.11.1",
-    "woofwoof": "^3.6.7"
+    "webpack-dev-server": "^2.11.1"
   },
-  "dependencies": {
-    "asciiart-logo": "^0.1.7",
-    "image-to-ascii": "^3.0.11",
-    "command-line-args": "^5.0.1",
-    "webpack": "^3.10.0",
-    "chalk": "^2.3.0"
-  }
+  "dependencies": {}
 }
