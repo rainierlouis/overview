@@ -24,6 +24,8 @@ const options = cla(optionDefinitions, { partial: true });
 const { reset, resetEntire } = require("./configuration/consoleReset");
 const { menu } = require("./configuration/consoleHelp");
 const { create, missingEntry } = require("./configuration/userConfig");
+const { parsing } = require("./configuration/parseModule");
+const { visualData } = require("./configuration/visualModule");
 //-------------//
 
 const userEntry = entryObj =>
@@ -62,8 +64,10 @@ const ov = async data => {
       setTimeout(async () => {
         // -- Ready for visual module consumption -- //
         // TODO: Call Parse module, pass entryPoint in
+        const parsedData = await parsing(entryPoint);
         // TODO: Await return, then pass Parsed Data to Visual module for folder/file creation
         await log("---START THE VISUALISATION---");
+        await visualData(parsedData);
       }, 4000);
       break;
     default:
