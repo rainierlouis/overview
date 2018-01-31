@@ -1,5 +1,5 @@
 var sources = {
-  "current": "secondReal",
+  "current": "firstAttempt",
   "sample": {
     "path": "/data/sampleTreeData.json",
     "createGetChildrenFunction": function(treeData) { return undefined },
@@ -7,7 +7,7 @@ var sources = {
       return treeData
     }
   },
-  "firstReal": {
+  "firstAttempt": {
     "path": "/data/first_test_data.json",
     "createGetChildrenFunction": function(treeData) {
       return function(currentNode) {
@@ -21,7 +21,7 @@ var sources = {
       return treeData[treeData.root]
     }
   },
-  "secondReal": {
+  "secondAttempt": {
     "path": "/data/secondAttempt.json",
     "createGetChildrenFunction": function(treeData) {
       return function(currentNode) {
