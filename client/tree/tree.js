@@ -46,7 +46,7 @@ window.onload = function() {
 
   // set the dimensions and margins of the diagram
   var margin = {top: 40, right: 90, bottom: 50, left: 90},
-    width = 660 - margin.left - margin.right,
+    width = 860 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
   var treemap = d3.tree()
@@ -106,8 +106,6 @@ window.onload = function() {
       .attr('y2', function(d) {
         return d.target.y
       })
-      .attr('stroke', 'grey')
-      .attr('stroke-width', 0.4)
 
     edges.exit().remove()
 
@@ -130,15 +128,14 @@ window.onload = function() {
       .attr('style',function(d){
         // http://www.color-hex.com/color-palette/53835
         var color = d.data.type==='container'?'#b4e2f4':'#f9eeb8'
-        return 'fill:'+color+'; stroke:darkgrey; stroke-width:3'
+        return 'fill:'+color+';'
       })
-      .style('cursor','pointer')
+      // .style('cursor','pointer') // -> css @TODO: discuss this
 
     // adds the text to the node
     node.append('text')
       .attr('dy', '.35em')
       .attr('y', function(d) { return d.children ? -20 : 20; })
-      .style('text-anchor', 'middle')
       .text(function(d) { return d.data.name; });
   }
 
