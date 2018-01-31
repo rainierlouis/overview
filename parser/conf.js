@@ -3,7 +3,7 @@ const createEntryFolderPath = (entryPoint) => {
   entryFolder = entryFolder.slice(0, entryFolder.length - 1);
   return  entryFolder.join('/') + '/';
 };
-const entryPoint = '/Users/karsten/Documents/CodeWorks/senior/overview/parser/test_data/src/Index.js';
+const entryPoint = '/Users/karsten/Documents/CodeWorks/senior/overview/parser/test_apps/mapStories/src/Index.js';
 const entryFolder = createEntryFolderPath(entryPoint);
 
 module.exports = {

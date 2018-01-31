@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const conf = require('./conf');
 const uuid = require('uuid');
+const ignoreList = [];
 
 class Entity {
   constructor (id, name, type, path, children) {
@@ -39,18 +40,10 @@ const parse = (
 
   walk.simple(ast, {
     ImportDeclaration(node) {
-      for (let i = 0; i < node.specifiers.length; i++) {
-        if (node.specifiers[i].type === 'ImportDefaultSpecifier' ||
-        node.specifiers[i].type === 'ImportSpecifier') {
-          if (!componentNames.includes(node.specifiers[i].local.name)) {
-            componentNames.push(node.specifiers[i].local.name);
-          }
-        }
-      }
       files.push(node);
     },
-    JSXOpeningElement(node) {
-      components.push(node.name);
+    JSXIdentifier(node) {
+      if (!ignoreList.includes(node.name)) components.push(node);
     },
   });
 
@@ -66,26 +59,13 @@ const parse = (
     []
   );
 
-  components.forEach(node => {
-    if (!componentNames.includes(node.name)) return;
-    for (let i = 0; i < structure[selfID].children.length; i++) {
-      if (structure[structure[selfID].children[i]].name === node.name) return;
-    }
-
-    let myID = uuid();
-    structure[myID] = new Entity(
-      myID,
-      node.name,
-      'component',
-      null,
-      []
-    );
-    structure[selfID].children.push(myID);
-  });
-
   files.forEach(node => {
     let url = parseFilePath(node.source.value, currentPath);
     if (!url) return;
+
+    for (let i = 0; i < node.specifiers.length; i++) {
+      componentNames.push(node.specifiers[i].local.name);
+    }
 
     if (!intel.visited.includes(url)) {
       let myID = uuid();
@@ -100,6 +80,24 @@ const parse = (
       structure[selfID].children.push(myID);
       parse(url, intel, structure, myID);
     }
+  });
+
+  components.forEach(node => {
+    if (!componentNames.includes(node.name)) return;
+
+    for (let i = 0; i < structure[selfID].children.length; i++) {
+      if (structure[structure[selfID].children[i]].name === node.name) return;
+    }
+
+    let myID = uuid();
+    structure[myID] = new Entity(
+      myID,
+      node.name,
+      'component',
+      null,
+      []
+    );
+    structure[selfID].children.push(myID);
   });
 
   return JSON.stringify(structure);
@@ -138,8 +136,5 @@ const readFile = filePath => new Promise((resolve, reject) => {
     else resolve(data);
   });
 });
-
-console.log(parse(conf.entryPoint));
-// parse(conf.entryPoint);
 
 module.exports = parse;
