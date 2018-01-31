@@ -139,7 +139,4 @@ const readFile = filePath => new Promise((resolve, reject) => {
   });
 });
 
-console.log(parse(conf.entryPoint));
-// parse(conf.entryPoint);
-
 module.exports = parse;
