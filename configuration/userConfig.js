@@ -66,7 +66,7 @@ const userConfig = {
       () => userConfig.percent(76, "|", false, "yellow"),
       1500
     );
-    await userConfig.createFile(entry);
+    // await userConfig.createFile(entry);
     await userConfig.timerFunc(
       () => userConfig.percent(99, "\\", false, "green"),
       2000
