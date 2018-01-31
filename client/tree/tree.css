@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins');
+
+g.node {
+
+}
+
+text {
+  text-anchor: middle;
+  color: blue;
+  font-family: 'Poppins', sans-serif;
+}
+
+line {
+  stroke: grey;
+  stroke-width: 0.4;
+}
+
+circle {
+  stroke: darkgrey;
+  stroke-width: 3;
+  cursor: pointer;
+}
+
+text.name {
+  font-size: 1em
+}
+
+text.info {
+  font-size: 0.6em
+}

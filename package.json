@@ -1,25 +1,58 @@
 {
- "name": "overview",
- "version": "1.0.0",
- "description": "\"creates a visual file for the chosen application structure\"",
- "scripts": {
-  "test": "echo \"Error: no test specified\" && exit 1"
- },
- "repository": {
-  "type": "git",
-  "url": "git+https://github.com/rainierlouis/overview.git"
- },
- "keywords": [
-  "overview"
- ],
- "author": "",
- "preferGlobal": true,
- "bin": {
-  "ov": "index.js"
- },
- "license": "ISC",
- "bugs": {
-  "url": "https://github.com/rainierlouis/overview/issues"
- },
- "homepage": "https://github.com/rainierlouis/overview#readme"
+  "name": "app-overview",
+  "version": "0.0.2",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config webpack.config.js",
+    "start": "webpack-dev-server --progress --colors",
+    "rand": "./random.js",
+    "precommit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": ["prettier --write", "git add"]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rainierlouis/overview.git"
+  },
+  "keywords": ["overview"],
+  "author": "",
+  "bin": {
+    "overview": "./index.js"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rainierlouis/overview/issues"
+  },
+  "homepage": "https://github.com/rainierlouis/overview#readme",
+  "devDependencies": {
+    "webpack": "^3.10.0",
+    "command-line-args": "^5.0.1",
+    "asciiart-logo": "^0.1.7",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.2",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-0": "^6.24.1",
+    "chalk": "^2.3.0",
+    "gm": "^1.23.1",
+    "husky": "^0.14.3",
+    "lint-staged": "^6.1.0",
+    "mkdirp": "^0.5.1",
+    "node-cmd": "^3.0.0",
+    "nyc": "^11.4.1",
+    "prettier": "^1.10.2",
+    "standard": "^10.0.3",
+    "tap": "^11.0.1",
+    "webpack-dev-server": "^2.11.1"
+  },
+  "dependencies": {
+    "babylon": "^6.18.0",
+    "babylon-walk": "^1.0.2",
+    "uuid": "^3.2.1",
+  }
 }

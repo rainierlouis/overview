@@ -1,4 +1,4 @@
-{
+var treeData = {
   "root": "0c1a611c-96fc-47c9-89ef-f3c8704a59a1",
 	"0c1a611c-96fc-47c9-89ef-f3c8704a59a1": {
 		"id": "0c1a611c-96fc-47c9-89ef-f3c8704a59a1",
