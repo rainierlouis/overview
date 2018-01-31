@@ -44,7 +44,7 @@ window.onload = function() {
 var simulation
 
 function unmountTree() {
-  simulation.on('tick', null)
+  if(simulation !== undefined) simulation.on('tick', null)
 }
 
 function mountTree() {
