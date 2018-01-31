@@ -4,8 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const uuid = require('uuid');
 
-const ignoreList = [];
-
 class Entity {
   constructor (id, name, type, path, children) {
     this.id = id;
@@ -28,6 +26,8 @@ const parse = (
   const components = [];
   const files = [];
   const componentNames = [];
+  const routes = [];
+  let routerExist = false;
 
   let ast = babylon.parse(fileContent, {
     sourceType: "module",
@@ -40,19 +40,27 @@ const parse = (
 
   walk.simple(ast, {
     ImportDeclaration(node) {
+      if (node.source.value === 'react-router' ||
+        node.source.value === 'react-router-native' ||
+        node.source.value === 'react-router-dom') routerExist = true;
       files.push(node);
     },
     JSXIdentifier(node) {
-      if (!ignoreList.includes(node.name)) components.push(node);
+      components.push(node);
+    },
+    JSXElement(node) {
+      if (node.openingElement.name.name === 'Route' ||
+        node.openingElement.name.name === 'PrivateRoute')
+        routes.push(node.openingElement.attributes);
     },
   });
 
   let temp = filePath.split('/');
-
   let currentPath = temp.slice(0, temp.length - 1).join('/') + '/';
 
-  structure[selfID] = new Entity(
-    selfID,
+  let entryPointID = Object.keys(structure).length ? 'root' : selfID;
+  structure[entryPointID] = new Entity(
+    entryPointID,
     temp[temp.length - 1],
     'file',
     filePath,
@@ -70,9 +78,12 @@ const parse = (
     if (!intel.visited.includes(url)) {
       let myID = uuid();
       let temp = url.split('/');
+
+      let name = temp[temp.length - 1] === 'index.js' ?
+        temp.slice(temp.length - 2).join('/') : temp[temp.length - 1];
       structure[myID] = new Entity(
         myID,
-        temp[temp.length - 1],
+        name,
         'file',
         url,
         []
@@ -99,6 +110,37 @@ const parse = (
     );
     structure[selfID].children.push(myID);
   });
+
+  if (routerExist && routes.length && routes.length > 1) {
+    let routerID = uuid();
+    structure[routerID] = new Entity(
+      routerID,
+      'Router',
+      'router',
+      null,
+      []
+    );
+    structure[selfID].children.push(routerID);
+
+    routes.forEach(route => {
+      for (let i = 0; i < route.length; i++) {
+        if (route[i].value &&
+            route[i].value.expression &&
+            componentNames.includes(route[i].value.expression.name)) {
+          let myID = uuid();
+          structure[myID] = new Entity(
+            myID,
+            route[i].value.expression.name,
+            'component',
+            null,
+            []
+          );
+          structure[routerID].children.push(myID);
+          break;
+        }
+      }
+    })
+  }
 
   return JSON.stringify(structure);
 };
