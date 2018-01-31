@@ -128,9 +128,7 @@ function mountTree() {
           return 'node' +
             (d.children ? ' node--internal' : ' node--leaf'); })
         .call(d3.drag()
-            .on('start', dragstarted)
-            .on('drag', dragged)
-            .on('end', dragended))
+            .on('start', dragstarted))
 
     node.append('circle')
       .attr('r', 10)
@@ -154,14 +152,6 @@ function mountTree() {
       .call(function(d) {})
   }
 
-  //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
-  function dragstarted(d) {
-    // console.log(d3.event);
-    d.x += d3.event.x + d3.event.dx;
-    d.y += d3.event.y;
-    d3.select(this).raise().classed('active', true);
-  }
-
   function dragged(d) {
     d.x = d3.event.x;
     d.y = d3.event.y;
@@ -174,12 +164,6 @@ function mountTree() {
       })
     var links = g.selectAll('line.link')
     ticked()
-  }
-
-  function dragended(d) {
-    d.x = null;
-    d.y = null;
-    d3.select(this).classed('active', false);
   }
 
   ticked()
