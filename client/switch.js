@@ -22,5 +22,5 @@ $( document ).ready(function() {
     }
     addButton('tree')
     addButton('discovery')
-    addButton('radial')
+    // addButton('radial')
 });

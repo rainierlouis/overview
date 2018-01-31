@@ -128,7 +128,8 @@ function mountTree() {
           return 'node' +
             (d.children ? ' node--internal' : ' node--leaf'); })
         .call(d3.drag()
-            .on('start', dragstarted))
+            .on('drag', dragged)
+        )
 
     node.append('circle')
       .attr('r', 10)
