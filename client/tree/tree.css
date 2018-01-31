@@ -20,3 +20,11 @@ circle {
   stroke-width: 3;
   cursor: pointer;
 }
+
+text.name {
+  font-size: 1em
+}
+
+text.info {
+  font-size: 0.6em
+}

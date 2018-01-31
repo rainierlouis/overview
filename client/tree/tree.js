@@ -38,7 +38,16 @@ var sources = {
 }
 
 window.onload = function() {
-  console.log(treeData);
+  if(typeof switch_is_present == 'undefined') mountTree()
+}
+
+var simulation
+
+function unmountTree() {
+  simulation.on('tick', null)
+}
+
+function mountTree() {
 
   var colorScale = ['orange', 'lightblue', '#B19CD9'];
   //var xCenter = [100, 300, 500]
@@ -59,25 +68,25 @@ window.onload = function() {
   var nodesHierarchy = d3.hierarchy(rootForHierarchy, childrenFunctionForHierarchy)
 
   var nodes = treemap(nodesHierarchy)
-  // var links = nodesHierarchy.links()
+  var links = nodesHierarchy.links()
 
-  var simulation = d3.forceSimulation(nodes)
-    .force(
-      'center x to treepositions',
-      d3.forceX(function(d){return d.x})
-    )
-    .force(
-      'center y to treepositions',
-      d3.forceY(function(d){return d.y})
-    )
-    // .force('charge', d3.forceManyBody().strength(-80))
+  simulation = d3.forceSimulation(nodes)
+    // .force(
+    //   'center x to treepositions',
+    //   d3.forceX(function(d){return d.x})
+    // )
+    // .force(
+    //   'center y to treepositions',
+    //   d3.forceY(function(d){return d.y})
+    // )
+    .force('charge', d3.forceManyBody().strength(80))
     // .force('y', d3.forceY().strength(200).y(height/2))
-    // .force('collision', d3.forceCollide().radius(function(d) {
-    //   return d.radius;
-    // }))
+    .force('collision', d3.forceCollide().radius(function(d) {
+      return d.radius || 40;
+    }))
     .on('tick', ticked);
 
-  var svg =  d3.select('body').append('svg')
+  var svg =  d3.select('#graph').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     //
@@ -132,16 +141,22 @@ window.onload = function() {
       })
       // .style('cursor','pointer') // -> css @TODO: discuss this
 
-    // adds the text to the node
     node.append('text')
       .attr('dy', '.35em')
       .attr('y', function(d) { return d.children ? -20 : 20; })
-      .text(function(d) { return d.data.name; });
+      .text(function(d) { return d.data.name; })
+      .classed('name', true)
+
+    node.append('text')
+      .attr('y', function(d) { return d.children ? 20 : -15; })
+      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      .classed('info', true)
+      .call(function(d) {})
   }
 
   //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
   function dragstarted(d) {
-    console.log(d3.event);
+    // console.log(d3.event);
     d.x += d3.event.x + d3.event.dx;
     d.y += d3.event.y;
     d3.select(this).raise().classed('active', true);
