@@ -1,5 +1,8 @@
-console.log(d3);
-!(function(){
+window.onload = function() {
+  if(typeof switch_is_present == 'undefined') mountDiscovery()
+}
+
+function mountDiscovery() {
     "use strict"
 
     var width,height
@@ -66,7 +69,7 @@ console.log(d3);
             .data(data.nodes)
             .enter().append("circle")
             .attr("r", function(d){
-              console.log(d.r, d.index);
+              // console.log(d.r, d.index);
               return d.r
             })
             .on("mouseover", mouseOver(.2))
@@ -137,7 +140,7 @@ console.log(d3);
         data.links.forEach(function(d) {
             linkedByIndex[d.source.index + "," + d.target.index] = 1;
         });
-        console.log(linkedByIndex);
+        // console.log(linkedByIndex);
         // check the dictionary to see if nodes are linked
         function isConnected(a, b) {
             return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index] || a.index == b.index;
@@ -150,7 +153,7 @@ console.log(d3);
                 // to this one. if so, keep the opacity at 1, otherwise
                 // fade
                 node.style("stroke-opacity", function(o) {
-                  console.log("D&O",d,o);
+                  // console.log("D&O",d,o);
                     let thisOpacity = isConnected(d, o) ? 1 : opacity;
                     return thisOpacity;
                 });
@@ -175,4 +178,4 @@ console.log(d3);
             link.style("stroke", "#ddd");
         }
     }
-}());
+};

@@ -1,0 +1,32 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito|Poppins');
+
+#graph {
+  background-color: lightgreen;
+  min-width: 100vw;
+  min-height: 100vh;
+  position: absolute;
+}
+#switch {
+  margin: 10px;
+  position: relative;
+  float: left;
+  background-color: lightblue;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  z-index: 100;
+  width: 130px;
+  padding: 15px;
+}
+.switch_button {
+  /* position: relative;
+  float: right */
+  padding: 5px;
+  margin: 5px;
+  background-color: blue;
+  color: white;
+  font-family: 'Poppins', sans-serif;
+  cursor: pointer;
+  width: 100%;
+}
