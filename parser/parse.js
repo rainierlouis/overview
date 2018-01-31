@@ -2,8 +2,8 @@ const babylon = require('babylon');
 const walk = require('babylon-walk');
 const fs = require('fs');
 const path = require('path');
-const conf = require('./conf');
 const uuid = require('uuid');
+
 const ignoreList = [];
 
 class Entity {
@@ -103,9 +103,9 @@ const parse = (
   return JSON.stringify(structure);
 };
 
-const parseFilePath = (url, entryFolder = conf.entryFolder) => {
+const parseFilePath = (url, currentPath) => {
   if (!url[0] === '.') return null;
-  url = entryFolder + url;
+  url = currentPath + url;
   url = path.normalize(url);
   if (path.parse(url).ext === '.js' ||
     path.parse(url).ext === '.jsx') return url;
