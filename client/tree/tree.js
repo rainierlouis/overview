@@ -71,25 +71,24 @@ function mountTree() {
   var links = nodesHierarchy.links()
 
   simulation = d3.forceSimulation(nodes)
-    // .force(
-    //   'center x to treepositions',
-    //   d3.forceX(function(d){return d.x})
-    // )
-    // .force(
-    //   'center y to treepositions',
-    //   d3.forceY(function(d){return d.y})
-    // )
+    .force(
+      'center x to treepositions',
+      d3.forceX(function(d){return d.x}).strength(200)
+    )
+    .force(
+      'center y to treepositions',
+      d3.forceY(function(d){return d.y}).strength(200)
+    )
     .force('charge', d3.forceManyBody().strength(80))
-    // .force('y', d3.forceY().strength(200).y(height/2))
     .force('collision', d3.forceCollide().radius(function(d) {
       return d.radius || 40;
     }))
-    .on('tick', ticked);
+    .on('tick', ticked)
 
   var svg =  d3.select('#graph').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
-    //
+
   var g = svg.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
@@ -120,10 +119,11 @@ function mountTree() {
 
     var node = svg.select('g').selectAll('.node')
         .data(nodes.descendants())
-      .enter().append('g')
         .attr('transform', function(d) {
-          return 'translate(' + d.x + ',' + d.y + ')';
-        })
+          // console.log('trans: ' + d.x + ',' + d.y);
+            return 'translate(' + d.x + ',' + d.y + ')';
+          })
+      .enter().append('g')
         .attr('class', function(d) {
           return 'node' +
             (d.children ? ' node--internal' : ' node--leaf'); })
@@ -148,9 +148,14 @@ function mountTree() {
 
     node.append('text')
       .attr('y', function(d) { return d.children ? 20 : -15; })
-      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      // .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      .text(function(d) { return Math.random() + ' / ' + Math.random() })
       .classed('info', true)
       .call(function(d) {})
+
+    node.selectAll('text.info')
+      .style('stroke','green')
+      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
   }
 
   function dragged(d) {
@@ -158,15 +163,13 @@ function mountTree() {
     d.y = d3.event.y;
     d3.select(this)
       .attr('transform', function(d) {
-        // console.log('d.x',d.x);
-        // console.log('d3.event.x', d3.event.x);
-        // console.log('d3.event.dx', d3.event.dx);
         return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
       })
     var links = g.selectAll('line.link')
-    ticked()
+    // ticked()
   }
 
+  ticked()
   ticked()
 
 }
