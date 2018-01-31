@@ -2,7 +2,6 @@ const babylon = require('babylon');
 const walk = require('babylon-walk');
 const fs = require('fs');
 const path = require('path');
-const conf = require('./conf');
 const uuid = require('uuid');
 
 class Entity {
@@ -27,6 +26,8 @@ const parse = (
   const components = [];
   const files = [];
   const componentNames = [];
+  const routes = [];
+  let routerExist = false;
 
   let ast = babylon.parse(fileContent, {
     sourceType: "module",
@@ -39,35 +40,62 @@ const parse = (
 
   walk.simple(ast, {
     ImportDeclaration(node) {
-      for (let i = 0; i < node.specifiers.length; i++) {
-        if (node.specifiers[i].type === 'ImportDefaultSpecifier' ||
-        node.specifiers[i].type === 'ImportSpecifier') {
-          if (!componentNames.includes(node.specifiers[i].local.name)) {
-            componentNames.push(node.specifiers[i].local.name);
-          }
-        }
-      }
+      if (node.source.value === 'react-router' ||
+        node.source.value === 'react-router-native' ||
+        node.source.value === 'react-router-dom') routerExist = true;
       files.push(node);
     },
-    JSXOpeningElement(node) {
-      components.push(node.name);
+    JSXIdentifier(node) {
+      components.push(node);
+    },
+    JSXElement(node) {
+      if (node.openingElement.name.name === 'Route' ||
+        node.openingElement.name.name === 'PrivateRoute')
+        routes.push(node.openingElement.attributes);
     },
   });
 
   let temp = filePath.split('/');
-
   let currentPath = temp.slice(0, temp.length - 1).join('/') + '/';
 
-  structure[selfID] = new Entity(
-    selfID,
+  let entryPointID = Object.keys(structure).length ? 'root' : selfID;
+  structure[entryPointID] = new Entity(
+    entryPointID,
     temp[temp.length - 1],
     'file',
     filePath,
     []
   );
 
+  files.forEach(node => {
+    let url = parseFilePath(node.source.value, currentPath);
+    if (!url) return;
+
+    for (let i = 0; i < node.specifiers.length; i++) {
+      componentNames.push(node.specifiers[i].local.name);
+    }
+
+    if (!intel.visited.includes(url)) {
+      let myID = uuid();
+      let temp = url.split('/');
+
+      let name = temp[temp.length - 1] === 'index.js' ?
+        temp.slice(temp.length - 2).join('/') : temp[temp.length - 1];
+      structure[myID] = new Entity(
+        myID,
+        name,
+        'file',
+        url,
+        []
+      );
+      structure[selfID].children.push(myID);
+      parse(url, intel, structure, myID);
+    }
+  });
+
   components.forEach(node => {
     if (!componentNames.includes(node.name)) return;
+
     for (let i = 0; i < structure[selfID].children.length; i++) {
       if (structure[structure[selfID].children[i]].name === node.name) return;
     }
@@ -83,31 +111,43 @@ const parse = (
     structure[selfID].children.push(myID);
   });
 
-  files.forEach(node => {
-    let url = parseFilePath(node.source.value, currentPath);
-    if (!url) return;
+  if (routerExist && routes.length && routes.length > 1) {
+    let routerID = uuid();
+    structure[routerID] = new Entity(
+      routerID,
+      'Router',
+      'router',
+      null,
+      []
+    );
+    structure[selfID].children.push(routerID);
 
-    if (!intel.visited.includes(url)) {
-      let myID = uuid();
-      let temp = url.split('/');
-      structure[myID] = new Entity(
-        myID,
-        temp[temp.length - 1],
-        'file',
-        url,
-        []
-      );
-      structure[selfID].children.push(myID);
-      parse(url, intel, structure, myID);
-    }
-  });
+    routes.forEach(route => {
+      for (let i = 0; i < route.length; i++) {
+        if (route[i].value &&
+            route[i].value.expression &&
+            componentNames.includes(route[i].value.expression.name)) {
+          let myID = uuid();
+          structure[myID] = new Entity(
+            myID,
+            route[i].value.expression.name,
+            'component',
+            null,
+            []
+          );
+          structure[routerID].children.push(myID);
+          break;
+        }
+      }
+    })
+  }
 
   return JSON.stringify(structure);
 };
 
-const parseFilePath = (url, entryFolder = conf.entryFolder) => {
+const parseFilePath = (url, currentPath) => {
   if (!url[0] === '.') return null;
-  url = entryFolder + url;
+  url = currentPath + url;
   url = path.normalize(url);
   if (path.parse(url).ext === '.js' ||
     path.parse(url).ext === '.jsx') return url;
