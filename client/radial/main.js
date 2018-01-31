@@ -1,5 +1,6 @@
+console.log(d3);
 var data = [
-  { "id": 0, "depth": 0, "children": [1, 2, 3, 4, 5] },
+  { "id": 'titties', "depth": 0, "children": [1, 2, 3, 4, 5] },
   { "id": 1, "depth": 1, "children": [10, 11, 12, 13, 14] },
   { "id": 2, "depth": 1, "children": [20, 21, 22, 23, 24] },
   { "id": 3, "depth": 1, "children": [30, 31, 32, 33, 34] },
@@ -29,7 +30,7 @@ var data = [
   { "id": 51, "depth": 2 },
   { "id": 52, "depth": 2 },
   { "id": 53, "depth": 2 },
-  { "id": 54, "depth": 2 }
+  { "id": 54, "depth": 2, "children": [50, 51, 52, 53] }
 ]
 
 var width = 960;

@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="utf-8" />
-<meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-<title>D3 v4 - force layout</title>
-<style>
-html, body, #graph {
-    width: 900px;
-    height: 500px;
-}
-.node text {
-  pointer-events: none;
-  font: 10px sans-serif;
-}
-</style>
-</head>
-
-<body>
-<div id="graph"></div>
-
-
-
-<script src="https://d3js.org/d3.v4.min.js"></script>
-<script>
+console.log(d3);
 !(function(){
     "use strict"
 
@@ -49,7 +25,6 @@ html, body, #graph {
     function setSize(data) {
         width = document.querySelector("#graph").clientWidth
         height = document.querySelector("#graph").clientHeight
-
         margin = {top:0, left:0, bottom:0, right:0 }
 
 
@@ -201,6 +176,3 @@ html, body, #graph {
         }
     }
 }());
-</script>
-</body>
-</html>
