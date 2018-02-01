@@ -1,6 +1,6 @@
 # OVERVIEW
 
-[![npm version](https://badge.fury.io/js/app-overview.svg)](https://badge.fury.io/js/app-overview) [![Build Status](https://travis-ci.org/rainierlouis/overview.svg?branch=development)](https://travis-ci.org/rainierlouis/overview) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![npm version](https://badge.fury.io/js/app-overview.svg)](https://badge.fury.io/js/app-overview) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
