@@ -56,7 +56,7 @@ const pwdExtract = async entryPoint => {
       // -- Ready for visual module consumption -- //
       await parsing(entryPoint);
       await visualData(stdout);
-      // TODO: opn('/file/path/visual.html');
+      await opn(`${stdout}/visual/overwiew.html`);
     }, 4000);
   });
 };
