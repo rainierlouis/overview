@@ -72,16 +72,16 @@ const userConfig = {
       () => userConfig.percent(100, "|", true, "green"),
       2500
     );
-    await userConfig.timerFunc(() => {
-      reset();
-      log(
+    await userConfig.timerFunc(async () => {
+      await reset();
+      await log(
         `${chalk.green(
           `[ ${chalk.bold("Finished")} ${chalk.grey(
             "--"
           )} Visual folder created - Enjoy! ]`
         )}\n\n`
       );
-      menu();
+      await menu();
     }, 3500);
   },
   percent: (p, t, b = false, c) => {
