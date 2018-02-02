@@ -9,7 +9,7 @@ const parse = require("../parser/parse");
 const dataContent = {};
 
 const jsonContent = jsonData => `
-	export const data = [${jsonData}]
+	export const data = ${jsonData}
 `;
 
 const parsing = async entryPoint => {
