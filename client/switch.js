@@ -10,14 +10,22 @@ $( document ).ready(function() {
       .addClass('switch_button')
       .click(function(e) {
         var name = $( e.delegateTarget ).text()
-        console.log(($('#graph svg').length))
         $('#graph svg').remove()
-        if(name == 'tree') mountTree()
+        if(name == 'tree') {
+          unmountRadial()
+          unmountDiscovery()
+          mountTree()
+        }
         if(name == 'discovery') {
           unmountTree()
+          unmountRadial()
           mountDiscovery()
         }
-        if(name == 'radial') mountRadial()
+        if(name == 'radial') {
+          unmountTree()
+          unmountDiscovery()
+          mountRadial()
+        }
       })
     }
     addButton('tree')
