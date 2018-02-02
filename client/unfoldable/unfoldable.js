@@ -1,7 +1,7 @@
 
 function convertJson(data) {
 
-  let id = data.root
+  let id = typeof(data.root) == 'string' ? data.root : 'root'
   let processed = []
   let depth = 0
 
@@ -41,9 +41,9 @@ function unmountTree() {
 }
 
 function mountTree() {
-  loadedTreeData = treeData // store old object
-  console.log(treeData)
-  treeData = convertJson(loadedTreeData)
+  loadedTreeData = data // store old object
+  console.log(loadedTreeData)
+  var treeData = convertJson(loadedTreeData)
   console.log(treeData)
   // Set the dimensions and margins of the diagram
   var margin = {top: 20, right: 90, bottom: 30, left: 90},
@@ -53,7 +53,7 @@ function mountTree() {
   // append the svg object to the body of the page
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
-  var svg = d3v4.select("body").append("svg")
+  var svg = d3v4.select("#graph").append("svg")
   .attr("width", width + margin.right + margin.left)
   .attr("height", height + margin.top + margin.bottom)
   .append("g")
