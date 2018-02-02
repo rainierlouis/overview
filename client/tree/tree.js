@@ -58,35 +58,35 @@ function mountTree() {
     width = 860 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-  var treemap = d3.tree()
+  var treemap = d3v4.tree()
     .size([width, height]);
 
   var dataSource = sources[sources.current]
   var ChildrenFunctionGenerator = dataSource['createGetChildrenFunction']
   var childrenFunctionForHierarchy = ChildrenFunctionGenerator(treeData)
   var rootForHierarchy = dataSource['getRoot'](treeData, childrenFunctionForHierarchy)
-  var nodesHierarchy = d3.hierarchy(rootForHierarchy, childrenFunctionForHierarchy)
+  var nodesHierarchy = d3v4.hierarchy(rootForHierarchy, childrenFunctionForHierarchy)
 
   var nodes = treemap(nodesHierarchy)
   var links = nodesHierarchy.links()
 
-  simulation = d3.forceSimulation(nodes)
+  simulation = d3v4.forceSimulation(nodes)
     // .force(
     //   'center x to treepositions',
-    //   d3.forceX(function(d){return d.x})
+    //   d3v4.forceX(function(d){return d.x})
     // )
     // .force(
     //   'center y to treepositions',
-    //   d3.forceY(function(d){return d.y})
+    //   d3v4.forceY(function(d){return d.y})
     // )
-    .force('charge', d3.forceManyBody().strength(80))
-    // .force('y', d3.forceY().strength(200).y(height/2))
-    .force('collision', d3.forceCollide().radius(function(d) {
+    .force('charge', d3v4.forceManyBody().strength(80))
+    // .force('y', d3v4.forceY().strength(200).y(height/2))
+    .force('collision', d3v4.forceCollide().radius(function(d) {
       return d.radius || 40;
     }))
     .on('tick', ticked);
 
-  var svg =  d3.select('#graph').append('svg')
+  var svg =  d3v4.select('#graph').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
     //
@@ -94,7 +94,7 @@ function mountTree() {
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
   function ticked() {
-    var edges = d3.select('svg g')
+    var edges = d3v4.select('svg g')
     .selectAll('line')
     .data(nodesHierarchy.links())
 
@@ -127,7 +127,7 @@ function mountTree() {
         .attr('class', function(d) {
           return 'node' +
             (d.children ? ' node--internal' : ' node--leaf'); })
-        .call(d3.drag()
+        .call(d3v4.drag()
             .on('start', dragstarted)
             .on('drag', dragged)
             .on('end', dragended))
@@ -154,23 +154,23 @@ function mountTree() {
       .call(function(d) {})
   }
 
-  //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
+  //https://bl.ocks.org/d3v4noob/204d08d3v409d2b2903e12554b0aef6a4d
   function dragstarted(d) {
-    // console.log(d3.event);
-    d.x += d3.event.x + d3.event.dx;
-    d.y += d3.event.y;
-    d3.select(this).raise().classed('active', true);
+    // console.log(d3v4.event);
+    d.x += d3v4.event.x + d3v4.event.dx;
+    d.y += d3v4.event.y;
+    d3v4.select(this).raise().classed('active', true);
   }
 
   function dragged(d) {
-    d.x = d3.event.x;
-    d.y = d3.event.y;
-    d3.select(this)
+    d.x = d3v4.event.x;
+    d.y = d3v4.event.y;
+    d3v4.select(this)
       .attr('transform', function(d) {
         // console.log('d.x',d.x);
-        // console.log('d3.event.x', d3.event.x);
-        // console.log('d3.event.dx', d3.event.dx);
-        return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
+        // console.log('d3v4.event.x', d3v4.event.x);
+        // console.log('d3v4.event.dx', d3v4.event.dx);
+        return 'translate(' + d3v4.event.x + ',' + d3v4.event.y + ')';
       })
     var links = g.selectAll('line.link')
     ticked()
@@ -179,7 +179,7 @@ function mountTree() {
   function dragended(d) {
     d.x = null;
     d.y = null;
-    d3.select(this).classed('active', false);
+    d3v4.select(this).classed('active', false);
   }
 
   ticked()

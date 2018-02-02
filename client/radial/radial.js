@@ -1,19 +1,15 @@
-window.onload = function() {
-  if(typeof switch_is_present == 'undefined') mountDiscovery()
-}
-
 function mountRadial() {
     "use strict"
 
-  var width = 960;
-  var height = 500;
+  var width = document.body.clientWidth;
+  var height = document.body.clientHeight;
   var tree;
 
-  var force = d3.layout.force()
+  var force = d3v3.layout.force()
     .charge(-800)
     .size([width, height]);
 
-  var svg = d3.select("body").append("svg")
+  var svg = d3v3.select("#graph").append("svg")
     .attr("width", width)
     .attr("height", height);
 
@@ -111,3 +107,11 @@ function mountRadial() {
     }));
   }
 };
+
+window.onload = function() {
+  if(typeof switch_is_present == 'undefined') mountRadial()
+}
+
+function unmountRadial() {
+  if(simulation !== undefined) simulation.on('tick', null)
+}
