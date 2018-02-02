@@ -1,16 +1,13 @@
-const fs = require("fs");
+const fs = require("fs-extra");
 const path = require("path");
 const chalk = require("chalk");
 const readline = require("readline");
 
-const folderPath = path.join(__dirname, "../Visual");
+// const folderPath = path.join(__dirname, '../visual');
 
 const remove = {
   remDir: async () => {
-    // await fs.rmdir(folderPath, err => {
-    //  if (err) throw err;
-    // });
-    await fs.rmdir(folderPath, err => {
+    await fs.emptyDir(`./visual`, err => {
       if (err) throw err;
     });
   },
@@ -18,9 +15,6 @@ const remove = {
     await fs.unlink(`${folderPath}/user.config.js`, err => {
       if (err) throw err;
     });
-    // await fs.unlick(`${folderPath}/visual.html`, err => {
-    //  if (err) throw err;
-    // });
     await remove.remDir();
   }
 };
