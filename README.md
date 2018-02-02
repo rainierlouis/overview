@@ -4,22 +4,29 @@
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
-Overview is an npm module that creates a visual representation of the user's application structure.
+Overview is a package module that creates a visual representation of the user's application structure.
 
 An invaluable tool for developers who will be able to immediately see the layout of the application folder and how the files within connect with one another.
 
 ## Getting Started
 
-* In your chosen CLI - `yarn add app-overview --dev`.
-* Go to the chosen app directory on the CLI - `ov App.js`, this will build the config file and begin the visualisation.
-* Voila, open the `visual.html` found in the Visual folder in your chosen browser.
-* Enjoy!
+* In your chosen CLI
+
+```
+yarn add app-overview --dev
+// or
+npm install app-overview --save-dev
+```
+
+* Go to the chosen app directory on the CLI - `overview App.js`, this will build the config file and begin the visualisation.
+* Voila, open the overview.html file found in the Visual folder in your chosen browser - Enjoy!
 
 ## Usage
 
-* `ov _.js` - Set entry file point + begin visualisation
-* `ov -h` - Menu/help
-* `ov -r` - Remove Visual folder + reset.
+* `overview _.js` - Set entry file point + begin visualisation
+* `overview -h` - Menu/help
+* `overview -r` - Remove Visual folder + reset.
+* `overview -p` - View current path.
 
 ## Built With
 
