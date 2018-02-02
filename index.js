@@ -55,8 +55,6 @@ const pwdExtract = async entryPoint => {
     setTimeout(async () => {
       // -- Ready for visual module consumption -- //
       await parsing(entryPoint);
-      // TODO: Await return, then pass Parsed Data to Visual module for folder/file creation
-      await log("---START THE VISUALISATION---");
       await visualData(stdout);
       // TODO: opn('/file/path/visual.html');
     }, 4000);
