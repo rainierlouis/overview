@@ -12,23 +12,23 @@ $( document ).ready(function() {
         var name = $( e.delegateTarget ).text()
         $('#graph svg').remove()
         if(name == 'tree') {
-          unmountRadial()
-          unmountDiscovery()
+          // unmountRadial()
+          // unmountDiscovery()
           mountTree()
         }
         if(name == 'discovery') {
-          unmountTree()
-          unmountRadial()
+          // unmountTree()
+          // unmountRadial()
           mountDiscovery()
         }
         if(name == 'radial') {
-          unmountTree()
-          unmountDiscovery()
+          // unmountTree()
+          // unmountDiscovery()
           mountRadial()
         }
       })
     }
     addButton('tree')
     addButton('discovery')
-    // addButton('radial')
+    addButton('radial')
 });
