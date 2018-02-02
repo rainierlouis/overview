@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito|Poppins');
 
 #graph {
-  background-color: lightgreen;
+  background-color: white;
   min-width: 100vw;
   min-height: 100vh;
   position: absolute;
@@ -29,4 +29,38 @@
   font-family: 'Poppins', sans-serif;
   cursor: pointer;
   width: 100%;
+}
+
+header {
+  background-color: grey;
+  min-height: 80px;
+  display: flex;
+}
+/* Radial */
+body {
+  margin: 0;
+}
+
+svg {
+  cursor: default;
+  font-weight: 400;
+  font-size: 100%;
+  border: 1px solid black;
+}
+
+.node circle {
+  fill: black;
+  cursor: pointer;
+}
+
+.node text {
+  text-anchor: middle;
+  cursor: pointer;
+  opacity: 0.5;
+}
+
+.link {
+  stroke: #ddd;
+  stroke-width: 1;
+  opacity: 0.5;
 }
