@@ -30,6 +30,16 @@ function convertJson(data) {
 
 }
 
+const unfoldable = {
+  show: mountTree,
+  hide: unmountTree
+}
+
+
+function unmountTree() {
+  // @TODO: look for things to clean up and tidy them here
+}
+
 function mountTree() {
   loadedTreeData = treeData // store old object
   console.log(treeData)
