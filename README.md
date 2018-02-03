@@ -4,6 +4,8 @@
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
+**NOTE: STILL WIP - Expected v1.0.0 release by 9th Feb 2018 - Thank you**
+
 Overview is a package module that creates a visual representation of the user's application structure.
 
 An invaluable tool for developers who will be able to immediately see the layout of the application folder and how the files within connect with one another.
