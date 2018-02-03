@@ -18,8 +18,9 @@ const parse = (
   filePath,
   intel = {visited: []},
   structure = {},
-  selfID = uuid()
+  selfID,
 ) => {
+  selfID = Object.keys(structure).length ? 'root' : uuid();
   intel.visited.push(filePath);
   const fileContent = fs.readFileSync(filePath, 'UTF8');
 
@@ -58,9 +59,8 @@ const parse = (
   let temp = filePath.split('/');
   let currentPath = temp.slice(0, temp.length - 1).join('/') + '/';
 
-  let entryPointID = Object.keys(structure).length ? 'root' : selfID;
-  structure[entryPointID] = new Entity(
-    entryPointID,
+  structure[selfID] = new Entity(
+    selfID,
     temp[temp.length - 1],
     'file',
     filePath,
