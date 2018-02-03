@@ -1,15 +1,11 @@
 var switch_is_present = true;
 
 $( document ).ready(function() {
-    // $('#switch').text("switch loaded...")
     function addButton(text) {
-      var buttonElement = $('<button id="' + text + '" type="button" class="btn btn-primary btn-sm"></button>')
-      var button = $(buttonElement).appendTo('#switch')
-      $(button)
-      .text(text)
-      .addClass('switch_button')
+      $('#'+text)
       .click(function(e) {
-        var name = $( e.delegateTarget ).text()
+        var name = e.target.id
+        console.log(name);
         $('#graph svg').remove()
         if(name == 'tree') {
           // unmountRadial()

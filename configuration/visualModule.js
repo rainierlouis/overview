@@ -1,17 +1,13 @@
-const fs = require('fs');
-const mkdirp = require('mkdirp');
-const path = require('path');
-const opn = require('opn');
+const fs = require("fs-extra");
+const path = require("path");
+const mkdirp = require("mkdirp");
 
-// require Visual logic
-const filePath = path.join(__dirname, `../client/data/data.js`);
+const visualData = async pwd => {
+  await mkdirp(`visual`, err => {
+    if (err) throw err;
+  });
 
-const visualData = dataObj => {
- const fileContent = `${dataObj}`;
- fs.writeFile(filePath, fileContent, err => {
-  if (err) throw err;
- });
- // continue visualising, return file
+  await fs.copy("./node_modules/app-overview/client", `visual`);
 };
 
 module.exports = { visualData };

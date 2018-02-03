@@ -4,6 +4,9 @@ function mountRadial() {
   var width = document.body.clientWidth;
   var height = document.body.clientHeight;
   var tree;
+  var min_zoom = 0.1;
+  var max_zoom = 7;
+  var zoom = d3v3.behavior.zoom().scaleExtent([min_zoom,max_zoom])
 
   var force = d3v3.layout.force()
     .charge(-800)
