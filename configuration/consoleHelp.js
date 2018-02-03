@@ -1,15 +1,17 @@
 const chalk = require("chalk");
 
-const asciimo = require("../node_modules/node-asciimo/lib/asciimo").Figlet;
-const colors = require("../node_modules/node-asciimo/lib/colors");
+const asciimo = require("../node_modules/asciimo/lib/asciimo").Figlet;
+const colors = require("../node_modules/asciimo/lib/colors");
 
 const log = console.log;
 
+const text = "OVERVIEW";
+
 const help = {
-  menu: async () => {
-    await asciimo.write("Overview", "isometric1", async art => {
-      await log(art.cyan);
-      await log(`
+  menu: () => {
+    asciimo.write(text, "isometric1", art => {
+      log(art.cyan);
+      log(`
 
    ${chalk.dim("creates a visual file for your application structure - v0.3.0")}
 
