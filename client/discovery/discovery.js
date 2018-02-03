@@ -8,7 +8,7 @@ function mountDiscovery() {
     var width,height
     var chartWidth, chartHeight
     var margin
-    var svg = d3.select("#graph").append("svg")
+    var svg = d3v4.select("#graph").append("svg")
     var chartLayer = svg.append("g").classed("chartLayer", true)
 
     main()
@@ -16,9 +16,9 @@ function mountDiscovery() {
     function main() {
         var range = 100
         var data = {
-            // nodes:d3.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3.randomUniform(8, 28)()}}),
-            nodes: d3.range(0,range).map( (d) => { return {label: "l"+d , r: 10 }}),
-            links:d3.range(0, range).map(function(){ return {source:~~d3.randomUniform(range)(), target:~~d3.randomUniform(range)()} })
+            // nodes:d3v4.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3v4.randomUniform(8, 28)()}}),
+            nodes: d3v4.range(0,range).map( (d) => { return {label: "l"+d , r: 10 }}),
+            links:d3v4.range(0, range).map(function(){ return {source:~~d3v4.randomUniform(range)(), target:~~d3v4.randomUniform(range)()} })
         }
 
         setSize(data)
@@ -47,13 +47,13 @@ function mountDiscovery() {
 
     function drawChart(data) {
 
-        var simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id(function(d) { return d.index }))
-            .force("collide",d3.forceCollide( function(d){return d.r + 8 }).iterations(16) )
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter(chartWidth / 2, chartHeight / 2))
-            .force("y", d3.forceY(0))
-            .force("x", d3.forceX(0))
+        var simulation = d3v4.forceSimulation()
+            .force("link", d3v4.forceLink().id(function(d) { return d.index }))
+            .force("collide",d3v4.forceCollide( function(d){return d.r + 8 }).iterations(16) )
+            .force("charge", d3v4.forceManyBody())
+            .force("center", d3v4.forceCenter(chartWidth / 2, chartHeight / 2))
+            .force("y", d3v4.forceY(0))
+            .force("x", d3v4.forceX(0))
 
         var link = svg.append("g")
             .attr("class", "links")
@@ -74,7 +74,7 @@ function mountDiscovery() {
             })
             .on("mouseover", mouseOver(.2))
             .on("mouseout", mouseOut)
-            .call(d3.drag()
+            .call(d3v4.drag()
                 .on("start", dragstarted)
                 .on("drag", dragged)
                 .on("end", dragended));
@@ -114,18 +114,18 @@ function mountDiscovery() {
 
 
         function dragstarted(d) {
-            if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+            if (!d3v4.event.active) simulation.alphaTarget(0.3).restart();
             d.fx = d.x;
             d.fy = d.y;
         }
 
         function dragged(d) {
-            d.fx = d3.event.x;
-            d.fy = d3.event.y;
+            d.fx = d3v4.event.x;
+            d.fy = d3v4.event.y;
         }
 
         function dragended(d) {
-            if (!d3.event.active) simulation.alphaTarget(0);
+            if (!d3v4.event.active) simulation.alphaTarget(0);
             d.fx = null;
             d.fy = null;
         }
@@ -179,3 +179,9 @@ function mountDiscovery() {
         }
     }
 };
+
+
+
+function unmountDiscovery() {
+  if(simulation !== undefined) simulation.on('tick', null)
+}
