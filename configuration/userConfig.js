@@ -3,6 +3,9 @@ const mkdirp = require("mkdirp");
 const path = require("path");
 const chalk = require("chalk");
 const readline = require("readline");
+const asciimo = require("../node_modules/asciimo/lib/asciimo").Figlet;
+const colors = require("../node_modules/asciimo/lib/colors");
+const Ora = require("ora");
 
 const { reset, tick } = require("./consoleReset");
 const { menu } = require("./consoleHelp");
@@ -39,6 +42,79 @@ const invalidLog = `
 			`;
 
 const userConfig = {
+  loadingTime: (spinnerItem, time) => {
+    setTimeout(() => {
+      spinnerItem.color = "red";
+    }, time);
+    setTimeout(() => {
+      spinnerItem.color = "yellow";
+    }, time + 400);
+    setTimeout(() => {
+      spinnerItem.color = "green";
+    }, time + 700);
+  },
+  loadSpinner: async () => {
+    const spinner = new Ora({});
+
+    spinner.start(" Loading OVERVIEW system tools");
+    userConfig.loadingTime(spinner, 0);
+    setTimeout(() => {
+      spinner.succeed(" Loading OVERVIEW system tools");
+      spinner.start(" Acquiring folder structure");
+    }, 1000);
+    userConfig.loadingTime(spinner, 1000);
+
+    setTimeout(() => {
+      spinner.succeed(" Acquiring folder structure");
+      spinner.color = "white";
+      spinner.start(" Constructing the algorithm with love");
+    }, 2000);
+    userConfig.loadingTime(spinner, 2000);
+    setTimeout(() => {
+      spinner.succeed(" Constructing the algorithm with love");
+      spinner.color = "gray";
+      spinner.start(" Parsing the application structure");
+    }, 3000);
+    userConfig.loadingTime(spinner, 3000);
+    setTimeout(() => {
+      spinner.succeed(" Parsing the application structure");
+      spinner.color = "red";
+      spinner.start(" Eating your sandwich whilst you read this");
+    }, 4000);
+    userConfig.loadingTime(spinner, 4000);
+    setTimeout(() => {
+      spinner.succeed(" Eating your sandwich whilst you read this");
+      spinner.color = "green";
+      spinner.start(" Still parsing the application structure");
+    }, 5000);
+    userConfig.loadingTime(spinner, 5000);
+    setTimeout(() => {
+      spinner.succeed(" Still parsing the application structure");
+      spinner.color = "yellow";
+      spinner.start(" Building visualisation index");
+    }, 6000);
+    userConfig.loadingTime(spinner, 6000);
+    setTimeout(() => {
+      spinner.succeed(" Building visualisation index");
+      spinner.color = "magenta";
+      spinner.start(" Creating visual folder");
+    }, 7000);
+    userConfig.loadingTime(spinner, 7000);
+    setTimeout(() => {
+      spinner.succeed(" Creating visual folder");
+      asciimo.write("Enjoy", "larry3d", art => {
+        log(`
+
+				`);
+        log(art.green);
+        log(`
+ Please open ${chalk.cyan("visual/index.html")} in your preferred browser ✌️
+
+					`);
+      });
+    }, 8000);
+  },
+
   createFile: async (entry, path) => {
     await mkdirp(folderPath, err => {
       if (err) throw err;
@@ -48,54 +124,13 @@ const userConfig = {
     });
   },
   invalidInput: () => invalidLog,
-  timerFunc: (func, time) => setTimeout(func, time),
   completedCreation: async entry => {
-    await reset();
-    await userConfig.timerFunc(
-      () => userConfig.percent(28, "|", false, "red"),
-      500
-    );
-    await userConfig.timerFunc(
-      () => userConfig.percent(47, "/", false, "yellow"),
-      1000
-    );
-    await userConfig.timerFunc(
-      () => userConfig.percent(76, "|", false, "yellow"),
-      1500
-    );
-    // await userConfig.createFile(entry);
-    await userConfig.timerFunc(
-      () => userConfig.percent(99, "\\", false, "green"),
-      2000
-    );
-    await userConfig.timerFunc(
-      () => userConfig.percent(100, "|", true, "green"),
-      2500
-    );
-    await userConfig.timerFunc(async () => {
-      await reset();
-      await log(
-        `${chalk.green(
-          `[ ${chalk.bold("Finished")} ${chalk.grey(
-            "--"
-          )} Visual folder created - Enjoy! ]`
-        )}\n\n`
-      );
-      await menu();
-    }, 3500);
-  },
-  percent: (p, t, b = false, c) => {
-    readline.cursorTo(process.stdout, 0);
-    tick(`[ ${t}`);
-    tick(`${t} ]     `);
-    process.stdout.write(
-      `${chalk.green("Building")} ... ${chalk[c](`${p} %`)}`
-    );
-    b ? readline.cursorTo(process.stdout, 0) : null;
+    // build file
+    await menu();
   }
 };
 
 module.exports = {
-  create: userConfig.completedCreation,
+  create: userConfig.loadSpinner,
   missingEntry: userConfig.invalidInput
 };
