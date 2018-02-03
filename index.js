@@ -2,17 +2,17 @@
 
 // TODO:
 // 'ov App.js' builds the user config AND runs the visualisation at once - DONE
-// Create script logic that will start the npm process
-// Receive the parsed data from PARSE team
-// Pass the parsed data to VISUAL team
+// Receive the parsed data from PARSE team - DONE
+// Pass the parsed data to VISUAL team - DONE
 // Refactor help menu - DONE
+// Add option to view folder path for entry point - DONE
 // Take nested paths into account with entry file
-// Add option to view folder path for entry point
 // Open index.html with browser
 
 const cla = require("command-line-args");
 const opn = require("opn");
 const { exec } = require("child_process");
+const shell = require("shelljs");
 
 const log = console.log;
 
@@ -49,16 +49,15 @@ const entryKeyExtractor = entryKey => entryKey.split(" ")[0];
 const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 
 const pwdExtract = async entryPoint => {
-  await exec("pwd", (err, stdout) => {
-    reset();
-    create(entryPoint, stdout);
-    setTimeout(async () => {
-      // -- Ready for visual module consumption -- //
-      await parsing(entryPoint);
-      await visualData(stdout);
-      // TODO: opn('/file/path/visual.html');
-    }, 4000);
-  });
+  const pathD = shell.pwd().stdout;
+  reset();
+  create(entryPoint, pathD);
+  setTimeout(async () => {
+    // -- Ready for visual module consumption -- //
+    await parsing(entryPoint, pathD);
+    await visualData(pathD);
+    //  // await opn(`${stdout}/visual/overwiew.html`, err => {});
+  }, 4000);
 };
 
 const ov = async data => {

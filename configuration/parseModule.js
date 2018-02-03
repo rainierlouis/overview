@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs = require("fs-extra");
 const mkdirp = require("mkdirp");
 const path = require("path");
 const parse = require("../parser/parse");
@@ -9,17 +9,13 @@ const parse = require("../parser/parse");
 const dataContent = {};
 
 const jsonContent = jsonData => `
-	export const data = [${jsonData}]
+	export const data = ${jsonData}
 `;
 
-const parsing = async entryPoint => {
+const parsing = async (entryPoint, pwd) => {
   const jsonData = await parse(`./${entryPoint}`);
-  const folderPath = await path.join(__dirname, `../client/data`);
-  const filePath = await path.join(__dirname, `../client/data/data.js`);
-  await mkdirp(folderPath, err => {
-    if (err) throw err;
-  });
-  await fs.writeFile(filePath, jsonContent(jsonData), err => {
+  const filePath = `${pwd}/node_modules/app-overview/client/data/data.js`;
+  await fs.outputFile(filePath, jsonContent(jsonData), err => {
     if (err) throw err;
   });
 };
