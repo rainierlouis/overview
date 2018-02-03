@@ -8,18 +8,18 @@ $( document ).ready(function() {
         console.log(name);
         $('#graph svg').remove()
         if(name == 'tree') {
-          unmountRadial()
-          unmountDiscovery()
+          // unmountRadial()
+          // unmountDiscovery()
           mountTree()
         }
         if(name == 'discovery') {
-          unmountTree()
-          unmountRadial()
+          // unmountTree()
+          // unmountRadial()
           mountDiscovery()
         }
         if(name == 'radial') {
-          unmountTree()
-          unmountDiscovery()
+          // unmountTree()
+          // unmountDiscovery()
           mountRadial()
         }
       })

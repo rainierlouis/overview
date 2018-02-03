@@ -26,11 +26,7 @@ const data = {
   name: 'calcReducers.js',
   type: 'file',
   path: 'app/reducers/calcReducers.js',
-  children: [
-    'e3a69c22-4c5f-4b38-a1a4-1e89573df8df',
-    '3555782b-6c64-4971-b18e-944ccdd7e579',
-    'd48675bc-4dc2-4231-a702-00feec11faa7'
-  ]
+  children: []
  },
  'e3a69c22-4c5f-4b38-a1a4-1e89573df8df': {
   id: 'e3a69c22-4c5f-4b38-a1a4-1e89573df8df',

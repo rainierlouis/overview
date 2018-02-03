@@ -71,25 +71,24 @@ function mountTree() {
   var links = nodesHierarchy.links()
 
   simulation = d3v4.forceSimulation(nodes)
-    // .force(
-    //   'center x to treepositions',
-    //   d3v4.forceX(function(d){return d.x})
-    // )
-    // .force(
-    //   'center y to treepositions',
-    //   d3v4.forceY(function(d){return d.y})
-    // )
+    .force(
+      'center x to treepositions',
+      d3v4.forceX(function(d){return d.x}).strength(200)
+    )
+    .force(
+      'center y to treepositions',
+      d3v4.forceY(function(d){return d.y}).strength(200)
+    )
     .force('charge', d3v4.forceManyBody().strength(80))
-    // .force('y', d3v4.forceY().strength(200).y(height/2))
     .force('collision', d3v4.forceCollide().radius(function(d) {
       return d.radius || 40;
     }))
-    .on('tick', ticked);
+    .on('tick', ticked)
 
   var svg =  d3v4.select('#graph').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
-    //
+
   var g = svg.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
@@ -120,17 +119,17 @@ function mountTree() {
 
     var node = svg.select('g').selectAll('.node')
         .data(nodes.descendants())
-      .enter().append('g')
         .attr('transform', function(d) {
-          return 'translate(' + d.x + ',' + d.y + ')';
-        })
+          // console.log('trans: ' + d.x + ',' + d.y);
+            return 'translate(' + d.x + ',' + d.y + ')';
+          })
+      .enter().append('g')
         .attr('class', function(d) {
           return 'node' +
             (d.children ? ' node--internal' : ' node--leaf'); })
         .call(d3v4.drag()
-            .on('start', dragstarted)
             .on('drag', dragged)
-            .on('end', dragended))
+        )
 
     node.append('circle')
       .attr('r', 10)
@@ -149,17 +148,14 @@ function mountTree() {
 
     node.append('text')
       .attr('y', function(d) { return d.children ? 20 : -15; })
-      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      // .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      .text(function(d) { return Math.random() + ' / ' + Math.random() })
       .classed('info', true)
       .call(function(d) {})
-  }
 
-  //https://bl.ocks.org/d3v4noob/204d08d3v409d2b2903e12554b0aef6a4d
-  function dragstarted(d) {
-    // console.log(d3v4.event);
-    d.x += d3v4.event.x + d3v4.event.dx;
-    d.y += d3v4.event.y;
-    d3v4.select(this).raise().classed('active', true);
+    node.selectAll('text.info')
+      .style('stroke','green')
+      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
   }
 
   function dragged(d) {
@@ -167,21 +163,13 @@ function mountTree() {
     d.y = d3v4.event.y;
     d3v4.select(this)
       .attr('transform', function(d) {
-        // console.log('d.x',d.x);
-        // console.log('d3v4.event.x', d3v4.event.x);
-        // console.log('d3v4.event.dx', d3v4.event.dx);
-        return 'translate(' + d3v4.event.x + ',' + d3v4.event.y + ')';
+        return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
       })
     var links = g.selectAll('line.link')
-    ticked()
+    // ticked()
   }
 
-  function dragended(d) {
-    d.x = null;
-    d.y = null;
-    d3v4.select(this).classed('active', false);
-  }
-
+  ticked()
   ticked()
 
 }
