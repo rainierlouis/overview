@@ -8,7 +8,7 @@ const log = console.log;
 
 const reset = {
   // test comment
-  reset: async () => await process.stdout.write("\x1B[2J\x1B[0f"),
+  reset: () => process.stdout.write("\x1B[2J\x1B[0f"),
   resetTick: (tick, space = "") => {
     return process.stdout.write(`${chalk.green.cyan(tick)}${space}`);
   },
