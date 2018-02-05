@@ -96,15 +96,10 @@ module.exports = {
     spin.loadingTime(spinner, 5000);
     setTimeout(() => {
       spinner.succeed(" Creating visual folder");
-      asciimo.write("Done", "isometric1", art => {
-        log(`
-		  			`);
-        log(art.cyan);
-        log(`
+      log(`
  Please open ${chalk.cyan("visual/overview.html")} in your preferred browser ✌️
 
-		  				`);
-      });
+								  				`);
     }, 6000);
   },
 
