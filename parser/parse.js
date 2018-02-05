@@ -66,10 +66,8 @@ const parse = (
     filePath,
     []
   );
-  console.log('self', structure[selfID].name);
   files.forEach(node => {
     let url = parseFilePath(node.source.value, currentPath);
-    console.log('url', url);
     if (!url) return;
 
     for (let i = 0; i < node.specifiers.length; i++) {
@@ -88,9 +86,7 @@ const parse = (
         url,
         []
       );
-      console.log(structure[myID].id);
       structure[selfID].children.push(myID);
-      console.log(selfID, structure[selfID].children);
       parse(url, intel, structure, myID);
     }
   });
@@ -180,7 +176,5 @@ const readFile = filePath => new Promise((resolve, reject) => {
     else resolve(data);
   });
 });
-
-console.log(parse('/Users/karsten/Documents/CodeWorks/senior/overview/parser/test_apps/mapStories/src/Index.js'));
 
 module.exports = parse;
