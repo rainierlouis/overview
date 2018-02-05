@@ -16,7 +16,6 @@ An invaluable tool for developers who will be able to immediately see the layout
 
 ```
 yarn add app-overview --dev
-// or
 npm install app-overview --save-dev
 ```
 
