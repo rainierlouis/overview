@@ -12,7 +12,9 @@ function mountRadial() {
   let svg = d3v3.select("#graph").append("svg")
     .attr("width", width)
     .attr("height", height)
-    .call(d3v3.behavior.zoom().on("zoom", function () {
+    .call(d3v3.behavior.zoom()
+    .scaleExtent([0.4, 4])
+    .on("zoom", function () {
       svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
     }))
     .append("g")
