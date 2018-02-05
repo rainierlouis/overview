@@ -27,11 +27,11 @@ const optionDefinitions = [
 const options = cla(optionDefinitions, { partial: true });
 
 //-- MODULES --//
-const { reset, resetEntire } = require("./configuration/consoleReset");
-const { menu } = require("./configuration/consoleHelp");
-const { create, missingEntry } = require("./configuration/userConfig");
-const { parsing } = require("./configuration/parseModule");
-const { visualData } = require("./configuration/visualModule");
+const reset = require("./configuration/consoleReset");
+const visual = require("./configuration/visualModule").visualData;
+const menu = require("./configuration/consoleHelp");
+const user = require("./configuration/userConfig");
+const parsing = require("./configuration/parseModule").parsing;
 //-------------//
 
 const userEntry = entryObj =>
@@ -48,16 +48,14 @@ const entryKeyExtractor = entryKey => entryKey.split(" ")[0];
 
 const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 
-const pwdExtract = async entryPoint => {
+const beginVisual = async entryPoint => {
   const pathD = shell.pwd().stdout;
-  reset();
-  create(entryPoint, pathD);
-  setTimeout(async () => {
-    // -- Ready for visual module consumption -- //
-    await parsing(entryPoint, pathD);
-    await visualData(pathD);
-    //  // await opn(`${stdout}/visual/overwiew.html`, err => {});
-  }, 4000);
+  await reset.reset();
+  // -- Ready for visual module consumption -- //
+  await user.loadSpinner();
+  await parsing(entryPoint, pathD);
+  await visual(pathD);
+  // await opn(`${stdout}/visual/overwiew.html`, err => {});
 };
 
 const ov = async data => {
@@ -70,20 +68,21 @@ const ov = async data => {
 
   switch (data) {
     case "help":
-      reset();
-      menu();
+      reset.reset();
+      menu.menu();
       break;
     case "reset":
-      resetEntire();
+      const pathD = shell.pwd().stdout;
+      reset.resetMethod(pathD);
       break;
     case "path":
       break;
     case "entry":
-      pwdExtract(entryPoint);
+      beginVisual(entryPoint);
       break;
     default:
-      reset();
-      log(missingEntry());
+      reset.reset();
+      log(user.invalidInput());
   }
 };
 
