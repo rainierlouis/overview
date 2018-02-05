@@ -34,13 +34,20 @@ function convertJson(data) {
   return result;
 }
 
-const unfoldable = {
-  show: mountTree,
-  hide: unmountTree
-};
-
 function unmountTree() {
   // @TODO: look for things to clean up and tidy them here
+}
+
+function showSearch() {
+  let jqSearch = $(`
+    <div class="graphsearch">
+      <input placeholder="hello text"/>
+    </div>
+    `);
+  $(jqSearch).insertAfter("#switch");
+  $(".graphsearch input").on("input", function(e) {
+    console.log($(e.delegateTarget).val());
+  });
 }
 
 function mountTree() {
@@ -278,5 +285,6 @@ function mountTree() {
 (function($) {
   $(document).ready(function() {
     if (typeof switch_is_present == "undefined") mountTree();
+    showSearch();
   });
 })(jQuery);
