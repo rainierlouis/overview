@@ -27,7 +27,7 @@ yarn global add app-overview
 npm install -g app-overview
 ```
 
-* Go to the chosen app directory on the CLI - `overview App.js`, this will build the config file and begin the visualisation.
+* Go to the chosen app directory on the CLI - `overview index.js` or `overview src/index.js`, this will build the config file and begin the visualisation.
 * Voila, open the overview.html file found in the Visual folder in your chosen browser - Enjoy!
 
 ## Usage
