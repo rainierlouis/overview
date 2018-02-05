@@ -48,12 +48,17 @@ const entryKeyExtractor = entryKey => entryKey.split(" ")[0];
 const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 
 const beginVisual = async entryPoint => {
-  const pathD = shell.pwd().stdout;
-  await reset.reset();
-  // -- Ready for visual module consumption -- //
-  await user.loadSpinner();
-  await parsing(entryPoint, pathD);
-  await visual(pathD);
+  const pathD = await shell.pwd().stdout;
+  if (user.checkNodeModules(pathD)) {
+    await reset.reset();
+    // -- Ready for visual module consumption -- //
+    await user.loadSpinner();
+    await parsing(entryPoint, pathD);
+    await visual(pathD);
+  } else {
+    await reset.reset();
+    await log(user.invalidNode());
+  }
 };
 
 const ov = async data => {
