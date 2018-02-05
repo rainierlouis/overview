@@ -5,7 +5,7 @@ const readline = require("readline");
 
 // const folderPath = path.join(__dirname, '../visual');
 
-const remove = {
+module.exports = {
   remDir: async () => {
     await fs.emptyDir(`./visual`, err => {
       if (err) throw err;
@@ -17,8 +17,4 @@ const remove = {
     });
     await remove.remDir();
   }
-};
-
-module.exports = {
-  remove: remove.remFile
 };

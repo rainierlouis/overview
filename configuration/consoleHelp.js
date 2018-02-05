@@ -7,7 +7,7 @@ const log = console.log;
 
 const text = "OVERVIEW";
 
-const help = {
+module.exports = {
   menu: () => {
     asciimo.write(text, "isometric1", art => {
       log(art.cyan);
@@ -38,8 +38,4 @@ const help = {
     	`);
     });
   }
-};
-
-module.exports = {
-  menu: help.menu
 };
