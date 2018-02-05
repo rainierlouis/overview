@@ -11,7 +11,9 @@ const spin = require("./spinLoader");
 const log = console.log;
 
 module.exports = {
-  reset: () => process.stdout.write("\x1B[2J\x1B[0f"),
+  reset: () => {
+    // process.stdout.write("\x1B[2J\x1B[0f")
+  },
   deleteDir: async () => {
     await fs.emptyDir("visual", err => {
       if (err) throw err;
