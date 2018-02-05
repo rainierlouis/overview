@@ -16,8 +16,8 @@ function mountDiscovery() {
     function main() {
         var range = 100
         var data = {
-            // nodes:d3v4.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3v4.randomUniform(8, 28)()}}),
-            nodes: d3v4.range(0,range).map( (d) => { return {label: "l"+d , r: 10 }}),
+            nodes:d3v4.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3v4.randomUniform(8, 28)()}}),
+            // nodes: d3v4.range(0,range).map( (d) => { return {label: "l"+d , r: 10 }}),
             links:d3v4.range(0, range).map(function(){ return {source:~~d3v4.randomUniform(range)(), target:~~d3v4.randomUniform(range)()} })
         }
 
