@@ -2,7 +2,6 @@ const fs = require("fs");
 const mkdirp = require("mkdirp");
 const path = require("path");
 const chalk = require("chalk");
-const chalkR = require("chalk-rainbow");
 const readline = require("readline");
 const asciimo = require("../node_modules/asciimo/lib/asciimo").Figlet;
 const colors = require("../node_modules/asciimo/lib/colors");
