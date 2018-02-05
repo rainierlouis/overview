@@ -1,6 +1,6 @@
 # OVERVIEW
 
-Overview is a package module that creates a visual representation of the user's application structure.
+> Overview is a package module that creates a visual representation of the user's application structure.
 
 [![npm version](https://badge.fury.io/js/app-overview.svg)](https://www.npmjs.com/package/app-overview)
 [![npm](https://img.shields.io/npm/dw/app-overview.svg)]() [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
