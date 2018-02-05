@@ -26,9 +26,10 @@ async function parse(entryPoint) {
     } catch (e) {
       return;
     }
-
     // flattening resulting array as Promise.protoype.some returns nested arrays
-    filesToParse = filesToParse.map(path => path[0]);
+    filesToParse = filesToParse.map(
+      path => (typeof path === "string" ? path : path[0])
+    );
 
     for (let i = 0; i < filesToParse.length; i++) {
       let name = filesToParse[i].match(/(\w*).\w{1,3}$/)[1];
@@ -47,7 +48,7 @@ async function parse(entryPoint) {
     }
   }
   await scan(entryPoint, "root").catch(err => console.log(err));
-  return nodes;
+  return JSON.stringify(nodes);
 }
 
 const babylonConfig = {
