@@ -10,7 +10,15 @@ Overview is a package module that creates a visual representation of the user's 
 
 An invaluable tool for developers who will be able to immediately see the layout of the application folder and how the files within connect with one another.
 
-## Getting Started
+## Table of contents
+
+* [Getting started](#getting-started)
+* [Usage](#usage)
+* [Built with](#built-with)
+* [Authors](#authors)
+* [License](#license)
+
+## Getting started
 
 * In your preferred CLI
 
@@ -29,7 +37,7 @@ npm install -g app-overview
 * `overview -h` - Menu/help
 * `overview -p` - View current path.
 
-## Built With
+## Built with
 
 * [d3](https://d3js.org/) - Data driven visualisation
 * [node](https://nodejs.org/en/docs/) - Modular CLI config & system filing
