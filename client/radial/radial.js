@@ -42,7 +42,8 @@ function mountRadial() {
     nodes: render(data),
     links: getLinks(render(data))
   };
-  console.log(tree);
+  var container = svg.append("g");
+
   updateForce();
 
   function updateForce(focusNode) {
