@@ -55,8 +55,6 @@ function mountRadial() {
       depth: 0
     });
 
-    console.log("Update with focus on node " + focusNode.id);
-
     force
       .nodes(tree.nodes)
       .links(tree.links)
