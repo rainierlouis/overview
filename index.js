@@ -10,7 +10,6 @@
 // Open index.html with browser
 
 const cla = require("command-line-args");
-const opn = require("opn");
 const { exec } = require("child_process");
 const shell = require("shelljs");
 
@@ -49,13 +48,17 @@ const entryKeyExtractor = entryKey => entryKey.split(" ")[0];
 const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 
 const beginVisual = async entryPoint => {
-  const pathD = shell.pwd().stdout;
-  await reset.reset();
-  // -- Ready for visual module consumption -- //
-  await user.loadSpinner();
-  await parsing(entryPoint, pathD);
-  await visual(pathD);
-  // await opn(`${stdout}/visual/overwiew.html`, err => {});
+  const pathD = await shell.pwd().stdout;
+  if (user.checkNodeModules(pathD)) {
+    await reset.reset();
+    // -- Ready for visual module consumption -- //
+    await user.loadSpinner();
+    await parsing(entryPoint, pathD);
+    await visual(pathD);
+  } else {
+    await reset.reset();
+    await log(user.invalidNode());
+  }
 };
 
 const ov = async data => {
@@ -72,8 +75,7 @@ const ov = async data => {
       menu.menu();
       break;
     case "reset":
-      const pathD = shell.pwd().stdout;
-      reset.resetMethod(pathD);
+      reset.resetMethod();
       break;
     case "path":
       break;

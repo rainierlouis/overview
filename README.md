@@ -1,18 +1,26 @@
 # OVERVIEW
 
+Overview is a package module that creates a visual representation of the user's application structure.
+
 [![npm version](https://badge.fury.io/js/app-overview.svg)](https://badge.fury.io/js/app-overview) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
 **NOTE: STILL WIP - Expected v1.0.0 release by 9th Feb 2018 - Thank you**
 
-Overview is a package module that creates a visual representation of the user's application structure.
-
 An invaluable tool for developers who will be able to immediately see the layout of the application folder and how the files within connect with one another.
 
-## Getting Started
+## Table of contents
 
-* In your chosen CLI
+* [Getting started](#getting-started)
+* [Usage](#usage)
+* [Built with](#built-with)
+* [Authors](#authors)
+* [License](#license)
+
+## Getting started
+
+* In your preferred CLI
 
 ```
 yarn global add app-overview
@@ -25,11 +33,11 @@ npm install -g app-overview
 ## Usage
 
 * `overview _.js` - Set entry file point + begin visualisation
-* `overview -h` - Menu/help
 * `overview -r` - Remove Visual folder + reset.
+* `overview -h` - Menu/help
 * `overview -p` - View current path.
 
-## Built With
+## Built with
 
 * [d3](https://d3js.org/) - Data driven visualisation
 * [node](https://nodejs.org/en/docs/) - Modular CLI config & system filing
@@ -38,10 +46,10 @@ npm install -g app-overview
 
 ## Authors
 
-* **Achim Bode** - [achimbode](https://github.com/achimbode)
-* **Karsten Balogh** - [karstenba](https://github.com/karstenba)
-* **Nikita Kudryavtsev** - [palevoo](https://github.com/palevoo)
-* **Rainier Louis** - [rainierlouis](https://github.com/rainierlouis)
+* **Achim Bode** - _Visualisation/D3/Design_ - [achimbode](https://github.com/achimbode)
+* **Karsten Balogh** - _Parsing/Data Algorithms_ - [karstenba](https://github.com/karstenba)
+* **Nikita Kudryavtsev** - _Visualisation/D3/Design_ - [palevoo](https://github.com/palevoo)
+* **Rainier Louis** - _CLI Environment/NPM_ - [rainierlouis](https://github.com/rainierlouis)
 
 ## License
 

@@ -40,16 +40,33 @@ const invalidLog = `
 
 			`;
 
+const invalidNode = `
+
+
+	${chalk.red.bold(
+    "ERR - Invalid directory:"
+  )}\n\n 	Please change to the root directory of the application - node_modules must be ${chalk.green(
+  "present"
+)}.
+\n	For more help, enter ${chalk.green("overview -h")}
+
+
+			`;
+
 module.exports = {
+  checkNodeModules: pwd => {
+    pathCheck = `${pwd}/node_modules`;
+    return fs.existsSync(pathCheck);
+  },
   loadSpinner: async () => {
     const spinner = new Ora({});
 
-    spinner.start(" Loading OVERVIEW system tools");
+    spinner.start(` Loading ${chalk.magentaBright("OVERVIEW")} system tools`);
 
     spin.loadSpinner(
       spinner,
       0,
-      "Loading OVERVIEW system tools",
+      `Loading ${chalk.magentaBright("OVERVIEW")} system tools`,
       "Acquiring folder structure"
     );
     spin.loadSpinner(
@@ -79,17 +96,18 @@ module.exports = {
     spin.loadingTime(spinner, 5000);
     setTimeout(() => {
       spinner.succeed(" Creating visual folder");
-      asciimo.write("Enjoy", "larry3d", art => {
+      asciimo.write("Done", "isometric1", art => {
         log(`
 		  			`);
-        log(art.green);
+        log(art.cyan);
         log(`
- Please open ${chalk.cyan("visual/index.html")} in your preferred browser ✌️
+ Please open ${chalk.cyan("visual/overview.html")} in your preferred browser ✌️
 
 		  				`);
       });
     }, 6000);
   },
 
-  invalidInput: () => invalidLog
+  invalidInput: () => invalidLog,
+  invalidNode: () => invalidNode
 };
