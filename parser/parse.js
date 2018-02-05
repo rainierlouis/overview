@@ -18,9 +18,9 @@ const parse = (
   filePath,
   intel = {visited: []},
   structure = {},
-  selfID,
+  selfID = uuid(),
 ) => {
-  selfID = Object.keys(structure).length ? 'root' : uuid();
+  selfID = Object.keys(structure).length ? selfID : 'root';
   intel.visited.push(filePath);
   const fileContent = fs.readFileSync(filePath, 'UTF8');
 
@@ -66,7 +66,6 @@ const parse = (
     filePath,
     []
   );
-
   files.forEach(node => {
     let url = parseFilePath(node.source.value, currentPath);
     if (!url) return;
@@ -74,7 +73,6 @@ const parse = (
     for (let i = 0; i < node.specifiers.length; i++) {
       componentNames.push(node.specifiers[i].local.name);
     }
-
     if (!intel.visited.includes(url)) {
       let myID = uuid();
       let temp = url.split('/');
