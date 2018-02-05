@@ -39,12 +39,12 @@ $(document).ready(function() {
         mountTree();
       }
       if (name == "discovery") {
-        // unmountTree()
+        unmountTree();
         // unmountRadial()
         mountDiscovery();
       }
       if (name == "radial") {
-        // unmountTree()
+        unmountTree();
         // unmountDiscovery()
         mountRadial();
       }

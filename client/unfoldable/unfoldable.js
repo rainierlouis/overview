@@ -35,7 +35,7 @@ function convertJson(data) {
 }
 
 function unmountTree() {
-  // @TODO: look for things to clean up and tidy them here
+  delete root, treemap, svg;
 }
 
 var root, treemap, svg;
