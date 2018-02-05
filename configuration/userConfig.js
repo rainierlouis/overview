@@ -2,6 +2,7 @@ const fs = require("fs");
 const mkdirp = require("mkdirp");
 const path = require("path");
 const chalk = require("chalk");
+const chalkR = require("chalk-rainbow");
 const readline = require("readline");
 const asciimo = require("../node_modules/asciimo/lib/asciimo").Figlet;
 const colors = require("../node_modules/asciimo/lib/colors");
@@ -44,12 +45,12 @@ module.exports = {
   loadSpinner: async () => {
     const spinner = new Ora({});
 
-    spinner.start(" Loading OVERVIEW system tools");
+    spinner.start(` Loading ${chalk.magentaBright("OVERVIEW")} system tools`);
 
     spin.loadSpinner(
       spinner,
       0,
-      "Loading OVERVIEW system tools",
+      `Loading ${chalk.magentaBright("OVERVIEW")} system tools`,
       "Acquiring folder structure"
     );
     spin.loadSpinner(
@@ -79,12 +80,12 @@ module.exports = {
     spin.loadingTime(spinner, 5000);
     setTimeout(() => {
       spinner.succeed(" Creating visual folder");
-      asciimo.write("Enjoy", "larry3d", art => {
+      asciimo.write("Done", "isometric1", art => {
         log(`
 		  			`);
-        log(art.green);
+        log(art.cyan);
         log(`
- Please open ${chalk.cyan("visual/index.html")} in your preferred browser ✌️
+ Please open ${chalk.cyan("visual/overview.html")} in your preferred browser ✌️
 
 		  				`);
       });
