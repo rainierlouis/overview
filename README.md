@@ -23,8 +23,8 @@ An invaluable tool for developers who will be able to immediately see the layout
 * In your preferred CLI
 
 ```
-yarn global add app-overview
-npm install -g app-overview
+yarn add app-overview --dev
+npm install app-overview --save-dev
 ```
 
 * Go to the chosen app directory on the CLI - `overview index.js` or `overview src/index.js`, this will build the config file and begin the visualisation.
