@@ -1,217 +1,261 @@
-
 function convertJson(data) {
+  let id = typeof data.root == "string" ? data.root : "root";
+  let processed = [];
+  let depth = 0;
 
-  let id = typeof(data.root) == 'string' ? data.root : 'root'
-  let processed = []
-  let depth = 0
-
-  function replaceObjectIdsByActualObjects (id, data, processed, depth) {
-    let dataObjectId = id
-    let alreadyProcessed = processed.indexOf(id) != -1
-    processed.push(dataObjectId)
-    let actualDataObject = data[dataObjectId]
-    let newChildrenArray
-    let childrenSupressedToAvoidRecursion
-    if(!alreadyProcessed) {
-      newChildrenArray = actualDataObject.children.map(function(childId){
-        return replaceObjectIdsByActualObjects (childId, data, processed, depth+1)
-      })
-      childrenSupressedToAvoidRecursion = false
+  function replaceObjectIdsByActualObjects(id, data, processed, depth) {
+    let dataObjectId = id;
+    let alreadyProcessed = processed.indexOf(id) != -1;
+    processed.push(dataObjectId);
+    let actualDataObject = data[dataObjectId];
+    let newChildrenArray;
+    let childrenSupressedToAvoidRecursion;
+    if (!alreadyProcessed) {
+      newChildrenArray = actualDataObject.children.map(function(childId) {
+        return replaceObjectIdsByActualObjects(
+          childId,
+          data,
+          processed,
+          depth + 1
+        );
+      });
+      childrenSupressedToAvoidRecursion = false;
     } else {
-      childrenSupressedToAvoidRecursion = (actualDataObject.children.length > 0)
-      newChildrenArray = []
+      childrenSupressedToAvoidRecursion = actualDataObject.children.length > 0;
+      newChildrenArray = [];
     }
-    let copyOfObjectWithNewChildren = Object.assign({}, actualDataObject, {children: newChildrenArray})
-    return copyOfObjectWithNewChildren
+    let copyOfObjectWithNewChildren = Object.assign({}, actualDataObject, {
+      children: newChildrenArray
+    });
+    return copyOfObjectWithNewChildren;
   }
 
-  let result = replaceObjectIdsByActualObjects (id, data, processed, depth)
-  return result
-
+  let result = replaceObjectIdsByActualObjects(id, data, processed, depth);
+  return result;
 }
 
 const unfoldable = {
   show: mountTree,
   hide: unmountTree
-}
-
+};
 
 function unmountTree() {
   // @TODO: look for things to clean up and tidy them here
 }
 
 function mountTree() {
-  loadedTreeData = data // store old object
-  console.log(loadedTreeData)
-  var treeData = convertJson(loadedTreeData)
-  console.log(treeData)
+  loadedTreeData = data; // store old object
+  console.log(loadedTreeData);
+  var treeData = convertJson(loadedTreeData);
+  console.log(treeData);
   // Set the dimensions and margins of the diagram
-  var margin = {top: 20, right: 90, bottom: 30, left: 90},
-  width = 960 - margin.left - margin.right,
-  height = 500 - margin.top - margin.bottom;
+  var margin = { top: 20, right: 90, bottom: 30, left: 90 },
+    width = 960 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
   // appends a 'group' element to 'svg'
   // moves the 'group' element to the top left margin
-  var svg = d3v4.select("#graph").append("svg")
-  .attr("width", width + margin.right + margin.left)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate("
-  + margin.left + "," + margin.top + ")");
+  var svg = d3v4
+    .select("#graph")
+    .append("svg")
+    .attr("width", width + margin.right + margin.left)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
   var i = 0,
-  duration = 750,
-  root;
+    duration = 750,
+    root;
 
   // declares a tree layout and assigns the size
   var treemap = d3v4.tree().size([height, width]);
 
   // Assigns parent, children, height, depth
-  root = d3v4.hierarchy(treeData, function(d) { return d.children; });
+  root = d3v4.hierarchy(treeData, function(d) {
+    return d.children;
+  });
   root.x0 = height / 2;
   root.y0 = 0;
 
   // Collapse after the second level
-  root.children.forEach(collapse);
+  // root.children.forEach(collapse);
+  unfoldToLevel(root, 3);
+
+  function traverse(node, func) {
+    let goDeeper = func(node);
+    let toBeTraversed = node["children"] || node["_children"] || [];
+    if (goDeeper !== false)
+      toBeTraversed.forEach(function(node) {
+        traverse(node, func);
+      });
+  }
+
+  function unfoldToLevel(root, toLevel) {
+    traverse(root, function(node) {
+      let hasUnfoldDepth = node.depth < toLevel;
+      if (hasUnfoldDepth) {
+        if (!node["children"]) node["children"] = node["_children"];
+      } else {
+        collapse(node);
+        return false;
+      }
+    });
+  }
 
   update(root);
 
   // Collapse the node and all it's children
   function collapse(d) {
-    if(d.children) {
-      d._children = d.children
-      d._children.forEach(collapse)
-      d.children = null
+    if (d.children) {
+      d._children = d.children;
+      d._children.forEach(collapse);
+      d.children = null;
     }
   }
 
   function update(source) {
-
     // Assigns the x and y position for the nodes
     var treeData = treemap(root);
 
     // Compute the new tree layout.
     var nodes = treeData.descendants(),
-    links = treeData.descendants().slice(1);
+      links = treeData.descendants().slice(1);
 
     // Normalize for fixed-depth.
-    nodes.forEach(function(d){ d.y = d.depth * 180});
+    nodes.forEach(function(d) {
+      d.y = d.depth * 180;
+    });
 
     // ****************** Nodes section ***************************
 
     // Update the nodes...
-    var node = svg.selectAll('g.node')
-    .data(nodes, function(d) {return d.id || (d.id = ++i); });
-
-    // Enter any new modes at the parent's previous position.
-    var nodeEnter = node.enter().append('g')
-    .attr('class', 'node')
-    .attr("transform", function(d) {
-      return "translate(" + source.y0 + "," + source.x0 + ")";
-    })
-    .on('click', click);
-
-    // Add Circle for the nodes
-    nodeEnter.append('circle')
-    .attr('class', 'node')
-    .attr('r', 1e-6)
-    .style("fill", function(d) {
-      return d._children ? "lightsteelblue" : "#fff";
+    var node = svg.selectAll("g.node").data(nodes, function(d) {
+      return d.id || (d.id = ++i);
     });
 
+    // Enter any new modes at the parent's previous position.
+    var nodeEnter = node
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .attr("transform", function(d) {
+        return "translate(" + source.y0 + "," + source.x0 + ")";
+      })
+      .on("click", click);
+
+    // Add Circle for the nodes
+    nodeEnter
+      .append("circle")
+      .attr("class", "node")
+      .attr("r", 1e-6)
+      .style("fill", function(d) {
+        return d._children ? "lightsteelblue" : "#fff";
+      });
+
     // Add labels for the nodes
-    nodeEnter.append('text')
-    .attr("dy", ".35em")
-    .attr("x", function(d) {
-      return d.children || d._children ? -13 : 13;
-    })
-    .attr("text-anchor", function(d) {
-      return d.children || d._children ? "end" : "start";
-    })
-    .text(function(d) { return d.data.name; });
+    nodeEnter
+      .append("text")
+      .attr("dy", ".35em")
+      .attr("x", function(d) {
+        return d.children || d._children ? -13 : 13;
+      })
+      .attr("text-anchor", function(d) {
+        return d.children || d._children ? "end" : "start";
+      })
+      .text(function(d) {
+        return d.data.name;
+      });
 
     // UPDATE
     var nodeUpdate = nodeEnter.merge(node);
 
     // Transition to the proper position for the node
-    nodeUpdate.transition()
-    .duration(duration)
-    .attr("transform", function(d) {
-      return "translate(" + d.y + "," + d.x + ")";
-    });
+    nodeUpdate
+      .transition()
+      .duration(duration)
+      .attr("transform", function(d) {
+        return "translate(" + d.y + "," + d.x + ")";
+      });
 
     // Update the node attributes and style
-    nodeUpdate.select('circle.node')
-    .attr('r', 10)
-    .style("fill", function(d) {
-      return d._children ? "lightsteelblue" : "#fff";
-    })
-    .attr('cursor', 'pointer');
-
+    nodeUpdate
+      .select("circle.node")
+      .attr("r", 10)
+      .style("fill", function(d) {
+        return d._children ? "lightsteelblue" : "#fff";
+      })
+      .attr("cursor", "pointer");
 
     // Remove any exiting nodes
-    var nodeExit = node.exit().transition()
-    .duration(duration)
-    .attr("transform", function(d) {
-      return "translate(" + source.y + "," + source.x + ")";
-    })
-    .remove();
+    var nodeExit = node
+      .exit()
+      .transition()
+      .duration(duration)
+      .attr("transform", function(d) {
+        return "translate(" + source.y + "," + source.x + ")";
+      })
+      .remove();
 
     // On exit reduce the node circles size to 0
-    nodeExit.select('circle')
-    .attr('r', 1e-6);
+    nodeExit.select("circle").attr("r", 1e-6);
 
     // On exit reduce the opacity of text labels
-    nodeExit.select('text')
-    .style('fill-opacity', 1e-6);
+    nodeExit.select("text").style("fill-opacity", 1e-6);
 
     // ****************** links section ***************************
 
     // Update the links...
-    var link = svg.selectAll('path.link')
-    .data(links, function(d) { return d.id; });
+    var link = svg.selectAll("path.link").data(links, function(d) {
+      return d.id;
+    });
 
     // Enter any new links at the parent's previous position.
-    var linkEnter = link.enter().insert('path', "g")
-    .attr("class", "link")
-    .attr('d', function(d){
-      var o = {x: source.x0, y: source.y0}
-      return diagonal(o, o)
-    });
+    var linkEnter = link
+      .enter()
+      .insert("path", "g")
+      .attr("class", "link")
+      .attr("d", function(d) {
+        var o = { x: source.x0, y: source.y0 };
+        return diagonal(o, o);
+      });
 
     // UPDATE
     var linkUpdate = linkEnter.merge(link);
 
     // Transition back to the parent element position
-    linkUpdate.transition()
-    .duration(duration)
-    .attr('d', function(d){ return diagonal(d, d.parent) });
+    linkUpdate
+      .transition()
+      .duration(duration)
+      .attr("d", function(d) {
+        return diagonal(d, d.parent);
+      });
 
     // Remove any exiting links
-    var linkExit = link.exit().transition()
-    .duration(duration)
-    .attr('d', function(d) {
-      var o = {x: source.x, y: source.y}
-      return diagonal(o, o)
-    })
-    .remove();
+    var linkExit = link
+      .exit()
+      .transition()
+      .duration(duration)
+      .attr("d", function(d) {
+        var o = { x: source.x, y: source.y };
+        return diagonal(o, o);
+      })
+      .remove();
 
     // Store the old positions for transition.
-    nodes.forEach(function(d){
+    nodes.forEach(function(d) {
       d.x0 = d.x;
       d.y0 = d.y;
     });
 
     // Creates a curved (diagonal) path from parent to the child nodes
     function diagonal(s, d) {
-
       path = `M ${s.y} ${s.x}
       C ${(s.y + d.y) / 2} ${s.x},
       ${(s.y + d.y) / 2} ${d.x},
-      ${d.y} ${d.x}`
+      ${d.y} ${d.x}`;
 
-      return path
+      return path;
     }
 
     // Toggle children on click.
@@ -229,5 +273,5 @@ function mountTree() {
 }
 
 window.onload = function() {
-  if(typeof switch_is_present == 'undefined') mountTree()
-}
+  if (typeof switch_is_present == "undefined") mountTree();
+};
