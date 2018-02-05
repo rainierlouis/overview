@@ -50,7 +50,6 @@
     "command-line-args": "^5.0.1",
     "fs-extra": "^5.0.0",
     "mkdirp": "^0.5.1",
-    "node-asciimo": "^0.3.2",
     "node-cmd": "^3.0.0",
     "ora": "^1.4.0",
     "shelljs": "^0.8.1",
