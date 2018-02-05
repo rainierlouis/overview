@@ -81,7 +81,16 @@ function showSearch() {
   $(jqSearch).insertAfter("#switch");
   $(".graphsearch input").on("input", function(e) {
     let inputText = $(e.delegateTarget).val();
-    console.log(findNodes(inputText));
+    let arrFoundNodes = findNodes(inputText);
+    highlight(arrFoundNodes);
+    console.log(arrFoundNodes);
+  });
+}
+
+function highlight(arrNodes) {
+  arrNodes.forEach(function(node) {
+    node.highlight = 1;
+    update(node);
   });
 }
 
@@ -166,6 +175,7 @@ function update(source) {
     .select("circle.node")
     .attr("r", 10)
     .style("fill", function(d) {
+      if (d.highlight) return "#ea762d";
       return d._children ? "lightsteelblue" : "#fff";
     })
     .attr("cursor", "pointer");
