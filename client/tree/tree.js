@@ -58,43 +58,42 @@ function mountTree() {
     width = 860 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
 
-  var treemap = d3.tree()
+  var treemap = d3v4.tree()
     .size([width, height]);
 
   var dataSource = sources[sources.current]
   var ChildrenFunctionGenerator = dataSource['createGetChildrenFunction']
   var childrenFunctionForHierarchy = ChildrenFunctionGenerator(treeData)
   var rootForHierarchy = dataSource['getRoot'](treeData, childrenFunctionForHierarchy)
-  var nodesHierarchy = d3.hierarchy(rootForHierarchy, childrenFunctionForHierarchy)
+  var nodesHierarchy = d3v4.hierarchy(rootForHierarchy, childrenFunctionForHierarchy)
 
   var nodes = treemap(nodesHierarchy)
   var links = nodesHierarchy.links()
 
-  simulation = d3.forceSimulation(nodes)
-    // .force(
-    //   'center x to treepositions',
-    //   d3.forceX(function(d){return d.x})
-    // )
-    // .force(
-    //   'center y to treepositions',
-    //   d3.forceY(function(d){return d.y})
-    // )
-    .force('charge', d3.forceManyBody().strength(80))
-    // .force('y', d3.forceY().strength(200).y(height/2))
-    .force('collision', d3.forceCollide().radius(function(d) {
+  simulation = d3v4.forceSimulation(nodes)
+    .force(
+      'center x to treepositions',
+      d3v4.forceX(function(d){return d.x}).strength(200)
+    )
+    .force(
+      'center y to treepositions',
+      d3v4.forceY(function(d){return d.y}).strength(200)
+    )
+    .force('charge', d3v4.forceManyBody().strength(80))
+    .force('collision', d3v4.forceCollide().radius(function(d) {
       return d.radius || 40;
     }))
-    .on('tick', ticked);
+    .on('tick', ticked)
 
-  var svg =  d3.select('#graph').append('svg')
+  var svg =  d3v4.select('#graph').append('svg')
     .attr('width', width + margin.left + margin.right)
     .attr('height', height + margin.top + margin.bottom)
-    //
+
   var g = svg.append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
   function ticked() {
-    var edges = d3.select('svg g')
+    var edges = d3v4.select('svg g')
     .selectAll('line')
     .data(nodesHierarchy.links())
 
@@ -120,17 +119,17 @@ function mountTree() {
 
     var node = svg.select('g').selectAll('.node')
         .data(nodes.descendants())
-      .enter().append('g')
         .attr('transform', function(d) {
-          return 'translate(' + d.x + ',' + d.y + ')';
-        })
+          // console.log('trans: ' + d.x + ',' + d.y);
+            return 'translate(' + d.x + ',' + d.y + ')';
+          })
+      .enter().append('g')
         .attr('class', function(d) {
           return 'node' +
             (d.children ? ' node--internal' : ' node--leaf'); })
-        .call(d3.drag()
-            .on('start', dragstarted)
+        .call(d3v4.drag()
             .on('drag', dragged)
-            .on('end', dragended))
+        )
 
     node.append('circle')
       .attr('r', 10)
@@ -149,39 +148,28 @@ function mountTree() {
 
     node.append('text')
       .attr('y', function(d) { return d.children ? 20 : -15; })
-      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      // .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
+      .text(function(d) { return Math.random() + ' / ' + Math.random() })
       .classed('info', true)
       .call(function(d) {})
-  }
 
-  //https://bl.ocks.org/d3noob/204d08d309d2b2903e12554b0aef6a4d
-  function dragstarted(d) {
-    // console.log(d3.event);
-    d.x += d3.event.x + d3.event.dx;
-    d.y += d3.event.y;
-    d3.select(this).raise().classed('active', true);
+    node.selectAll('text.info')
+      .style('stroke','green')
+      .text(function(d) { return Math.round(d.x) + ' / ' + Math.round(d.y) })
   }
 
   function dragged(d) {
-    d.x = d3.event.x;
-    d.y = d3.event.y;
-    d3.select(this)
+    d.x = d3v4.event.x;
+    d.y = d3v4.event.y;
+    d3v4.select(this)
       .attr('transform', function(d) {
-        // console.log('d.x',d.x);
-        // console.log('d3.event.x', d3.event.x);
-        // console.log('d3.event.dx', d3.event.dx);
         return 'translate(' + d3.event.x + ',' + d3.event.y + ')';
       })
     var links = g.selectAll('line.link')
-    ticked()
+    // ticked()
   }
 
-  function dragended(d) {
-    d.x = null;
-    d.y = null;
-    d3.select(this).classed('active', false);
-  }
-
+  ticked()
   ticked()
 
 }

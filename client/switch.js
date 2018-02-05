@@ -1,23 +1,28 @@
 var switch_is_present = true;
 
 $( document ).ready(function() {
-    // $('#switch').text("switch loaded...")
     function addButton(text) {
-      var buttonElement = $('<button id="' + text + '" type="button" class="btn btn-primary btn-sm"></button>')
-      var button = $(buttonElement).appendTo('#switch')
-      $(button)
-      .text(text)
-      .addClass('switch_button')
+      $('#'+text)
       .click(function(e) {
-        var name = $( e.delegateTarget ).text()
-        console.log(($('#graph svg').length))
+        console.log(e.target);
+        var name = e.target.id
+        console.log(name);
         $('#graph svg').remove()
-        if(name == 'tree') mountTree()
+        if(name == 'tree') {
+          // unmountRadial()
+          // unmountDiscovery()
+          mountTree()
+        }
         if(name == 'discovery') {
-          unmountTree()
+          // unmountTree()
+          // unmountRadial()
           mountDiscovery()
         }
-        if(name == 'radial') mountRadial()
+        if(name == 'radial') {
+          // unmountTree()
+          // unmountDiscovery()
+          mountRadial()
+        }
       })
     }
     addButton('tree')
