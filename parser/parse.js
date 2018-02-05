@@ -18,9 +18,9 @@ const parse = (
   filePath,
   intel = {visited: []},
   structure = {},
-  selfID,
+  selfID = uuid(),
 ) => {
-  selfID = Object.keys(structure).length ? 'root' : uuid();
+  selfID = Object.keys(structure).length ? selfID : 'root';
   intel.visited.push(filePath);
   const fileContent = fs.readFileSync(filePath, 'UTF8');
 
@@ -66,15 +66,15 @@ const parse = (
     filePath,
     []
   );
-
+  console.log('self', structure[selfID].name);
   files.forEach(node => {
     let url = parseFilePath(node.source.value, currentPath);
+    console.log('url', url);
     if (!url) return;
 
     for (let i = 0; i < node.specifiers.length; i++) {
       componentNames.push(node.specifiers[i].local.name);
     }
-
     if (!intel.visited.includes(url)) {
       let myID = uuid();
       let temp = url.split('/');
@@ -88,7 +88,9 @@ const parse = (
         url,
         []
       );
+      console.log(structure[myID].id);
       structure[selfID].children.push(myID);
+      console.log(selfID, structure[selfID].children);
       parse(url, intel, structure, myID);
     }
   });
@@ -178,5 +180,7 @@ const readFile = filePath => new Promise((resolve, reject) => {
     else resolve(data);
   });
 });
+
+console.log(parse('/Users/karsten/Documents/CodeWorks/senior/overview/parser/test_apps/mapStories/src/Index.js'));
 
 module.exports = parse;
