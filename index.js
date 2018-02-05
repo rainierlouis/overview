@@ -72,8 +72,7 @@ const ov = async data => {
       menu.menu();
       break;
     case "reset":
-      const pathD = shell.pwd().stdout;
-      reset.resetMethod(pathD);
+      reset.resetMethod();
       break;
     case "path":
       break;
