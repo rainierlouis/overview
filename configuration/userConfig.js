@@ -40,7 +40,24 @@ const invalidLog = `
 
 			`;
 
+const invalidNode = `
+
+
+	${chalk.red.bold(
+    "ERR - Invalid directory:"
+  )}\n\n 	Please change to the root directory of the application - node_modules must be ${chalk.green(
+  "present"
+)}.
+\n	For more help, enter ${chalk.green("overview -h")}
+
+
+			`;
+
 module.exports = {
+  checkNodeModules: pwd => {
+    pathCheck = `${pwd}/node_modules`;
+    return fs.existsSync(pathCheck);
+  },
   loadSpinner: async () => {
     const spinner = new Ora({});
 
@@ -91,5 +108,6 @@ module.exports = {
     }, 6000);
   },
 
-  invalidInput: () => invalidLog
+  invalidInput: () => invalidLog,
+  invalidNode: () => invalidNode
 };
