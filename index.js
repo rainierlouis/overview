@@ -60,6 +60,9 @@ const beginVisual = async entryPoint => {
     await user.loadSpinner();
     await parsing(entryPoint, pathD);
     await visual(pathD);
+    setTimeout(async () => {
+      await shell.exec("open visual/overview.html");
+    }, 6000);
   } else {
     await reset.reset();
     await log(user.invalidNode());
