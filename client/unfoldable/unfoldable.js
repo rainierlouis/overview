@@ -83,13 +83,21 @@ function showSearch() {
     let inputText = $(e.delegateTarget).val();
     let arrFoundNodes = findNodes(inputText);
     highlight(arrFoundNodes);
-    console.log(arrFoundNodes);
+    // console.log(arrFoundNodes);
   });
 }
 
 function highlight(arrNodes) {
+  removeHighlights();
   arrNodes.forEach(function(node) {
     node.highlight = 1;
+    update(node);
+  });
+}
+
+function removeHighlights(exepArrNodes, doUpdate) {
+  traverse(root, function(node) {
+    delete node.highlight;
     update(node);
   });
 }
