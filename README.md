@@ -12,7 +12,7 @@ An invaluable tool for developers who will be able to immediately see the layout
 
 ## Getting Started
 
-* In your chosen CLI
+* In your preferred CLI
 
 ```
 yarn global add app-overview
@@ -25,8 +25,8 @@ npm install -g app-overview
 ## Usage
 
 * `overview _.js` - Set entry file point + begin visualisation
-* `overview -h` - Menu/help
 * `overview -r` - Remove Visual folder + reset.
+* `overview -h` - Menu/help
 * `overview -p` - View current path.
 
 ## Built With
@@ -38,10 +38,10 @@ npm install -g app-overview
 
 ## Authors
 
-* **Achim Bode** - [achimbode](https://github.com/achimbode)
-* **Karsten Balogh** - [karstenba](https://github.com/karstenba)
-* **Nikita Kudryavtsev** - [palevoo](https://github.com/palevoo)
-* **Rainier Louis** - [rainierlouis](https://github.com/rainierlouis)
+* **Achim Bode** - _Visualisation/D3/Design _ - [achimbode](https://github.com/achimbode)
+* **Karsten Balogh** - _Parsing/Data Algorithms _ - [karstenba](https://github.com/karstenba)
+* **Nikita Kudryavtsev** - _Visualisation/D3/Design_ - [palevoo](https://github.com/palevoo)
+* **Rainier Louis** - _CLI Environment/NPM_ - [rainierlouis](https://github.com/rainierlouis)
 
 ## License
 
