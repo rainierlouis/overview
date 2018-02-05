@@ -3,9 +3,6 @@ const mkdirp = require("mkdirp");
 const path = require("path");
 const parse = require("../parser/parse");
 
-// TODO: Require parser function, invoke
-// TODO: Take parsed data, create folder/file in client
-
 const dataContent = {};
 
 const jsonContent = jsonData => `const data = ${jsonData}`;
