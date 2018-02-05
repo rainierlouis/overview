@@ -6,11 +6,11 @@ svg {
   cursor: default;
   font-weight: 400;
   font-size: 100%;
-  border: 1px solid black;
+  border: 3px solid darkgrey;
 }
 
 .node circle {
-  fill: black;
+  /* fill: black; */
   cursor: pointer;
 }
 

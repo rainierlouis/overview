@@ -6,20 +6,30 @@ function mountRadial() {
   var tree;
   var min_zoom = 0.1;
   var max_zoom = 7;
-  var zoom = d3v3.behavior.zoom().scaleExtent([min_zoom,max_zoom])
 
   var force = d3v3.layout.force()
     .charge(-800)
     .size([width, height]);
 
+  var zoom = d3v3.behavior.zoom()
+      .scaleExtent([1, 10])
+      .on("zoom", zoomed);
+
+  var drag = d3v3.behavior.drag()
+      .origin(function(d) { return d; })
+      .on("dragstart", dragstarted)
+      .on("drag", dragged)
+      .on("dragend", dragended);
+
   var svg = d3v3.select("#graph").append("svg")
     .attr("width", width)
-    .attr("height", height);
+    .attr("height", height)
+    .call(zoom);
 
-  const render = (data) => {
-    // console.log(data);
-    const arr = [];
 
+
+  var render = (data) => {
+    var arr = [];
     for (let i in data) {
       if (i === 'root') data[i]['depth'] = 0;
       else data[i]['depth'] = 1;
@@ -32,7 +42,8 @@ function mountRadial() {
     nodes: render(data),
     links: getLinks(render(data))
   };
-  console.log(tree);
+  var container = svg.append("g");
+
   updateForce();
 
   function updateForce(focusNode) {
@@ -95,6 +106,28 @@ function mountRadial() {
         });
     });
 
+  }
+
+  function zoomed() {
+          container.attr("transform", "translate(" + d3v3.event.translate + ")scale(" + d3v3.event.scale + ")");
+        }
+
+  function dragstarted(d) {
+    d3v3.event.sourceEvent.stopPropagation();
+
+    d3v3.select(this).classed("dragging", true);
+    force.start();
+  }
+
+  function dragged(d) {
+
+    d3v3.select(this).attr("cx", d.x = d3v3.event.x).attr("cy", d.y = d3v3.event.y);
+
+  }
+
+  function dragended(d) {
+
+    d3v3.select(this).classed("dragging", false);
   }
 
   function getLinks(data) { // Gets links from nodes data

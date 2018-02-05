@@ -11,7 +11,10 @@ html, body {
 }
 
 body {
-  background: linear-gradient(45deg, #e10522 0%, rgba(225, 5, 34, 0) 70%), linear-gradient(135deg, #3105d1 10%, rgba(49, 5, 209, 0) 80%), linear-gradient(225deg, #0adbd8 10%, rgba(10, 219, 216, 0) 80%), linear-gradient(315deg, #09f505 100%, rgba(9, 245, 5, 0) 70%);
+  background: linear-gradient(45deg, #e10522 0%, rgba(225, 5, 34, 0) 70%),
+              linear-gradient(135deg, #3105d1 10%, rgba(49, 5, 209, 0) 80%),
+              linear-gradient(225deg, #0adbd8 10%, rgba(10, 219, 216, 0) 80%),
+              linear-gradient(315deg, #09f505 100%, rgba(9, 245, 5, 0) 70%);
 }
 
 .absolute-center, .menu, .menu .btn .fa, .menu .btn.trigger .line {

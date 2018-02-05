@@ -4,6 +4,7 @@ $( document ).ready(function() {
     function addButton(text) {
       $('#'+text)
       .click(function(e) {
+        console.log(e.target);
         var name = e.target.id
         console.log(name);
         $('#graph svg').remove()
