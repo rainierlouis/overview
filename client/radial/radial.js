@@ -1,35 +1,26 @@
 function mountRadial() {
     "use strict"
 
-  var width = document.body.clientWidth;
-  var height = document.body.clientHeight;
-  var tree;
-  var min_zoom = 0.1;
-  var max_zoom = 7;
+  const width = document.body.clientWidth;
+  const height = document.body.clientHeight;
+  let tree;
 
-  var force = d3v3.layout.force()
+  const force = d3v3.layout.force()
     .charge(-800)
     .size([width, height]);
 
-  var zoom = d3v3.behavior.zoom()
-      .scaleExtent([1, 10])
-      .on("zoom", zoomed);
-
-  var drag = d3v3.behavior.drag()
-      .origin(function(d) { return d; })
-      .on("dragstart", dragstarted)
-      .on("drag", dragged)
-      .on("dragend", dragended);
-
-  var svg = d3v3.select("#graph").append("svg")
+  let svg = d3v3.select("#graph").append("svg")
     .attr("width", width)
     .attr("height", height)
-    .call(zoom);
+    .call(d3v3.behavior.zoom()
+    .scaleExtent([0.4, 4])
+    .on("zoom", function () {
+      svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
+    }))
+    .append("g")
 
-
-
-  var render = (data) => {
-    var arr = [];
+  const render = (data) => {
+    let arr = [];
     for (let i in data) {
       if (i === 'root') data[i]['depth'] = 0;
       else data[i]['depth'] = 1;
@@ -42,14 +33,13 @@ function mountRadial() {
     nodes: render(data),
     links: getLinks(render(data))
   };
-  var container = svg.append("g");
 
   updateForce();
 
   function updateForce(focusNode) {
     var link = svg.selectAll(".link").data(tree.links);
     var node = svg.selectAll(".node").data(tree.nodes);
-    var nodeGroup;
+    var container;
 
     focusNode = focusNode || _.find(tree.nodes, {
       depth: 0
@@ -66,18 +56,18 @@ function mountRadial() {
       .append("line")
       .attr("class", "link");
 
-    nodeGroup = node.enter()
+    container = node.enter()
       .append("g")
       .attr("class", "node")
-      .call(force.drag);
 
-    nodeGroup.append("circle")
-      .attr("r", 6)
+    container.append("circle")
+      .attr("r", 10)
       .on("click", function(d) {
         updateForce(d);
       });
 
-    nodeGroup.append("text")
+
+    container.append("text")
       .text(function(d) {
         return d.name;
       })
@@ -105,29 +95,6 @@ function mountRadial() {
           return "translate(" + d.x + "," + d.y + ")";
         });
     });
-
-  }
-
-  function zoomed() {
-          container.attr("transform", "translate(" + d3v3.event.translate + ")scale(" + d3v3.event.scale + ")");
-        }
-
-  function dragstarted(d) {
-    d3v3.event.sourceEvent.stopPropagation();
-
-    d3v3.select(this).classed("dragging", true);
-    force.start();
-  }
-
-  function dragged(d) {
-
-    d3v3.select(this).attr("cx", d.x = d3v3.event.x).attr("cy", d.y = d3v3.event.y);
-
-  }
-
-  function dragended(d) {
-
-    d3v3.select(this).classed("dragging", false);
   }
 
   function getLinks(data) { // Gets links from nodes data
