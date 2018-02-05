@@ -10,7 +10,6 @@
 // Open index.html with browser
 
 const cla = require("command-line-args");
-const opn = require("opn");
 const { exec } = require("child_process");
 const shell = require("shelljs");
 
@@ -55,7 +54,6 @@ const beginVisual = async entryPoint => {
   await user.loadSpinner();
   await parsing(entryPoint, pathD);
   await visual(pathD);
-  // await opn(`${stdout}/visual/overwiew.html`, err => {});
 };
 
 const ov = async data => {
