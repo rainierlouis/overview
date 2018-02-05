@@ -41,22 +41,22 @@ module.exports = {
       "Scanning directories + files for removal",
       "Deleting visual directory + it's contents"
     );
-    spin.loadingTime(spinner, 2000);
+    spin.loadSpinner(
+      spinner,
+      2000,
+      "Deleting visual directory + it's contents",
+      "Clearing log cache"
+    );
+    spin.loadingTime(spinner, 3000);
     setTimeout(() => {
-      spinner.succeed(" Deleting visual directory + it's contents");
-      asciimo.write("Done", "isometric1", art => {
-        log(`
-				`);
-        log(art.cyan);
-        log(`
+      spinner.succeed(" Clearing log cache");
+      log(`
  Environment is ready to begin a new ${chalk.magentaBright(
    "OVERVIEW"
  )} visualisation ✌️
 
-
 				`);
-      });
-    }, 3000);
+    }, 4000);
   },
   resetMethod: async () => {
     await module.exports.reset();
