@@ -62,9 +62,12 @@ function unfoldToLevel(root, toLevel) {
 }
 
 function findNodes(name) {
+  caseSensitivity = false;
+  if (!caseSensitivity) name = name.toLowerCase();
   var found = [];
   traverse(root, function(node) {
     var nodename = node.data.name;
+    if (!caseSensitivity) nodename = nodename.toLowerCase();
     if (nodename.search(name) !== -1) {
       found.push(node);
     }
@@ -81,9 +84,11 @@ function showSearch() {
   $(jqSearch).insertAfter("#switch");
   $(".graphsearch input").on("input", function(e) {
     let inputText = $(e.delegateTarget).val();
-    let arrFoundNodes = findNodes(inputText);
-    highlight(arrFoundNodes);
-    // console.log(arrFoundNodes);
+    if (inputText.length > 0) {
+      let arrFoundNodes = findNodes(inputText);
+      highlight(arrFoundNodes);
+      // console.log(arrFoundNodes);
+    } else removeHighlights();
   });
 }
 
