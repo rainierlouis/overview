@@ -49,12 +49,20 @@ const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 
 const beginVisual = async entryPoint => {
   const pathD = await shell.pwd().stdout;
+  if (!user.checkEntryPoint(pathD, entryPoint)) {
+    reset.reset();
+    log(user.invalidInput());
+    return;
+  }
   if (user.checkNodeModules(pathD)) {
     await reset.reset();
     // -- Ready for visual module consumption -- //
     await user.loadSpinner();
     await parsing(entryPoint, pathD);
     await visual(pathD);
+    setTimeout(async () => {
+      await shell.exec("open visual/overview.html");
+    }, 6000);
   } else {
     await reset.reset();
     await log(user.invalidNode());

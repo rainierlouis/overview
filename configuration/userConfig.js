@@ -31,7 +31,7 @@ const invalidLog = `
 
 	${chalk.red.bold(
     "ERR - Invalid input or flag:"
-  )}\n\n 	An entry point is ${chalk.green(
+  )}\n\n 	A valid entry point is ${chalk.green(
   "required"
 )} - Please input one and try again. ${chalk.grey(
   "(e.g. overview App.js)"
@@ -57,6 +57,10 @@ module.exports = {
   checkNodeModules: pwd => {
     pathCheck = `${pwd}/node_modules`;
     return fs.existsSync(pathCheck);
+  },
+  checkEntryPoint: (pwd, entryPoint) => {
+    entryPathCheck = `${pwd}/${entryPoint}`;
+    return fs.existsSync(entryPathCheck);
   },
   loadSpinner: async () => {
     const spinner = new Ora({});
@@ -96,15 +100,12 @@ module.exports = {
     spin.loadingTime(spinner, 5000);
     setTimeout(() => {
       spinner.succeed(" Creating visual folder");
-      asciimo.write("Done", "isometric1", art => {
-        log(`
-		  			`);
-        log(art.cyan);
-        log(`
- Please open ${chalk.cyan("visual/overview.html")} in your preferred browser ✌️
+      log(`
+ Visual file has been created at ${chalk.cyan(
+   "visual/overview.html"
+ )} - Enjoy! ✌️
 
-		  				`);
-      });
+								  				`);
     }, 6000);
   },
 

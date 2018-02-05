@@ -1,8 +1,9 @@
 # OVERVIEW
 
-Overview is a package module that creates a visual representation of the user's application structure.
+> Overview is a package module that creates a visual representation of the user's application structure.
 
-[![npm version](https://badge.fury.io/js/app-overview.svg)](https://badge.fury.io/js/app-overview) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+[![npm version](https://badge.fury.io/js/app-overview.svg)](https://www.npmjs.com/package/app-overview)
+[![npm](https://img.shields.io/npm/dw/app-overview.svg)]() [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
@@ -20,15 +21,27 @@ An invaluable tool for developers who will be able to immediately see the layout
 
 ## Getting started
 
-* In your preferred CLI
+In your preferred CLI -
 
 ```
-yarn global add app-overview
-npm install -g app-overview
+yarn add app-overview --dev
+-or-
+npm install app-overview --save-dev
 ```
 
-* Go to the chosen app directory on the CLI - `overview App.js`, this will build the config file and begin the visualisation.
-* Voila, open the overview.html file found in the Visual folder in your chosen browser - Enjoy!
+Go to the chosen app directory on the CLI -
+
+```
+overview index.js
+-or-
+overview src/index.js
+```
+
+This will build the config file and begin the visualisation. Once complete, the visual file will open in your default browser.
+
+Alternatively, you can go to `YourAppDirectory/Visual/overview.html`.
+
+Enjoy!
 
 ## Usage
 
