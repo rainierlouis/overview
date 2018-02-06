@@ -208,6 +208,6 @@ const update = (source, root) => {
 (function($) {
   $(document).ready(function() {
     if (typeof switch_is_present == "undefined") mountTree();
-    showSearch();
+    //showSearch();
   });
 })(jQuery);

@@ -43,3 +43,9 @@ function removeHighlights(exepArrNodes, doUpdate) {
     update(node);
   });
 }
+
+(function($) {
+  $(document).ready(function() {
+    showSearch();
+  });
+})(jQuery);
