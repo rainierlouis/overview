@@ -21,7 +21,7 @@ An invaluable tool for developers who will be able to immediately see the layout
 
 ## Getting started
 
-In your preferred CLI -
+Go to the chosen app directory on the CLI, then install the following -
 
 ```
 yarn add app-overview --dev
@@ -29,7 +29,7 @@ yarn add app-overview --dev
 npm install app-overview --save-dev
 ```
 
-Go to the chosen app directory on the CLI -
+Once installation is complete, input your entry point like so -
 
 ```
 overview index.js
@@ -61,9 +61,9 @@ Enjoy!
 
 ## Authors
 
-* **Achim Bode** - _Visualization/D3/Design_ - [achimbode](https://github.com/achimbode)
+* **Achim Bode** - _Data Visualization/D3_ - [achimbode](https://github.com/achimbode)
 * **Karsten Balogh** - _Parsing/Data Algorithms_ - [karstenba](https://github.com/karstenba)
-* **Nikita Kudryavtsev** - _Visualization/D3/Design_ - [palevoo](https://github.com/palevoo)
+* **Nikita Kudryavtsev** - _Data Visualization/D3_ - [palevoo](https://github.com/palevoo)
 * **Rainier Louis** - _CLI Environment/NPM_ - [rainierlouis](https://github.com/rainierlouis)
 
 ## License

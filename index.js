@@ -33,6 +33,7 @@ const user = require("./configuration/userConfig");
 const parsing = require("./configuration/parseModule").parsing;
 //-------------//
 
+// HELPER METHODS //
 const userEntry = entryObj =>
   entryObj._unknown && entryObj._unknown.length > 0
     ? entryObj._unknown[0]
@@ -73,6 +74,8 @@ const beginVisual = async entryPoint => {
     await log(user.invalidNode());
   }
 };
+
+// ---------------- //
 
 const ov = async data => {
   let entryPoint;
