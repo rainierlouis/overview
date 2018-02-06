@@ -65,25 +65,21 @@ function mountRadial() {
 
     container.append("circle")
       .attr("r", 10)
-      .on("click", function(d) {
-        updateForce(d);
-      });
 
     container.append("text")
       .text(function(d) {
         return d.name;
       })
       .attr("y", 18)
-      .on("click", function(d) {
-        updateForce(d);
-      });
 
     tree.links.forEach((d) => {
         linkedNodes[d.source.index + "," + d.target.index] = 1;
     });
+
     const isConnected = (a, b) => {
         return linkedNodes[a.index + "," + b.index] || linkedNodes[b.index + "," + a.index] || a.index == b.index;
     }
+
     function mouseOver(opacity) {
         return function(d) {
 
@@ -131,7 +127,7 @@ function mountRadial() {
     });
   }
 
-  function getLinks(data) { // Gets links from nodes data
+  function getLinks(data) {
     return _.flatten(_.map(_.filter(data, "children"), function(source, i) {
       return _.map(source.children, function(target) {
         return {
@@ -144,7 +140,6 @@ function mountRadial() {
     }));
   }
 };
-
 
 window.onload = function() {
   if(typeof switch_is_present == 'undefined') mountRadial()
