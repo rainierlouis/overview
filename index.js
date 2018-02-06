@@ -86,6 +86,8 @@ const ov = async data => {
       reset.resetMethod();
       break;
     case "path":
+      const pathD = await shell.pwd().stdout;
+      log(`${pathD}/`);
       break;
     case "entry":
       beginVisual(entryPoint);
