@@ -42,7 +42,7 @@ async function parse(entryPoint) {
     );
   }
   await scan(entryPoint, "root").catch(err => console.log(err));
-  return JSON.stringify(nodes);
+  return nodes;
 }
 
 const createRouter = (state, nodes, parent) => {
