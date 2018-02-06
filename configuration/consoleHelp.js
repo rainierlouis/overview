@@ -19,7 +19,7 @@ module.exports = {
    ${chalk.dim("Entry")}
    	${chalk.green(
       "$ overview <entry>"
-    )} Declare entry point for the visualisation ${chalk.magenta.bold(
+    )} Declare entry point for the visualization ${chalk.magenta.bold(
         "required first"
       )}
 
