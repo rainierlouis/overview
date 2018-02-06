@@ -4,6 +4,7 @@ function mountRadial() {
   const width = document.body.clientWidth;
   const height = document.body.clientHeight;
   let tree;
+  let linkedNodes = {};
 
   const force = d3v3.layout.force()
     .charge(-800)
@@ -45,8 +46,6 @@ function mountRadial() {
       depth: 0
     });
 
-    console.log("Update with focus on node " + focusNode.id);
-
     force
       .nodes(tree.nodes)
       .links(tree.links)
@@ -58,23 +57,54 @@ function mountRadial() {
 
     container = node.enter()
       .append("g")
-      .attr("class", "node")
+      .on("mouseover", mouseOver(.1))
+      .on("mouseout", mouseOut)
+      .attr("class", "node");
 
     container.append("circle")
-      .attr("r", 10)
-      .on("click", function(d) {
-        updateForce(d);
-      });
-
+      .attr("r", 10);
 
     container.append("text")
       .text(function(d) {
         return d.name;
       })
-      .attr("y", 18)
-      .on("click", function(d) {
-        updateForce(d);
-      });
+      .attr("x", 8)
+      .attr("y", 18);
+
+    tree.links.forEach((d) => {
+        linkedNodes[d.source.index + "," + d.target.index] = 1;
+    });
+
+    const isConnected = (a, b) => {
+        return linkedNodes[a.index + "," + b.index] || linkedNodes[b.index + "," + a.index] || a.index == b.index;
+    };
+
+    function mouseOver(opacity) {
+        return function(d) {
+
+            node.style("stroke-opacity", function(o) {
+                let thisOpacity = isConnected(d, o) ? 1 : opacity;
+                return thisOpacity;
+            });
+            node.style("fill-opacity", function(o) {
+                let thisOpacity = isConnected(d, o) ? 1 : opacity;
+                return thisOpacity;
+            });
+            link.style("stroke-opacity", function(o) {
+                return o.source === d || o.target === d ? 1 : opacity;
+            });
+            link.style("stroke", function(o){
+                return o.source === d || o.target === d ? o.source.colour : "#ddd";
+            });
+        };
+    };
+
+    function mouseOut() {
+        node.style("stroke-opacity", 1);
+        node.style("fill-opacity", 1);
+        link.style("stroke-opacity", 1);
+        link.style("stroke", "#ddd");
+    };
 
     force.on("tick", function() {
       link
@@ -95,9 +125,10 @@ function mountRadial() {
           return "translate(" + d.x + "," + d.y + ")";
         });
     });
+
   }
 
-  function getLinks(data) { // Gets links from nodes data
+  function getLinks(data) {
     return _.flatten(_.map(_.filter(data, "children"), function(source, i) {
       return _.map(source.children, function(target) {
         return {
