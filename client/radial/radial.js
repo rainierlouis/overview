@@ -46,8 +46,6 @@ function mountRadial() {
       depth: 0
     });
 
-    console.log("Update with focus on node " + focusNode.id);
-
     force
       .nodes(tree.nodes)
       .links(tree.links)
@@ -59,18 +57,19 @@ function mountRadial() {
 
     container = node.enter()
       .append("g")
-      .on("mouseover", mouseOver(.3))
+      .on("mouseover", mouseOver(.1))
       .on("mouseout", mouseOut)
-      .attr("class", "node")
+      .attr("class", "node");
 
     container.append("circle")
-      .attr("r", 10)
+      .attr("r", 10);
 
     container.append("text")
       .text(function(d) {
         return d.name;
       })
-      .attr("y", 18)
+      .attr("x", 8)
+      .attr("y", 18);
 
     tree.links.forEach((d) => {
         linkedNodes[d.source.index + "," + d.target.index] = 1;
@@ -78,7 +77,7 @@ function mountRadial() {
 
     const isConnected = (a, b) => {
         return linkedNodes[a.index + "," + b.index] || linkedNodes[b.index + "," + a.index] || a.index == b.index;
-    }
+    };
 
     function mouseOver(opacity) {
         return function(d) {
@@ -98,13 +97,14 @@ function mountRadial() {
                 return o.source === d || o.target === d ? o.source.colour : "#ddd";
             });
         };
-    }
+    };
+
     function mouseOut() {
         node.style("stroke-opacity", 1);
         node.style("fill-opacity", 1);
         link.style("stroke-opacity", 1);
         link.style("stroke", "#ddd");
-    }
+    };
 
     force.on("tick", function() {
       link
@@ -125,6 +125,7 @@ function mountRadial() {
           return "translate(" + d.x + "," + d.y + ")";
         });
     });
+
   }
 
   function getLinks(data) {
