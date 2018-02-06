@@ -89,12 +89,12 @@ module.exports = {
       spinner,
       3000,
       "Parsing the application structure",
-      "Building visualisation index"
+      "Building visualization index"
     );
     spin.loadSpinner(
       spinner,
       4000,
-      "Building visualisation index",
+      "Building visualization index",
       "Creating visual folder"
     );
     spin.loadingTime(spinner, 5000);
