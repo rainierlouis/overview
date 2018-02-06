@@ -63,7 +63,7 @@ Enjoy!
 
 * **Achim Bode** - _Visualization/D3/Design_ - [achimbode](https://github.com/achimbode)
 * **Karsten Balogh** - _Parsing/Data Algorithms_ - [karstenba](https://github.com/karstenba)
-* **Nikita Kudryavtsev** - _Visualization/D3/Design_ - [palevoo](https://github.com/palevoo)
+* **Nikita Kudryavtsev** - _Data Visualization/D3/Front-End_ - [palevoo](https://github.com/palevoo)
 * **Rainier Louis** - _CLI Environment/NPM_ - [rainierlouis](https://github.com/rainierlouis)
 
 ## License
