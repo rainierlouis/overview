@@ -1,38 +1,21 @@
-function convertJson(data) {
-  let id = typeof data.root == "string" ? data.root : "root";
-  let processed = [];
-  let depth = 0;
+const prepare = data => {
+  const processed = [];
 
-  function replaceObjectIdsByActualObjects(id, data, processed, depth) {
-    let dataObjectId = id;
-    let alreadyProcessed = processed.indexOf(id) != -1;
-    processed.push(dataObjectId);
-    let actualDataObject = data[dataObjectId];
-    let newChildrenArray;
-    let childrenSupressedToAvoidRecursion;
-    if (!alreadyProcessed) {
-      newChildrenArray = actualDataObject.children.map(function(childId) {
-        return replaceObjectIdsByActualObjects(
-          childId,
-          data,
-          processed,
-          depth + 1
-        );
-      });
-      childrenSupressedToAvoidRecursion = false;
-    } else {
-      childrenSupressedToAvoidRecursion = actualDataObject.children.length > 0;
-      newChildrenArray = [];
-    }
-    let copyOfObjectWithNewChildren = Object.assign({}, actualDataObject, {
-      children: newChildrenArray
+  const transChildren = (id, depth = 0) => {
+    processed.push(id);
+    return Object.assign({}, data[id], {
+      depth,
+      children: data[id].children.map(childID => {
+        if (processed.includes(childID))
+          return Object.assign({}, data[childID], {
+            children: []
+          });
+        return transChildren(childID, depth + 1);
+      })
     });
-    return copyOfObjectWithNewChildren;
-  }
-
-  let result = replaceObjectIdsByActualObjects(id, data, processed, depth);
-  return result;
-}
+  };
+  return transChildren("root");
+};
 
 function unmountTree() {
   delete root, treemap, svg;
@@ -61,53 +44,6 @@ function unfoldToLevel(root, toLevel) {
   });
 }
 
-// function findNodes(name) {
-//   caseSensitivity = false;
-//   if (!caseSensitivity) name = name.toLowerCase();
-//   var found = [];
-//   traverse(root, function(node) {
-//     var nodename = node.data.name;
-//     if (!caseSensitivity) nodename = nodename.toLowerCase();
-//     if (nodename.search(name) !== -1) {
-//       found.push(node);
-//     }
-//   });
-//   return found;
-// }
-//
-// function showSearch() {
-//   let jqSearch = $(`
-//     <div class="graphsearch">
-//       <input placeholder="hello text"/>
-//     </div>
-//     `);
-//   $(jqSearch).insertAfter("#switch");
-//   $(".graphsearch input").on("input", function(e) {
-//     let inputText = $(e.delegateTarget).val();
-//     if (inputText.length > 0) {
-//       let arrFoundNodes = findNodes(inputText);
-//       highlight(arrFoundNodes);
-//       // console.log(arrFoundNodes);
-//     } else removeHighlights();
-//   });
-// }
-//
-// function highlight(arrNodes) {
-//   removeHighlights();
-//   arrNodes.forEach(function(node) {
-//     node.highlight = 1;
-//     update(node);
-//   });
-// }
-//
-// function removeHighlights(exepArrNodes, doUpdate) {
-//   traverse(root, function(node) {
-//     delete node.highlight;
-//     update(node);
-//   });
-// }
-//
-// Collapse the node and all it's children
 function collapse(d) {
   if (d.children) {
     d._children = d.children;
@@ -280,7 +216,7 @@ function update(source) {
 function mountTree() {
   loadedTreeData = data; // store old object
   console.log(loadedTreeData);
-  var treeData = convertJson(loadedTreeData);
+  var treeData = prepare(loadedTreeData);
   console.log(treeData);
   // Set the dimensions and margins of the diagram
   var margin = { top: 20, right: 90, bottom: 30, left: 90 },
