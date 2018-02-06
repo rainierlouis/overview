@@ -55,7 +55,7 @@ module.exports = {
       log(`
  Environment is ready to begin a new ${chalk.magentaBright(
    "OVERVIEW"
- )} visualisation ✌️
+ )} visualization ✌️
 
 				`);
     }, 4000);
