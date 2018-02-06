@@ -30,7 +30,9 @@ module.exports = {
   },
   spinLoading: async () => {
     const spinner = new Ora({});
-    spinner.start(` Loading ${chalk.magentaBright("OVERVIEW")} system tools`);
+    spinner.start(`
+
+					Loading ${chalk.magentaBright("OVERVIEW")} system tools`);
     spin.loadSpinner(
       spinner,
       0,
