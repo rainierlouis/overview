@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins');
+@import url("https://fonts.googleapis.com/css?family=Poppins");
 
 .node circle {
   fill: #fff;
@@ -8,6 +8,11 @@
 
 .node text {
   font: 12px sans-serif;
+  font-family: "Poppins", sans-serif;
+}
+
+.node circle.highlighted {
+  fill: #c14343;
 }
 
 .link {
