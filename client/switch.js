@@ -20,7 +20,7 @@ $(document).ready(function() {
                 </div>
                 <div class="rotater">
                   <div class="btn btn-icon">
-                    <img src="network.svg" class="fa clicker" id="network"></img>
+                    <img src="network.svg" class="fa clicker" id="radial"></img>
                   </div>
                 </div>
               </div>
