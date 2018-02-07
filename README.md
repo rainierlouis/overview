@@ -24,9 +24,9 @@ An invaluable tool for developers who will be able to immediately see the layout
 Go to the chosen app directory on the CLI, then install the following -
 
 ```
-yarn add app-overview --dev
+yarn global add app-overview
 -or-
-npm install app-overview --save-dev
+npm install -g app-overview
 ```
 
 Once installation is complete, input your entry point like so -
@@ -48,15 +48,16 @@ Enjoy!
 ## Usage
 
 * `overview _.js` - Set entry file point + begin visualization
-* `overview -r` - Remove Visual folder + reset.
+* `overview -r` - Remove Visual folder + reset
 * `overview -h` - Menu/help
-* `overview -p` - View current path.
+* `overview -p` - View current path
 
 ## Built with
 
 * [d3](https://d3js.org/) - Data driven visualization
 * [node](https://nodejs.org/en/docs/) - Modular CLI config & system filing
 * [webpack](https://github.com/webpack/webpack) - Bundling application for npm consumption
+* [npm](https://www.npmjs.com/package/app-overview) - Packaging, versioning & publishing
 * [command line args](https://github.com/75lb/command-line-args) - Parsing CLI options
 
 ## Authors

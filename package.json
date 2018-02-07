@@ -1,12 +1,13 @@
 {
   "name": "app-overview",
-  "version": "0.0.21",
+  "version": "0.0.25",
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.config.js",
     "start": "webpack-dev-server --progress --colors",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "overview": "./bin/overview"
   },
   "lint-staged": {
     "*.{js,json,css,md}": ["prettier --write", "git add"]
