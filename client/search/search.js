@@ -3,12 +3,13 @@ function findNodes(name) {
   if (!caseSensitivity) name = name.toLowerCase();
   var found = [];
   diagram.traverse(function(node) {
-    var nodename = node.data.name;
+    var nodename = node.name || node.data.name;
     if (!caseSensitivity) nodename = nodename.toLowerCase();
     if (nodename.search(name) !== -1) {
       found.push(node);
     }
   }); // , diagram.root
+  console.log(found);
   return found;
 }
 

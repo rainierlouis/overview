@@ -4,10 +4,22 @@ function mountRadial() {
 }
 
 class Radial {
+  traverse(func) {
+    let arr = this.tree.nodes;
+    for (var i = 0; i < arr.length; i++) {
+      let node = arr[i];
+      let funcSaysStopRecursing = func(node) === false;
+      if (funcSaysStopRecursing) return;
+    }
+  }
+
+  update() {
+    // updates by click
+  }
+
   constructor() {
     const width = document.body.clientWidth;
     const height = document.body.clientHeight;
-    let tree;
     let linkedNodes = {};
 
     let svg = d3v4
@@ -35,16 +47,16 @@ class Radial {
       return arr;
     };
 
-    tree = {
+    this.tree = {
       nodes: render(data),
       links: getLinks(render(data))
     };
 
     var simulation = d3v4
-      .forceSimulation(tree.nodes)
+      .forceSimulation(this.tree.nodes)
       .force("charge", d3v4.forceManyBody())
       .force("collide", d3v4.forceCollide(15))
-      .force("link", d3v4.forceLink(tree.links).strength(0.1))
+      .force("link", d3v4.forceLink(this.tree.links).strength(0.1))
       .force("center", d3v4.forceCenter(width / 2, height / 2))
       .on("tick", ticked);
 
@@ -52,7 +64,7 @@ class Radial {
       .append("g")
       .attr("class", "links")
       .selectAll("line")
-      .data(tree.links)
+      .data(this.tree.links)
       .enter()
       .append("line")
       .attr("stroke", "darkgrey")
@@ -62,7 +74,7 @@ class Radial {
       .append("g")
       .attr("class", "nodes")
       .selectAll("g")
-      .data(tree.nodes)
+      .data(this.tree.nodes)
       .enter()
       .append("g");
 
@@ -90,12 +102,14 @@ class Radial {
       .attr("y", 18);
 
     simulation
-      .nodes(tree.nodes)
+      .nodes(this.tree.nodes)
       .alphaTarget(1)
       .restart()
       .on("tick", ticked);
 
-    simulation.force("link").links(tree.links);
+    simulation.force("link").links(this.tree.links);
+
+    var circleUpdate = d3v4.selectAll("g.nodes circle");
 
     function ticked() {
       link
@@ -114,6 +128,12 @@ class Radial {
 
       node.attr("transform", function(d) {
         return "translate(" + d.x + "," + d.y + ")";
+      });
+
+      circleUpdate.attr("fill", function(d) {
+        return d["highlight"] && d.highlight === 1
+          ? "#ea762d"
+          : "lightsteelblue";
       });
     }
 
@@ -134,7 +154,7 @@ class Radial {
       d.fy = null;
     }
 
-    tree.links.forEach(d => {
+    this.tree.links.forEach(d => {
       linkedNodes[d.source.index + "," + d.target.index] = 1;
     });
 

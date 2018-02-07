@@ -47,7 +47,7 @@ $(document).ready(function() {
       if (name == "radial") {
         unmountTree();
         // unmountDiscovery()
-        mountRadial();
+        diagram = mountRadial();
       }
     });
   }
