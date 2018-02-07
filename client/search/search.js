@@ -2,13 +2,14 @@ function findNodes(name) {
   caseSensitivity = false;
   if (!caseSensitivity) name = name.toLowerCase();
   var found = [];
-  diagram.traverse(diagram.root, function(node) {
-    var nodename = node.data.name;
+  diagram.traverse(function(node) {
+    var nodename = node.name || node.data.name;
     if (!caseSensitivity) nodename = nodename.toLowerCase();
     if (nodename.search(name) !== -1) {
       found.push(node);
     }
-  });
+  }); // , diagram.root
+  console.log(found);
   return found;
 }
 
@@ -43,10 +44,10 @@ function highlight(arrNodes) {
 }
 
 function removeHighlights(exepArrNodes, doUpdate) {
-  diagram.traverse(diagram.root, function(node) {
+  diagram.traverse(function(node) {
     delete node.highlight;
     diagram.update(node, diagram.root);
-  });
+  }); // , diagram.root
 }
 
 (function($) {

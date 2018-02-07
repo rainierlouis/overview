@@ -51,22 +51,23 @@ class Unfoldable {
     return transChildren("root");
   }
 
-  traverse(node, func) {
+  traverse(func, node) {
+    if (!node) node = this.root;
     let funcSaysStopRecursing = func(node) === false;
     let nodeHasChildrenArray = node["children"] && Array.isArray(node.children);
     if (!funcSaysStopRecursing && nodeHasChildrenArray)
-      node.children.forEach(node => this.traverse(node, func));
+      node.children.forEach(node => this.traverse(func, node));
   }
 
   unfoldToLevel(root, toLevel) {
-    this.traverse(root, node => {
+    this.traverse(node => {
       if (node.depth <= toLevel && node.children) {
         return true;
       } else {
         this.collapse(node);
         return false;
       }
-    });
+    }, root);
   }
 
   collapse(node) {
