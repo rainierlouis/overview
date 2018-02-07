@@ -68,10 +68,7 @@ function mountDiscovery() {
             .selectAll("circle")
             .data(data.nodes)
             .enter().append("circle")
-            .attr("r", function(d){
-              // console.log(d.r, d.index);
-              return d.r
-            })
+            .attr("r", function(d){ return d.r })
             .on("mouseover", mouseOver(.2))
             .on("mouseout", mouseOut)
             .call(d3v4.drag()
