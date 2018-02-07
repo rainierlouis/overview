@@ -14,26 +14,26 @@ function mountRadial() {
 
 
   //V4
-  // let svg = d3v4.select("#graph")
-  //   .append("svg")
-  //   .attr("width", width)
-  //   .attr("height", height)
-  //   .call(d3v4.zoom()
-  //   .scaleExtent([0.4, 4])
-  //   .on("zoom", () => {
-  //     svg.attr("transform", d3v3.event.transform)
-  //   }))
-  //   .append("g")
-
-  let svg = d3v3.select("#graph").append("svg")
+  let svg = d3v4.select("#graph")
+    .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .call(d3v3.behavior.zoom() // d3v4.zoom()
+    .call(d3v4.zoom()
     .scaleExtent([0.4, 4])
-    .on("zoom", function () {
-      svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
-    })) // event.tranform.x && event.transform.y // event.transform.k
+    .on("zoom", () => {
+      svg.attr("transform", d3v4.event.transform)
+    }))
     .append("g")
+
+  // let svg = d3v3.select("#graph").append("svg")
+  //   .attr("width", width)
+  //   .attr("height", height)
+  //   .call(d3v3.behavior.zoom() // d3v4.zoom()
+  //   .scaleExtent([0.4, 4])
+  //   .on("zoom", function () {
+  //     svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
+  //   })) // event.tranform.x && event.transform.y // event.transform.k
+  //   .append("g")
 
   const render = (data) => {
     let arr = [];
@@ -54,8 +54,7 @@ function mountRadial() {
   var simulation = d3v4.forceSimulation(tree.nodes)
       .force("charge", d3v4.forceManyBody())
       .force("link", d3v4.forceLink(tree.links).distance(20).strength(1))
-      .force("x", d3v4.forceX())
-      .force("y", d3v4.forceY())
+      .force("center", d3v4.forceCenter(width / 2, height / 2))
       .on("tick", ticked);
 
   var link = svg.append("g")
@@ -71,10 +70,10 @@ function mountRadial() {
       .selectAll("circle")
       .data(tree.nodes)
       .enter().append("circle")
-      .attr("r", function(d){ return d.r })
+      .attr("r", 10)
       .attr("fill", "black")
-      // .on("mouseover", mouseOver(.2))
-      // .on("mouseout", mouseOut)
+      .on("mouseover", mouseOver(.2))
+      .on("mouseout", mouseOut)
       // .call(d3v4.drag()
       //     .on("start", dragstarted)
       //     .on("drag", dragged)
@@ -91,6 +90,41 @@ function mountRadial() {
           .attr("cx", function(d) { return d.x; })
           .attr("cy", function(d) { return d.y; });
   }
+
+  tree.links.forEach((d) => {
+      linkedNodes[d.source.index + "," + d.target.index] = 1;
+  });
+
+  const isConnected = (a, b) => {
+      return linkedNodes[a.index + "," + b.index] || linkedNodes[b.index + "," + a.index] || a.index == b.index;
+  };
+
+  function mouseOver(opacity) {
+      return function(d) {
+
+          node.style("stroke-opacity", function(o) {
+              let thisOpacity = isConnected(d, o) ? 1 : opacity;
+              return thisOpacity;
+          });
+          node.style("fill-opacity", function(o) {
+              let thisOpacity = isConnected(d, o) ? 1 : opacity;
+              return thisOpacity;
+          });
+          link.style("stroke-opacity", function(o) {
+              return o.source === d || o.target === d ? 1 : opacity;
+          });
+          link.style("stroke", function(o){
+              return o.source === d || o.target === d ? o.source.colour : "#ddd";
+          });
+      };
+  };
+
+  function mouseOut() {
+      node.style("stroke-opacity", 1);
+      node.style("fill-opacity", 1);
+      link.style("stroke-opacity", 1);
+      link.style("stroke", "#ddd");
+  };
   //
   updateForce();
 
@@ -137,61 +171,6 @@ function mountRadial() {
     //   })
     //   .attr("x", 8)
     //   .attr("y", 18);
-
-    tree.links.forEach((d) => {
-        linkedNodes[d.source.index + "," + d.target.index] = 1;
-    });
-
-    const isConnected = (a, b) => {
-        return linkedNodes[a.index + "," + b.index] || linkedNodes[b.index + "," + a.index] || a.index == b.index;
-    };
-
-    function mouseOver(opacity) {
-        return function(d) {
-
-            node.style("stroke-opacity", function(o) {
-                let thisOpacity = isConnected(d, o) ? 1 : opacity;
-                return thisOpacity;
-            });
-            node.style("fill-opacity", function(o) {
-                let thisOpacity = isConnected(d, o) ? 1 : opacity;
-                return thisOpacity;
-            });
-            link.style("stroke-opacity", function(o) {
-                return o.source === d || o.target === d ? 1 : opacity;
-            });
-            link.style("stroke", function(o){
-                return o.source === d || o.target === d ? o.source.colour : "#ddd";
-            });
-        };
-    };
-
-    function mouseOut() {
-        node.style("stroke-opacity", 1);
-        node.style("fill-opacity", 1);
-        link.style("stroke-opacity", 1);
-        link.style("stroke", "#ddd");
-    };
-    //
-    // force.on("tick", function() {
-    //   link
-    //     .attr("x1", function(d) {
-    //       return d.source.x;
-    //     })
-    //     .attr("y1", function(d) {
-    //       return d.source.y;
-    //     })
-    //     .attr("x2", function(d) {
-    //       return d.target.x;
-    //     })
-    //     .attr("y2", function(d) {
-    //       return d.target.y;
-    //     });
-    //   node
-    //     .attr("transform", function(d) {
-    //       return "translate(" + d.x + "," + d.y + ")";
-    //     });
-    // });
 
   }
 
