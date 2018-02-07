@@ -3,19 +3,20 @@ const walk = require("babylon-walk");
 const fs = require("fs");
 const path = require("path");
 
-const createRouter = require("./parser/createRouter");
-const createCompNodes = require("./parser/createCompNodes");
+const createNodes = require("./parser/nodeHandlers").createNodes;
+const checkNodeValidity = require("./parser/nodeHandlers").checkNodeValidity;
+const Node = require("./parser/nodeHandlers").node;
+const createFileList = require("./parser/nodeHandlers").createFileList;
 
-const babylonConfig = require("./parser/config").babylonConfig;
-const visitors = require("./parser/config").visitors;
-const Node = require("./parser/config").node;
+const babylonConfig = require("./parser/ASThandlers").babylonConfig;
+const visitors = require("./parser/ASThandlers").visitors;
+const walker = require("./parser/ASThandlers").walker;
 
 const readFile = require("./parser/fileHandlers").readFile;
 const fsAccessAsync = require("./parser/fileHandlers").fsAccessAsync;
 const getPathtoParentFolder = require("./parser/fileHandlers")
   .getPathtoParentFolder;
 const parseFilePath = require("./parser/fileHandlers").parseFilePath;
-const walker = require("./parser/walker");
 Promise.prototype.some = require("./parser/some");
 
 async function parse(entryPoint) {
@@ -23,37 +24,39 @@ async function parse(entryPoint) {
     root: new Node("root", "Root", "root", entryPoint, [])
   };
   const visited = [];
-  const componentNames = [];
+  let validNodes = [];
 
   async function scan(filePath, parent) {
     visited.push(filePath);
     const fileContent = await readFile(filePath);
     const ast = babylon.parse(fileContent, babylonConfig);
     const state = await walker(ast, visitors);
+    validNodes = [...validNodes, ...checkNodeValidity(state)];
 
-    if (!state.files.length) return;
+    if (!state.imports.length) return;
 
-    let filesToParse;
-    try {
-      filesToParse = await Promise.prototype.some(state.files, node =>
-        parseFilePath(node.source.value, getPathtoParentFolder(filePath))
-      );
-    } catch (e) {
-      return;
-    }
-    // flattening resulting array as Promise.protoype.some returns nested arrays
-    filesToParse = filesToParse.map(
-      path => (typeof path === "string" ? path : path[0])
+    let filesToParse = await Promise.prototype.some(state.imports, node =>
+      parseFilePath(node.path, getPathtoParentFolder(filePath))
     );
-    //implicitly creates nodes and returns list of files to parse
-    filesToParse = createCompNodes(filesToParse, state, nodes, parent, visited);
-    createRouter(state, nodes, parent);
+    console.log(1);
+    filesToParse.forEach(obj => {
+      obj.result = Array.isArray(obj.result[0].result)
+        ? obj.result[0].result[0]
+        : obj.result[0].result;
+    });
+    filesToParse = createFileList(filesToParse, validNodes, visited);
+    console.log(2);
+
+    createNodes(validNodes, nodes, parent);
+    console.log(3);
 
     await Promise.all(
-      filesToParse.map(el => {
-        if (visited.includes(el.path)) return;
-        else return scan(el.path, el.name);
-      })
+      filesToParse
+        .map(el => {
+          if (visited.includes(el.path)) return;
+          else return scan(el.path, el.name);
+        })
+        .filter(el => el)
     );
   }
   await scan(entryPoint, "root").catch(err => console.log(err));

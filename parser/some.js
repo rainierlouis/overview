@@ -7,7 +7,7 @@ const some = function(array, callback) {
       counter++;
       callback(element, index, array)
         .then(result => {
-          success.push(result);
+          success.push({ input: element, result });
           counter--;
           if (counter === 0) {
             if (success.length) resolve(success);
