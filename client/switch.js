@@ -9,7 +9,7 @@ $(document).ready(function() {
               <div class="icons">
                 <div class="rotater">
                   <div class="btn btn-icon" id="discovery">
-                    <img src="share.svg" class="fa clicker" id="discovery"></img>
+                    <img src="science.svg" class="fa clicker" id="discovery"></img>
                   </div>
                 </div>
                 <div class="rotater">
@@ -19,7 +19,7 @@ $(document).ready(function() {
                 </div>
                 <div class="rotater">
                   <div class="btn btn-icon">
-                    <img src="network.svg" class="fa clicker" id="radial"></img>
+                    <img src="network.svg" class="fa clicker" id="network"></img>
                   </div>
                 </div>
               </div>
