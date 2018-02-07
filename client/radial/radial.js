@@ -53,13 +53,14 @@ function mountRadial() {
 
   //V4
   var simulation = d3v4
-    .forceSimulation(tree.nodes)
+    .forceSimulation()
+    .nodes(tree.nodes)
     .force("charge", d3v4.forceManyBody())
     .force(
       "link",
       d3v4
         .forceLink(tree.links)
-        .distance(20)
+        .distance(200)
         .strength(1)
     )
     .force("center", d3v4.forceCenter(width / 2, height / 2))
@@ -74,26 +75,22 @@ function mountRadial() {
     .append("line")
     .attr("stroke", "black");
 
-  var node = svg.selectAll("g.nodes").data(tree.nodes);
+  var node = svg
+    .append("g")
+    .attr("class", "nodes")
+    .selectAll("g.nodes")
+    .data(tree.nodes);
 
   var nodeEnter = node
     .enter()
     .append("g")
-    .attr("class", "nodes");
+    .attr("class", "node");
 
-  var nodeMerge = nodeEnter
-    .merge(node)
-    .attr("cx", function(d) {
-      return d.x;
-    })
-    .attr("cy", function(d) {
-      return d.y;
-    });
+  var nodeMerge = nodeEnter.merge(node).attr("transform", function(d) {
+    return "translate(" + d.x + "," + d.y + ")";
+  });
 
-  var circle = nodeEnter.selectAll("circle").data(tree.nodes);
-
-  var circleEnter = circle
-    .enter()
+  nodeEnter
     .append("circle")
     .attr("r", 10)
     .attr("fill", "black")
@@ -137,13 +134,9 @@ function mountRadial() {
         return d.target.y;
       });
 
-    node
-      .attr("cx", function(d) {
-        return d.x;
-      })
-      .attr("cy", function(d) {
-        return d.y;
-      });
+    node.attr("transform", function(d) {
+      return "translate(" + d.x + "," + d.y + ")";
+    });
   }
 
   tree.links.forEach(d => {
