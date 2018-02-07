@@ -5,14 +5,16 @@ const parse = require("../parser/parse");
 
 const dataContent = {};
 
-const jsonContent = jsonData => `const data = ${jsonData}`;
+const jsonContent = jsonData => `const data = ${JSON.stringify(jsonData)}`;
 
 module.exports = {
   parsing: async (entryPoint, pwd) => {
     const jsonData = await parse(`${pwd}/${entryPoint}`);
     const filePath = `${pwd}/node_modules/app-overview/client/data/data.js`;
     await fs.outputFile(filePath, jsonContent(jsonData), err => {
-      if (err) throw err;
+      if (err) {
+        throw err;
+      }
     });
   }
 };

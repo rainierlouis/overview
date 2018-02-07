@@ -61,7 +61,7 @@ const beginVisual = async entryPoint => {
     return;
   }
   if (user.checkNodeModules(pathD)) {
-    await reset.reset();
+    // await reset.reset();
     // -- Ready for visual module consumption -- //
     await user.loadSpinner();
     await parsing(entryPoint, pathD);

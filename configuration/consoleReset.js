@@ -29,13 +29,15 @@ module.exports = {
     });
   },
   spinLoading: async () => {
-    const spinner = new Ora({});
-    spinner.start(`
+    log(`
 
-					Loading ${chalk.magentaBright("OVERVIEW")} system tools`);
+				`);
+    const spinner = new Ora({}).start(
+      ` Loading ${chalk.magentaBright("OVERVIEW")} system tools`
+    );
     spin.loadSpinner(
       spinner,
-      0,
+      5,
       `Loading ${chalk.magentaBright("OVERVIEW")} system tools`,
       "Scanning directories + files for removal"
     );
