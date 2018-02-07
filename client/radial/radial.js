@@ -111,54 +111,6 @@ function mountRadial() {
         })
   }
 
-  // var node = svg.selectAll("g.node")
-  //     .data(tree.nodes)
-  //     .enter().append("circle")
-  //     .attr("r", 7.5)
-  //     .attr("fill", "black")
-      // .on("mouseover", mouseOver(.2))
-      // .on("mouseout", mouseOut)
-  //
-  // var text = node.append("text")
-  //     .attr("dx", 12)
-  //     .attr("dy", ".35em")
-  //     .attr("fill", "black")
-  //     .text(function(d) {  return d.name });
-  //
-  // node.append("circle")
-  //   .attr("r", 5)
-  //   .style("fill", "blue")
-  //
-  // // node.append("title")
-  // //   .text(function (d) {return d.id;});
-  //
-  // node.append("text")
-  //   .attr("dy", -3)
-  //   .text(function (d) {return d.name;});
-  //
-  //     // .call(d3v4.drag()
-  //     //     .on("start", dragstarted)
-  //     //     .on("drag", dragged)
-  //     //     .on("end", dragended));
-  //
-  //
-  // function ticked() {
-  //     link
-  //         .attr("x1", function(d) { return d.source.x; })
-  //         .attr("y1", function(d) { return d.source.y; })
-  //         .attr("x2", function(d) { return d.target.x; })
-  //         .attr("y2", function(d) { return d.target.y; });
-  //
-  //     node
-  //       // .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  //         .attr("cx", function(d) { return d.x; })
-  //         .attr("cy", function(d) { return d.y; })
-  //         text
-  //           // .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-  //             .attr("cx", function(d) { return d.x; })
-  //             .attr("cy", function(d) { return d.y; })
-  // }
-
   tree.links.forEach((d) => {
       linkedNodes[d.source.index + "," + d.target.index] = 1;
   });
@@ -193,54 +145,6 @@ function mountRadial() {
       link.style("stroke-opacity", 1);
       link.style("stroke", "#ddd");
   };
-  //
-  // updateForce();
-
-  function updateForce(focusNode) {
-    var link = svg.selectAll(".link").data(tree.links);
-    var node = svg.selectAll(".node").data(tree.nodes);
-    var container;
-
-    focusNode = focusNode || _.find(tree.nodes, {
-      depth: 0
-    });
-
-    //V4
-
-    simulation
-        .nodes(tree.nodes)
-        .on("tick", ticked);
-
-    simulation.force("link")
-        .links(tree.links);
-    //
-
-    // force
-    //   .nodes(tree.nodes)
-    //   .links(tree.links) //d3v4.forceLinks([links]) >>> // link.links([links]) // link.distance([distance]) // link.strength([strength]) // link.iterations([iterations])
-    //   .start();
-    //
-    // link.enter()
-    //   .append("line")
-    //   .attr("class", "link");
-
-    // container = node.enter()
-    //   .append("g")
-    //   .on("mouseover", mouseOver(.1))
-    //   .on("mouseout", mouseOut)
-    //   .attr("class", "node");
-    //
-    // container.append("circle")
-    //   .attr("r", 10);
-    //
-  //   container.append("text")
-  //     .text(function(d) {
-  //       return d.name;
-  //     })
-  //     .attr("x", 8)
-  //     .attr("y", 18);
-  //
-  }
 
   function getLinks(data) {
     return _.flatten(_.map(_.filter(data, "children"), function(source, i) {
