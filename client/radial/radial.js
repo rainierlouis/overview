@@ -1,5 +1,5 @@
 function mountRadial() {
-    "use strict"
+  "use strict";
 
   const width = document.body.clientWidth;
   const height = document.body.clientHeight;
@@ -10,20 +10,21 @@ function mountRadial() {
   //   .charge(-800)//d3v4.forceManyBody() >>>> // manyBody.strength([strength]) // manyBody.theta([theta]) // manyBody.distanceMin([distance]) // manyBody.distanceMax([distance])
   //   .size([width, height]); //x.x & y.y
 
-
-
-
   //V4
-  let svg = d3v4.select("#graph")
+  let svg = d3v4
+    .select("#graph")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .call(d3v4.zoom()
-    .scaleExtent([0.4, 4])
-    .on("zoom", () => {
-      svg.attr("transform", d3v4.event.transform)
-    }))
-    .append("g")
+    .call(
+      d3v4
+        .zoom()
+        .scaleExtent([0.4, 4])
+        .on("zoom", () => {
+          svg.attr("transform", d3v4.event.transform);
+        })
+    )
+    .append("g");
 
   // let svg = d3v3.select("#graph").append("svg")
   //   .attr("width", width)
@@ -35,11 +36,11 @@ function mountRadial() {
   //   })) // event.tranform.x && event.transform.y // event.transform.k
   //   .append("g")
 
-  const render = (data) => {
+  const render = data => {
     let arr = [];
     for (let i in data) {
-      if (i === 'root') data[i]['depth'] = 0;
-      else data[i]['depth'] = 1;
+      if (i === "root") data[i]["depth"] = 0;
+      else data[i]["depth"] = 1;
       arr.push(data[i]);
     }
     return arr;
@@ -51,80 +52,137 @@ function mountRadial() {
   };
 
   //V4
-  var simulation = d3v4.forceSimulation(tree.nodes)
-      .force("charge", d3v4.forceManyBody())
-      .force("link", d3v4.forceLink(tree.links).distance(20).strength(1))
-      .force("center", d3v4.forceCenter(width / 2, height / 2))
-      .on("tick", ticked);
+  var simulation = d3v4
+    .forceSimulation(tree.nodes)
+    .force("charge", d3v4.forceManyBody())
+    .force(
+      "link",
+      d3v4
+        .forceLink(tree.links)
+        .distance(20)
+        .strength(1)
+    )
+    .force("center", d3v4.forceCenter(width / 2, height / 2))
+    .on("tick", ticked);
 
-  var link = svg.append("g")
-      .attr("class", "links")
-      .selectAll("line")
-      .data(tree.links)
-      .enter()
-      .append("line")
-      .attr("stroke", "black")
+  var link = svg
+    .append("g")
+    .attr("class", "links")
+    .selectAll("line")
+    .data(tree.links)
+    .enter()
+    .append("line")
+    .attr("stroke", "black");
 
-  var node = svg.append("g")
-      .attr("class", "nodes")
-      .selectAll("circle")
-      .data(tree.nodes)
-      .enter().append("circle")
-      .attr("r", 10)
-      .attr("fill", "black")
-      .on("mouseover", mouseOver(.2))
-      .on("mouseout", mouseOut)
-      // .call(d3v4.drag()
-      //     .on("start", dragstarted)
-      //     .on("drag", dragged)
-      //     .on("end", dragended));
+  var node = svg.selectAll("g.nodes").data(tree.nodes);
+
+  var nodeEnter = node
+    .enter()
+    .append("g")
+    .attr("class", "nodes");
+
+  var nodeMerge = nodeEnter
+    .merge(node)
+    .attr("cx", function(d) {
+      return d.x;
+    })
+    .attr("cy", function(d) {
+      return d.y;
+    });
+
+  var circle = nodeEnter.selectAll("circle").data(tree.nodes);
+
+  var circleEnter = circle
+    .enter()
+    .append("circle")
+    .attr("r", 10)
+    .attr("fill", "black")
+    .on("mouseover", mouseOver(0.2))
+    .on("mouseout", mouseOut);
+  // .call(d3v4.drag()
+  //     .on("start", dragstarted)
+  //     .on("drag", dragged)
+  //     .on("end", dragended));
+
+  // container = node.enter()
+  //   .append("g")
+  //   .on("mouseover", mouseOver(.1))
+  //   .on("mouseout", mouseOut)
+  //   .attr("class", "node");
+  //
+  // container.append("circle")
+  //   .attr("r", 10);
+  //
+
+  nodeEnter
+    .append("text")
+    .text(function(d) {
+      return d.name;
+    })
+    .attr("x", 8)
+    .attr("y", 18);
 
   function ticked() {
-      link
-          .attr("x1", function(d) { return d.source.x; })
-          .attr("y1", function(d) { return d.source.y; })
-          .attr("x2", function(d) { return d.target.x; })
-          .attr("y2", function(d) { return d.target.y; });
+    link
+      .attr("x1", function(d) {
+        return d.source.x;
+      })
+      .attr("y1", function(d) {
+        return d.source.y;
+      })
+      .attr("x2", function(d) {
+        return d.target.x;
+      })
+      .attr("y2", function(d) {
+        return d.target.y;
+      });
 
-      node
-          .attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; });
+    node
+      .attr("cx", function(d) {
+        return d.x;
+      })
+      .attr("cy", function(d) {
+        return d.y;
+      });
   }
 
-  tree.links.forEach((d) => {
-      linkedNodes[d.source.index + "," + d.target.index] = 1;
+  tree.links.forEach(d => {
+    linkedNodes[d.source.index + "," + d.target.index] = 1;
   });
 
   const isConnected = (a, b) => {
-      return linkedNodes[a.index + "," + b.index] || linkedNodes[b.index + "," + a.index] || a.index == b.index;
+    return (
+      linkedNodes[a.index + "," + b.index] ||
+      linkedNodes[b.index + "," + a.index] ||
+      a.index == b.index
+    );
   };
 
   function mouseOver(opacity) {
-      return function(d) {
-
-          node.style("stroke-opacity", function(o) {
-              let thisOpacity = isConnected(d, o) ? 1 : opacity;
-              return thisOpacity;
-          });
-          node.style("fill-opacity", function(o) {
-              let thisOpacity = isConnected(d, o) ? 1 : opacity;
-              return thisOpacity;
-          });
-          link.style("stroke-opacity", function(o) {
-              return o.source === d || o.target === d ? 1 : opacity;
-          });
-          link.style("stroke", function(o){
-              return o.source === d || o.target === d ? o.source.colour : "#ddd";
-          });
-      };
-  };
+    return function(d) {
+      node.style("stroke-opacity", function(o) {
+        let thisOpacity = isConnected(d, o) ? 1 : opacity;
+        return thisOpacity;
+      });
+      node.style("fill-opacity", function(o) {
+        let thisOpacity = isConnected(d, o) ? 1 : opacity;
+        return thisOpacity;
+      });
+      link.style("stroke-opacity", function(o) {
+        return o.source === d || o.target === d ? 1 : opacity;
+      });
+      link.style("stroke", function(o) {
+        return o.source === d || o.target === d ? o.source.colour : "#ddd";
+      });
+    };
+  }
 
   function mouseOut() {
-      node.style("stroke-opacity", 1);
-      node.style("fill-opacity", 1);
-      link.style("stroke-opacity", 1);
-      link.style("stroke", "#ddd");
-  };
+    node.style("stroke-opacity", 1);
+    node.style("fill-opacity", 1);
+    link.style("stroke-opacity", 1);
+    link.style("stroke", "#ddd");
+  }
   //
   updateForce();
 
@@ -133,18 +191,17 @@ function mountRadial() {
     var node = svg.selectAll(".node").data(tree.nodes);
     var container;
 
-    focusNode = focusNode || _.find(tree.nodes, {
-      depth: 0
-    });
+    focusNode =
+      focusNode ||
+      _.find(tree.nodes, {
+        depth: 0
+      });
 
     //V4
 
-    simulation
-        .nodes(tree.nodes)
-        .on("tick", ticked);
+    simulation.nodes(tree.nodes).on("tick", ticked);
 
-    simulation.force("link")
-        .links(tree.links);
+    simulation.force("link").links(tree.links);
     //
 
     // force
@@ -171,27 +228,28 @@ function mountRadial() {
     //   })
     //   .attr("x", 8)
     //   .attr("y", 18);
-
   }
 
   function getLinks(data) {
-    return _.flatten(_.map(_.filter(data, "children"), function(source, i) {
-      return _.map(source.children, function(target) {
-        return {
-          "source": i,
-          "target": _.findIndex(data, {
-            id: target
-          })
-        };
-      });
-    }));
+    return _.flatten(
+      _.map(_.filter(data, "children"), function(source, i) {
+        return _.map(source.children, function(target) {
+          return {
+            source: i,
+            target: _.findIndex(data, {
+              id: target
+            })
+          };
+        });
+      })
+    );
   }
-};
-
-window.onload = function() {
-  if(typeof switch_is_present == 'undefined') mountRadial()
 }
 
+window.onload = function() {
+  if (typeof switch_is_present == "undefined") mountRadial();
+};
+
 function unmountRadial() {
-  if(simulation !== undefined) simulation.on('tick', null)
+  if (simulation !== undefined) simulation.on("tick", null);
 }
