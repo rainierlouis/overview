@@ -62,10 +62,13 @@ module.exports = {
     entryPathCheck = `${pwd}/${entryPoint}`;
     return fs.existsSync(entryPathCheck);
   },
-  loadSpinner: async () => {
-    const spinner = new Ora({});
+  loadSpinner: () => {
+    log(`
 
-    spinner.start(` Loading ${chalk.magentaBright("OVERVIEW")} system tools`);
+		`);
+    const spinner = new Ora({}).start(
+      ` Loading ${chalk.magentaBright("OVERVIEW")} system tools`
+    );
 
     spin.loadSpinner(
       spinner,
