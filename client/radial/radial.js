@@ -6,17 +6,11 @@ function mountRadial() {
   let tree;
   let linkedNodes = {};
 
-  const force = d3v3.layout.force()//d3v4.forceSimulation
-    .charge(-800)//d3v4.forceManyBody() >>>> // manyBody.strength([strength]) // manyBody.theta([theta]) // manyBody.distanceMin([distance]) // manyBody.distanceMax([distance])
-    .size([width, height]); //x.x & y.y
+  // const force = d3v3.layout.force()//d3v4.forceSimulation
+  //   .charge(-800)//d3v4.forceManyBody() >>>> // manyBody.strength([strength]) // manyBody.theta([theta]) // manyBody.distanceMin([distance]) // manyBody.distanceMax([distance])
+  //   .size([width, height]); //x.x & y.y
 
-  //V4
-  // let simulation = d3v4.forceSimulation()
-  //   .force("charge", d3v4.forceManyBody())
-  //   .force("center", d3v4.forceCenter(width / 2, height / 2))
-  //   .force("y", d3v4.forceY(0))
-  //   .force("x", d3v4.forceX(0))
-  //   // .strength(-100)
+
 
 
   //V4
@@ -56,6 +50,48 @@ function mountRadial() {
     links: getLinks(render(data))
   };
 
+  //V4
+  var simulation = d3v4.forceSimulation(tree.nodes)
+      .force("charge", d3v4.forceManyBody())
+      .force("link", d3v4.forceLink(tree.links).distance(20).strength(1))
+      .force("x", d3v4.forceX())
+      .force("y", d3v4.forceY())
+      .on("tick", ticked);
+
+  var link = svg.append("g")
+      .attr("class", "links")
+      .selectAll("line")
+      .data(tree.links)
+      .enter()
+      .append("line")
+      .attr("stroke", "black")
+
+  var node = svg.append("g")
+      .attr("class", "nodes")
+      .selectAll("circle")
+      .data(tree.nodes)
+      .enter().append("circle")
+      .attr("r", function(d){ return d.r })
+      .attr("fill", "black")
+      // .on("mouseover", mouseOver(.2))
+      // .on("mouseout", mouseOut)
+      // .call(d3v4.drag()
+      //     .on("start", dragstarted)
+      //     .on("drag", dragged)
+      //     .on("end", dragended));
+
+  function ticked() {
+      link
+          .attr("x1", function(d) { return d.source.x; })
+          .attr("y1", function(d) { return d.source.y; })
+          .attr("x2", function(d) { return d.target.x; })
+          .attr("y2", function(d) { return d.target.y; });
+
+      node
+          .attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; });
+  }
+  //
   updateForce();
 
   function updateForce(focusNode) {
@@ -69,33 +105,38 @@ function mountRadial() {
 
     //V4
 
-    // simulation
+    simulation
+        .nodes(tree.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(tree.links);
+    //
+
+    // force
     //   .nodes(tree.nodes)
+    //   .links(tree.links) //d3v4.forceLinks([links]) >>> // link.links([links]) // link.distance([distance]) // link.strength([strength]) // link.iterations([iterations])
+    //   .start();
+    //
+    // link.enter()
+    //   .append("line")
+    //   .attr("class", "link");
 
-    force
-      .nodes(tree.nodes)
-      .links(tree.links) //d3v4.forceLinks([links]) >>> // link.links([links]) // link.distance([distance]) // link.strength([strength]) // link.iterations([iterations])
-      .start();
-
-    link.enter()
-      .append("line")
-      .attr("class", "link");
-
-    container = node.enter()
-      .append("g")
-      .on("mouseover", mouseOver(.1))
-      .on("mouseout", mouseOut)
-      .attr("class", "node");
-
-    container.append("circle")
-      .attr("r", 10);
-
-    container.append("text")
-      .text(function(d) {
-        return d.name;
-      })
-      .attr("x", 8)
-      .attr("y", 18);
+    // container = node.enter()
+    //   .append("g")
+    //   .on("mouseover", mouseOver(.1))
+    //   .on("mouseout", mouseOut)
+    //   .attr("class", "node");
+    //
+    // container.append("circle")
+    //   .attr("r", 10);
+    //
+    // container.append("text")
+    //   .text(function(d) {
+    //     return d.name;
+    //   })
+    //   .attr("x", 8)
+    //   .attr("y", 18);
 
     tree.links.forEach((d) => {
         linkedNodes[d.source.index + "," + d.target.index] = 1;
@@ -131,26 +172,26 @@ function mountRadial() {
         link.style("stroke-opacity", 1);
         link.style("stroke", "#ddd");
     };
-
-    force.on("tick", function() {
-      link
-        .attr("x1", function(d) {
-          return d.source.x;
-        })
-        .attr("y1", function(d) {
-          return d.source.y;
-        })
-        .attr("x2", function(d) {
-          return d.target.x;
-        })
-        .attr("y2", function(d) {
-          return d.target.y;
-        });
-      node
-        .attr("transform", function(d) {
-          return "translate(" + d.x + "," + d.y + ")";
-        });
-    });
+    //
+    // force.on("tick", function() {
+    //   link
+    //     .attr("x1", function(d) {
+    //       return d.source.x;
+    //     })
+    //     .attr("y1", function(d) {
+    //       return d.source.y;
+    //     })
+    //     .attr("x2", function(d) {
+    //       return d.target.x;
+    //     })
+    //     .attr("y2", function(d) {
+    //       return d.target.y;
+    //     });
+    //   node
+    //     .attr("transform", function(d) {
+    //       return "translate(" + d.x + "," + d.y + ")";
+    //     });
+    // });
 
   }
 
