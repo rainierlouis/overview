@@ -3,9 +3,9 @@ const path = require("path");
 
 module.exports = {
   visualData: async pwd => {
-    await fs.ensureDir("visual", err => {
+    await fs.ensureDir(`${pwd}/visual`, err => {
       if (err) throw err;
     });
-    await fs.copy("./node_modules/app-overview/client", "visual");
+    await fs.copy(`${pwd}/node_modules/app-overview/client`, "/visual");
   }
 };
