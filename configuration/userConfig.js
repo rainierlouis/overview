@@ -7,8 +7,7 @@ const asciimo = require("../node_modules/asciimo/lib/asciimo").Figlet;
 const colors = require("../node_modules/asciimo/lib/colors");
 const Ora = require("ora");
 
-const { reset, tick } = require("./consoleReset");
-const { menu } = require("./consoleHelp");
+const spin = require("./spinLoader");
 
 const log = console.log;
 
@@ -32,7 +31,7 @@ const invalidLog = `
 
 	${chalk.red.bold(
     "ERR - Invalid input or flag:"
-  )}\n\n 	An entry point is ${chalk.green(
+  )}\n\n 	A valid entry point is ${chalk.green(
   "required"
 )} - Please input one and try again. ${chalk.grey(
   "(e.g. overview App.js)"
@@ -41,96 +40,78 @@ const invalidLog = `
 
 			`;
 
-const userConfig = {
-  loadingTime: (spinnerItem, time) => {
-    setTimeout(() => {
-      spinnerItem.color = "red";
-    }, time);
-    setTimeout(() => {
-      spinnerItem.color = "yellow";
-    }, time + 400);
-    setTimeout(() => {
-      spinnerItem.color = "green";
-    }, time + 700);
-  },
-  loadSpinner: async () => {
-    const spinner = new Ora({});
+const invalidNode = `
 
-    spinner.start(" Loading OVERVIEW system tools");
-    userConfig.loadingTime(spinner, 0);
-    setTimeout(() => {
-      spinner.succeed(" Loading OVERVIEW system tools");
-      spinner.start(" Acquiring folder structure");
-    }, 1000);
-    userConfig.loadingTime(spinner, 1000);
 
-    setTimeout(() => {
-      spinner.succeed(" Acquiring folder structure");
-      spinner.color = "white";
-      spinner.start(" Constructing the algorithm with love");
-    }, 2000);
-    userConfig.loadingTime(spinner, 2000);
-    setTimeout(() => {
-      spinner.succeed(" Constructing the algorithm with love");
-      spinner.color = "gray";
-      spinner.start(" Parsing the application structure");
-    }, 3000);
-    userConfig.loadingTime(spinner, 3000);
-    setTimeout(() => {
-      spinner.succeed(" Parsing the application structure");
-      spinner.color = "red";
-      spinner.start(" Eating your sandwich whilst you read this");
-    }, 4000);
-    userConfig.loadingTime(spinner, 4000);
-    setTimeout(() => {
-      spinner.succeed(" Eating your sandwich whilst you read this");
-      spinner.color = "green";
-      spinner.start(" Still parsing the application structure");
-    }, 5000);
-    userConfig.loadingTime(spinner, 5000);
-    setTimeout(() => {
-      spinner.succeed(" Still parsing the application structure");
-      spinner.color = "yellow";
-      spinner.start(" Building visualisation index");
-    }, 6000);
-    userConfig.loadingTime(spinner, 6000);
-    setTimeout(() => {
-      spinner.succeed(" Building visualisation index");
-      spinner.color = "magenta";
-      spinner.start(" Creating visual folder");
-    }, 7000);
-    userConfig.loadingTime(spinner, 7000);
-    setTimeout(() => {
-      spinner.succeed(" Creating visual folder");
-      asciimo.write("Enjoy", "larry3d", art => {
-        log(`
+	${chalk.red.bold(
+    "ERR - Invalid directory:"
+  )}\n\n 	Please change to the root directory of the application - node_modules must be ${chalk.green(
+  "present"
+)}.
+\n	For more help, enter ${chalk.green("overview -h")}
 
-				`);
-        log(art.green);
-        log(`
- Please open ${chalk.cyan("visual/index.html")} in your preferred browser ✌️
 
-					`);
-      });
-    }, 8000);
-  },
-
-  createFile: async (entry, path) => {
-    await mkdirp(folderPath, err => {
-      if (err) throw err;
-    });
-    await fs.writeFile(filePath, fileContent(entry), err => {
-      if (err) throw err;
-    });
-  },
-  invalidInput: () => invalidLog,
-  completedCreation: async entry => {
-    // build file
-    await menu();
-  }
-};
+			`;
 
 module.exports = {
-  create: userConfig.loadSpinner,
-  missingEntry: userConfig.invalidInput
+  checkNodeModules: pwd => {
+    pathCheck = `${pwd}/node_modules`;
+    return fs.existsSync(pathCheck);
+  },
+  checkEntryPoint: (pwd, entryPoint) => {
+    entryPathCheck = `${pwd}/${entryPoint}`;
+    return fs.existsSync(entryPathCheck);
+  },
+  loadSpinner: () => {
+    log(`
+
+		`);
+    const spinner = new Ora({}).start(
+      ` Loading ${chalk.magentaBright("OVERVIEW")} system tools`
+    );
+
+    spin.loadSpinner(
+      spinner,
+      0,
+      `Loading ${chalk.magentaBright("OVERVIEW")} system tools`,
+      "Acquiring folder structure"
+    );
+    spin.loadSpinner(
+      spinner,
+      1000,
+      "Acquiring folder structure",
+      "Constructing the algorithm with love"
+    );
+    spin.loadSpinner(
+      spinner,
+      2000,
+      "Constructing the algorithm with love",
+      "Parsing the application structure"
+    );
+    spin.loadSpinner(
+      spinner,
+      3000,
+      "Parsing the application structure",
+      "Building visualization index"
+    );
+    spin.loadSpinner(
+      spinner,
+      4000,
+      "Building visualization index",
+      "Creating visual folder"
+    );
+    spin.loadingTime(spinner, 5000);
+    setTimeout(() => {
+      spinner.succeed(" Creating visual folder");
+      log(`
+ Visual file has been created at ${chalk.cyan(
+   "visual/overview.html"
+ )} - Enjoy! ✌️
+
+								  				`);
+    }, 6000);
+  },
+
+  invalidInput: () => invalidLog,
+  invalidNode: () => invalidNode
 };

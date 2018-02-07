@@ -7,7 +7,7 @@ const log = console.log;
 
 const text = "OVERVIEW";
 
-const help = {
+module.exports = {
   menu: () => {
     asciimo.write(text, "isometric1", art => {
       log(art.cyan);
@@ -19,7 +19,7 @@ const help = {
    ${chalk.dim("Entry")}
    	${chalk.green(
       "$ overview <entry>"
-    )} Declare entry point for the visualisation ${chalk.magenta.bold(
+    )} Declare entry point for the visualization ${chalk.magenta.bold(
         "required first"
       )}
 
@@ -38,8 +38,4 @@ const help = {
     	`);
     });
   }
-};
-
-module.exports = {
-  menu: help.menu
 };

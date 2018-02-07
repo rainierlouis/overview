@@ -10,7 +10,6 @@
 // Open index.html with browser
 
 const cla = require("command-line-args");
-const opn = require("opn");
 const { exec } = require("child_process");
 const shell = require("shelljs");
 
@@ -27,13 +26,14 @@ const optionDefinitions = [
 const options = cla(optionDefinitions, { partial: true });
 
 //-- MODULES --//
-const { reset, resetEntire } = require("./configuration/consoleReset");
-const { menu } = require("./configuration/consoleHelp");
-const { create, missingEntry } = require("./configuration/userConfig");
-const { parsing } = require("./configuration/parseModule");
-const { visualData } = require("./configuration/visualModule");
+const reset = require("./configuration/consoleReset");
+const visual = require("./configuration/visualModule").visualData;
+const menu = require("./configuration/consoleHelp");
+const user = require("./configuration/userConfig");
+const parsing = require("./configuration/parseModule").parsing;
 //-------------//
 
+// HELPER METHODS //
 const userEntry = entryObj =>
   entryObj._unknown && entryObj._unknown.length > 0
     ? entryObj._unknown[0]
@@ -48,17 +48,34 @@ const entryKeyExtractor = entryKey => entryKey.split(" ")[0];
 
 const entryValueExtractor = entryValue => entryValue.split(" ")[1];
 
-const pwdExtract = async entryPoint => {
-  const pathD = shell.pwd().stdout;
-  reset();
-  create(entryPoint, pathD);
-  setTimeout(async () => {
+const formatEntry = userInput =>
+  userInput[0] === "/"
+    ? userInput.substr(1)
+    : userInput[0] === "." ? userInput.substr(2) : userInput;
+
+const beginVisual = async entryPoint => {
+  const pathD = await shell.pwd().stdout;
+  if (!user.checkEntryPoint(pathD, entryPoint)) {
+    reset.reset();
+    log(user.invalidInput());
+    return;
+  }
+  if (user.checkNodeModules(pathD)) {
+    // await reset.reset();
     // -- Ready for visual module consumption -- //
+    await user.loadSpinner();
     await parsing(entryPoint, pathD);
-    await visualData(pathD);
-    //  // await opn(`${stdout}/visual/overwiew.html`, err => {});
-  }, 4000);
+    await visual(pathD);
+    setTimeout(async () => {
+      await shell.exec("open visual/overview.html");
+    }, 6000);
+  } else {
+    await reset.reset();
+    await log(user.invalidNode());
+  }
 };
+
+// ---------------- //
 
 const ov = async data => {
   let entryPoint;
@@ -70,20 +87,22 @@ const ov = async data => {
 
   switch (data) {
     case "help":
-      reset();
-      menu();
+      reset.reset();
+      menu.menu();
       break;
     case "reset":
-      resetEntire();
+      reset.resetMethod();
       break;
     case "path":
+      const pathD = await shell.pwd().stdout;
+      log(`${pathD}/`);
       break;
     case "entry":
-      pwdExtract(entryPoint);
+      beginVisual(formatEntry(entryPoint));
       break;
     default:
-      reset();
-      log(missingEntry());
+      reset.reset();
+      log(user.invalidInput());
   }
 };
 

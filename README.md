@@ -1,47 +1,71 @@
 # OVERVIEW
 
-[![npm version](https://badge.fury.io/js/app-overview.svg)](https://badge.fury.io/js/app-overview) [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
+> A visualization of the application structure. See, read & learn the code, effortlessly.
+
+[![npm version](https://badge.fury.io/js/app-overview.svg)](https://www.npmjs.com/package/app-overview)
+[![npm](https://img.shields.io/npm/dw/app-overview.svg)]() [![MIT Licence](https://badges.frapsoft.com/os/mit/mit.svg?v=103)](https://opensource.org/licenses/mit-license.php)
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
 **NOTE: STILL WIP - Expected v1.0.0 release by 9th Feb 2018 - Thank you**
 
-Overview is a package module that creates a visual representation of the user's application structure.
-
 An invaluable tool for developers who will be able to immediately see the layout of the application folder and how the files within connect with one another.
 
-## Getting Started
+## Table of contents
 
-* In your chosen CLI
+* [Getting started](#getting-started)
+* [Usage](#usage)
+* [Built with](#built-with)
+* [Authors](#authors)
+* [License](#license)
+
+## Getting started
+
+Go to the chosen app directory on the CLI, then install the following -
 
 ```
-yarn add app-overview --dev
-npm install app-overview --save-dev
+yarn global add app-overview
+-or-
+npm install -g app-overview
 ```
 
-* Go to the chosen app directory on the CLI - `overview App.js`, this will build the config file and begin the visualisation.
-* Voila, open the overview.html file found in the Visual folder in your chosen browser - Enjoy!
+Once installation is complete, input your entry point like so -
+
+```
+overview index.js
+-or-
+overview src/index.js
+```
+
+This will build the config file and begin the visualization. Once complete, the visual file will open in your default browser.
+
+Alternatively, you can go to `YourAppDirectory/visual/overview.html`.
+
+If you would like to reset/delete the Visual folder, simply enter `overview -r` in your CLI to remove the contents.
+
+Enjoy!
 
 ## Usage
 
-* `overview _.js` - Set entry file point + begin visualisation
+* `overview _.js` - Set entry file point + begin visualization
+* `overview -r` - Remove Visual folder + reset
 * `overview -h` - Menu/help
-* `overview -r` - Remove Visual folder + reset.
-* `overview -p` - View current path.
+* `overview -p` - View current path
 
-## Built With
+## Built with
 
-* [d3](https://d3js.org/) - Data driven visualisation
+* [d3](https://d3js.org/) - Data driven visualization
 * [node](https://nodejs.org/en/docs/) - Modular CLI config & system filing
 * [webpack](https://github.com/webpack/webpack) - Bundling application for npm consumption
+* [npm](https://www.npmjs.com/package/app-overview) - Packaging, versioning & publishing
 * [command line args](https://github.com/75lb/command-line-args) - Parsing CLI options
 
 ## Authors
 
-* **Achim Bode** - [achimbode](https://github.com/achimbode)
-* **Karsten Balogh** - [karstenba](https://github.com/karstenba)
-* **Nikita Kudryavtsev** - [palevoo](https://github.com/palevoo)
-* **Rainier Louis** - [rainierlouis](https://github.com/rainierlouis)
+* **Achim Bode** - _Data Visualization/D3_ - [achimbode](https://github.com/achimbode)
+* **Karsten Balogh** - _Parsing/Data Algorithms_ - [karstenba](https://github.com/karstenba)
+* **Nikita Kudryavtsev** - _Data Visualization/D3/Front-End_ - [palevoo](https://github.com/palevoo)
+* **Rainier Louis** - _CLI Environment/NPM_ - [rainierlouis](https://github.com/rainierlouis)
 
 ## License
 
