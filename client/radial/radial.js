@@ -76,7 +76,8 @@ class Radial {
       .selectAll("g")
       .data(this.tree.nodes)
       .enter()
-      .append("g");
+      .append("g")
+      .attr("class", "node");
 
     var circles = node
       .append("circle")
@@ -130,11 +131,15 @@ class Radial {
         return "translate(" + d.x + "," + d.y + ")";
       });
 
-      circleUpdate.attr("fill", function(d) {
-        return d["highlight"] && d.highlight === 1
-          ? "#ea762d"
-          : "lightsteelblue";
-      });
+      circleUpdate
+        .attr("fill", function(d) {
+          return d["highlight"] && d.highlight === 1
+            ? "#ea762d"
+            : "lightsteelblue";
+        })
+        .attr("class", function(d) {
+          return d["highlight"] && d.highlight === 1 ? "highlighted" : null;
+        });
     }
 
     function dragstarted(d) {

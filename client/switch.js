@@ -49,6 +49,7 @@ $(document).ready(function() {
         // unmountDiscovery()
         diagram = mountRadial();
       }
+      if (diagram) diagram.update();
     });
   }
   addButton("tree");

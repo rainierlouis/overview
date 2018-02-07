@@ -76,6 +76,9 @@ class Unfoldable {
   }
 
   update(source, root) {
+    if (!source) source = this.root;
+    if (!root) root = this.root;
+
     let i = 0;
     let duration = 500;
 
@@ -133,10 +136,15 @@ class Unfoldable {
       .select("circle.node")
       .attr("r", 10)
       .style("fill", d => {
-        if (d.highlight) return "#ea762d";
+        if (d.highlight) return "#c14343";
         return d._children ? "lightsteelblue" : "#fff";
       })
       .attr("cursor", "pointer");
+    // .attr("class", function(d) {
+    //   return d["highlight"] && d.highlight === 1
+    //     ? "highlighted"
+    //     : null;
+    // })
 
     // Remove any exiting nodes
     let nodeExit = node
