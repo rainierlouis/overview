@@ -52,7 +52,10 @@ class Unfoldable {
   }
 
   traverse(node, func) {
-    if (func(node)) node.children.forEach(node => this.traverse(node, func));
+    let funcSaysStopRecursing = func(node) === false;
+    let nodeHasChildrenArray = node["children"] && Array.isArray(node.children);
+    if (!funcSaysStopRecursing && nodeHasChildrenArray)
+      node.children.forEach(node => this.traverse(node, func));
   }
 
   unfoldToLevel(root, toLevel) {
