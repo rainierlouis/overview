@@ -1,43 +1,39 @@
 function mountRadial() {
   "use strict";
 
-  const width = document.body.clientWidth;
-  const height = document.body.clientHeight;
-  let tree;
-  let linkedNodes = {};
+  var width = document.body.clientWidth;
+  var height = document.body.clientHeight;
+  var tree;
+  var min_zoom = 0.1;
+  var max_zoom = 7;
 
-  // const force = d3v3.layout.force()//d3v4.forceSimulation
-  //   .charge(-800)//d3v4.forceManyBody() >>>> // manyBody.strength([strength]) // manyBody.theta([theta]) // manyBody.distanceMin([distance]) // manyBody.distanceMax([distance])
-  //   .size([width, height]); //x.x & y.y
+  // var force = d3v3.layout.force()
+  //   .charge(-800)
+  //   .size([width, height]);
 
-  //V4
-  let svg = d3v4
+  var zoom = d3v3.behavior
+    .zoom()
+    .scaleExtent([1, 10])
+    .on("zoom", zoomed);
+
+  var drag = d3v3.behavior
+    .drag()
+    .origin(function(d) {
+      return d;
+    })
+    .on("dragstart", dragstarted)
+    .on("drag", dragged)
+    .on("dragend", dragended);
+
+  var svg = d3v3
     .select("#graph")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .call(
-      d3v4
-        .zoom()
-        .scaleExtent([0.4, 4])
-        .on("zoom", () => {
-          svg.attr("transform", d3v4.event.transform);
-        })
-    )
-    .append("g");
+    .call(zoom);
 
-  // let svg = d3v3.select("#graph").append("svg")
-  //   .attr("width", width)
-  //   .attr("height", height)
-  //   .call(d3v3.behavior.zoom() // d3v4.zoom()
-  //   .scaleExtent([0.4, 4])
-  //   .on("zoom", function () {
-  //     svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
-  //   })) // event.tranform.x && event.transform.y // event.transform.k
-  //   .append("g")
-
-  const render = data => {
-    let arr = [];
+  var render = data => {
+    var arr = [];
     for (let i in data) {
       if (i === "root") data[i]["depth"] = 0;
       else data[i]["depth"] = 1;
@@ -50,139 +46,14 @@ function mountRadial() {
     nodes: render(data),
     links: getLinks(render(data))
   };
+  var container = svg.append("g");
 
-  //V4
-  var simulation = d3v4
-    .forceSimulation()
-    .nodes(tree.nodes)
-    .force("charge", d3v4.forceManyBody())
-    .force(
-      "link",
-      d3v4
-        .forceLink(tree.links)
-        .distance(200)
-        .strength(1)
-    )
-    .force("center", d3v4.forceCenter(width / 2, height / 2))
-    .on("tick", ticked);
-
-  var link = svg
-    .append("g")
-    .attr("class", "links")
-    .selectAll("line")
-    .data(tree.links)
-    .enter()
-    .append("line")
-    .attr("stroke", "black");
-
-  var node = svg
-    .append("g")
-    .attr("class", "nodes")
-    .selectAll("g.nodes")
-    .data(tree.nodes);
-
-  var nodeEnter = node
-    .enter()
-    .append("g")
-    .attr("class", "node");
-
-  var nodeMerge = nodeEnter.merge(node).attr("transform", function(d) {
-    return "translate(" + d.x + "," + d.y + ")";
-  });
-
-  nodeEnter
-    .append("circle")
-    .attr("r", 10)
-    .attr("fill", "black")
-    .on("mouseover", mouseOver(0.2))
-    .on("mouseout", mouseOut);
-  // .call(d3v4.drag()
-  //     .on("start", dragstarted)
-  //     .on("drag", dragged)
-  //     .on("end", dragended));
-
-  // container = node.enter()
-  //   .append("g")
-  //   .on("mouseover", mouseOver(.1))
-  //   .on("mouseout", mouseOut)
-  //   .attr("class", "node");
-  //
-  // container.append("circle")
-  //   .attr("r", 10);
-  //
-
-  nodeEnter
-    .append("text")
-    .text(function(d) {
-      return d.name;
-    })
-    .attr("x", 8)
-    .attr("y", 18);
-
-  function ticked() {
-    link
-      .attr("x1", function(d) {
-        return d.source.x;
-      })
-      .attr("y1", function(d) {
-        return d.source.y;
-      })
-      .attr("x2", function(d) {
-        return d.target.x;
-      })
-      .attr("y2", function(d) {
-        return d.target.y;
-      });
-
-    node.attr("transform", function(d) {
-      return "translate(" + d.x + "," + d.y + ")";
-    });
-  }
-
-  tree.links.forEach(d => {
-    linkedNodes[d.source.index + "," + d.target.index] = 1;
-  });
-
-  const isConnected = (a, b) => {
-    return (
-      linkedNodes[a.index + "," + b.index] ||
-      linkedNodes[b.index + "," + a.index] ||
-      a.index == b.index
-    );
-  };
-
-  function mouseOver(opacity) {
-    return function(d) {
-      node.style("stroke-opacity", function(o) {
-        let thisOpacity = isConnected(d, o) ? 1 : opacity;
-        return thisOpacity;
-      });
-      node.style("fill-opacity", function(o) {
-        let thisOpacity = isConnected(d, o) ? 1 : opacity;
-        return thisOpacity;
-      });
-      link.style("stroke-opacity", function(o) {
-        return o.source === d || o.target === d ? 1 : opacity;
-      });
-      link.style("stroke", function(o) {
-        return o.source === d || o.target === d ? o.source.colour : "#ddd";
-      });
-    };
-  }
-
-  function mouseOut() {
-    node.style("stroke-opacity", 1);
-    node.style("fill-opacity", 1);
-    link.style("stroke-opacity", 1);
-    link.style("stroke", "#ddd");
-  }
-  //
   updateForce();
 
   function updateForce(focusNode) {
     var link = svg.selectAll(".link").data(tree.links);
     var node = svg.selectAll(".node").data(tree.nodes);
-    var container;
+    var nodeGroup;
 
     focusNode =
       focusNode ||
@@ -190,40 +61,92 @@ function mountRadial() {
         depth: 0
       });
 
-    //V4
-
-    simulation.nodes(tree.nodes).on("tick", ticked);
-
-    simulation.force("link").links(tree.links);
-    //
+    var simulation = d3v4
+      .forceSimulation(tree.nodes)
+      .force("charge", d3v4.forceManyBody())
+      .force("center", d3v4.forceCenter(width / 2, height / 2))
+      .force("link", d3v4.forceLink(tree.links).strength(0.5));
 
     // force
     //   .nodes(tree.nodes)
-    //   .links(tree.links) //d3v4.forceLinks([links]) >>> // link.links([links]) // link.distance([distance]) // link.strength([strength]) // link.iterations([iterations])
+    //   .links(tree.links)
     //   .start();
-    //
-    // link.enter()
-    //   .append("line")
-    //   .attr("class", "link");
 
-    // container = node.enter()
-    //   .append("g")
-    //   .on("mouseover", mouseOver(.1))
-    //   .on("mouseout", mouseOut)
-    //   .attr("class", "node");
-    //
-    // container.append("circle")
-    //   .attr("r", 10);
-    //
-    // container.append("text")
-    //   .text(function(d) {
-    //     return d.name;
-    //   })
-    //   .attr("x", 8)
-    //   .attr("y", 18);
+    link
+      .enter()
+      .append("line")
+      .attr("class", "link");
+
+    nodeGroup = node
+      .enter()
+      .append("g")
+      .attr("class", "node");
+    // .call(force.drag);
+
+    nodeGroup
+      .append("circle")
+      .attr("r", 6)
+      .on("click", function(d) {
+        updateForce(d);
+      });
+
+    nodeGroup
+      .append("text")
+      .text(function(d) {
+        return d.name;
+      })
+      .attr("y", 18)
+      .on("click", function(d) {
+        updateForce(d);
+      });
+
+    simulation.on("tick", function() {
+      link
+        .attr("x1", function(d) {
+          return d.source.x;
+        })
+        .attr("y1", function(d) {
+          return d.source.y;
+        })
+        .attr("x2", function(d) {
+          return d.target.x;
+        })
+        .attr("y2", function(d) {
+          return d.target.y;
+        });
+      node.attr("transform", function(d) {
+        return "translate(" + d.x + "," + d.y + ")";
+      });
+    });
+  }
+
+  function zoomed() {
+    container.attr(
+      "transform",
+      "translate(" + d3v3.event.translate + ")scale(" + d3v3.event.scale + ")"
+    );
+  }
+
+  function dragstarted(d) {
+    d3v3.event.sourceEvent.stopPropagation();
+
+    d3v3.select(this).classed("dragging", true);
+    force.start();
+  }
+
+  function dragged(d) {
+    d3v3
+      .select(this)
+      .attr("cx", (d.x = d3v3.event.x))
+      .attr("cy", (d.y = d3v3.event.y));
+  }
+
+  function dragended(d) {
+    d3v3.select(this).classed("dragging", false);
   }
 
   function getLinks(data) {
+    // Gets links from nodes data
     return _.flatten(
       _.map(_.filter(data, "children"), function(source, i) {
         return _.map(source.children, function(target) {
