@@ -26,8 +26,8 @@
 }
 
 .menu {
-  width: 5em;
-  height: 5em;
+  width: 3em;
+  height: 3em;
 }
 .menu .btn {
   position: absolute;
@@ -36,7 +36,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: #c14343;
   opacity: 0;
   z-index: -10;
   cursor: pointer;
@@ -65,7 +65,7 @@
   padding-left: 5px;
 }
 .menu .btn .fa {
-  font-size: 3em;
+  font-size: 2em;
   -webkit-transition: color 0.3s;
   transition: color 0.3s;
 }
@@ -94,9 +94,9 @@
 }
 .menu .btn.trigger .line {
   width: 60%;
-  height: 6px;
-  background: #000;
-  border-radius: 6px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
   -webkit-transition: background-color 0.3s, height 0.3s, top 0.3s;
   transition: background-color 0.3s, height 0.3s, top 0.3s;
 }
@@ -107,21 +107,21 @@
   position: absolute;
   left: 0;
   width: 100%;
-  height: 6px;
-  background: #000;
-  border-radius: 6px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
   -webkit-transition: background-color 0.3s, -webkit-transform 0.3s;
   transition: background-color 0.3s, -webkit-transform 0.3s;
   transition: background-color 0.3s, transform 0.3s;
   transition: background-color 0.3s, transform 0.3s, -webkit-transform 0.3s;
 }
 .menu .btn.trigger .line:before {
-  top: -12px;
+  top: -8px;
   -webkit-transform-origin: 15% 100%;
   transform-origin: 15% 100%;
 }
 .menu .btn.trigger .line:after {
-  top: 12px;
+  top: 8px;
   -webkit-transform-origin: 25% 30%;
   transform-origin: 25% 30%;
 }
@@ -145,12 +145,12 @@
 .menu.active .trigger .line:before {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-  width: 110%;
+  width: 120%;
 }
 .menu.active .trigger .line:after {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
-  width: 110%;
+  width: 120%;
 }
 
 .rotater:nth-child(1) {
@@ -159,8 +159,8 @@
 }
 
 .menu.active .rotater:nth-child(1) .btn-icon {
-  -webkit-transform: translateY(-10em) rotate(25.71429deg);
-  transform: translateY(-10em) rotate(25.71429deg);
+  -webkit-transform: translateY(-6em) rotate(25.71429deg);
+  transform: translateY(-6em) rotate(25.71429deg);
 }
 
 .rotater:nth-child(2) {
@@ -169,8 +169,8 @@
 }
 
 .menu.active .rotater:nth-child(2) .btn-icon {
-  -webkit-transform: translateY(-10em) rotate(-90.71429deg);
-  transform: translateY(-10em) rotate(-90.71429deg);
+  -webkit-transform: translateY(-6em) rotate(-90.71429deg);
+  transform: translateY(-6em) rotate(-90.71429deg);
 }
 
 .rotater:nth-child(3) {
@@ -179,6 +179,77 @@
 }
 
 .menu.active .rotater:nth-child(3) .btn-icon {
-  -webkit-transform: translateY(-10em) rotate(-77.14286deg);
-  transform: translateY(-10em) rotate(-77.14286deg);
+  -webkit-transform: translateY(-6em) rotate(-77.14286deg);
+  transform: translateY(-6em) rotate(-77.14286deg);
+}
+
+.container {
+  width: 600px;
+  margin: 50px auto;
+}
+
+.searchbox {
+  position: relative;
+  min-width: 50px;
+  width: 0%;
+  height: 50px;
+  float: right;
+  overflow: hidden;
+
+  -webkit-transition: width 0.3s;
+  -moz-transition: width 0.3s;
+  -ms-transition: width 0.3s;
+  -o-transition: width 0.3s;
+  transition: width 0.3s;
+}
+
+.searchbox-input {
+  top: 0;
+  right: 0;
+  border: 0;
+  outline: 0;
+  background: #dcddd8;
+  width: 100%;
+  height: 50px;
+  margin: 0;
+  padding: 0px 55px 0px 20px;
+  font-size: 20px;
+  color: red;
+}
+.searchbox-input::-webkit-input-placeholder {
+  color: #d74b4b;
+}
+.searchbox-input:-moz-placeholder {
+  color: #d74b4b;
+}
+.searchbox-input::-moz-placeholder {
+  color: #d74b4b;
+}
+.searchbox-input:-ms-input-placeholder {
+  color: #d74b4b;
+}
+
+.searchbox-icon,
+.searchbox-submit {
+  width: 50px;
+  height: 50px;
+  display: block;
+  position: absolute;
+  top: 0;
+  font-family: verdana;
+  font-size: 22px;
+  right: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  outline: 0;
+  line-height: 50px;
+  text-align: center;
+  cursor: pointer;
+  color: #dcddd8;
+  background: #172b3c;
+}
+
+.searchbox-open {
+  width: 100%;
 }
