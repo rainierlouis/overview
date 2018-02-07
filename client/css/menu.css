@@ -1,11 +1,14 @@
-*,
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+@import url(http://weloveiconfonts.com/api/?family=entypo);
+
+/* *,
 *:before,
 *:after {
-  -webkit-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+ -webkit-box-sizing: border-box;
+ box-sizing: border-box;
+ margin: 0;
+ padding: 0;
+} */
 
 /* body {
   background: linear-gradient(45deg, #e10522 0%, rgba(225, 5, 34, 0) 70%),
@@ -26,8 +29,8 @@
 }
 
 .menu {
-  width: 5em;
-  height: 5em;
+  width: 3em;
+  height: 3em;
 }
 .menu .btn {
   position: absolute;
@@ -36,7 +39,7 @@
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.15);
+  background: #c14343;
   opacity: 0;
   z-index: -10;
   cursor: pointer;
@@ -65,7 +68,7 @@
   padding-left: 5px;
 }
 .menu .btn .fa {
-  font-size: 3em;
+  font-size: 2em;
   -webkit-transition: color 0.3s;
   transition: color 0.3s;
 }
@@ -94,9 +97,9 @@
 }
 .menu .btn.trigger .line {
   width: 60%;
-  height: 6px;
-  background: #000;
-  border-radius: 6px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
   -webkit-transition: background-color 0.3s, height 0.3s, top 0.3s;
   transition: background-color 0.3s, height 0.3s, top 0.3s;
 }
@@ -107,21 +110,21 @@
   position: absolute;
   left: 0;
   width: 100%;
-  height: 6px;
-  background: #000;
-  border-radius: 6px;
+  height: 3px;
+  background: #fff;
+  border-radius: 3px;
   -webkit-transition: background-color 0.3s, -webkit-transform 0.3s;
   transition: background-color 0.3s, -webkit-transform 0.3s;
   transition: background-color 0.3s, transform 0.3s;
   transition: background-color 0.3s, transform 0.3s, -webkit-transform 0.3s;
 }
 .menu .btn.trigger .line:before {
-  top: -12px;
+  top: -8px;
   -webkit-transform-origin: 15% 100%;
   transform-origin: 15% 100%;
 }
 .menu .btn.trigger .line:after {
-  top: 12px;
+  top: 8px;
   -webkit-transform-origin: 25% 30%;
   transform-origin: 25% 30%;
 }
@@ -145,12 +148,12 @@
 .menu.active .trigger .line:before {
   -webkit-transform: rotate(45deg);
   transform: rotate(45deg);
-  width: 110%;
+  width: 120%;
 }
 .menu.active .trigger .line:after {
   -webkit-transform: rotate(-45deg);
   transform: rotate(-45deg);
-  width: 110%;
+  width: 120%;
 }
 
 .rotater:nth-child(1) {
@@ -159,8 +162,8 @@
 }
 
 .menu.active .rotater:nth-child(1) .btn-icon {
-  -webkit-transform: translateY(-10em) rotate(25.71429deg);
-  transform: translateY(-10em) rotate(25.71429deg);
+  -webkit-transform: translateY(-6em) rotate(25.71429deg);
+  transform: translateY(-6em) rotate(25.71429deg);
 }
 
 .rotater:nth-child(2) {
@@ -169,8 +172,8 @@
 }
 
 .menu.active .rotater:nth-child(2) .btn-icon {
-  -webkit-transform: translateY(-10em) rotate(-90.71429deg);
-  transform: translateY(-10em) rotate(-90.71429deg);
+  -webkit-transform: translateY(-6em) rotate(-90.71429deg);
+  transform: translateY(-6em) rotate(-90.71429deg);
 }
 
 .rotater:nth-child(3) {
@@ -179,6 +182,85 @@
 }
 
 .menu.active .rotater:nth-child(3) .btn-icon {
-  -webkit-transform: translateY(-10em) rotate(-77.14286deg);
-  transform: translateY(-10em) rotate(-77.14286deg);
+  -webkit-transform: translateY(-6em) rotate(-77.14286deg);
+  transform: translateY(-6em) rotate(-77.14286deg);
+}
+
+/* entypo */
+[class*="entypo-"]:before {
+  font-family: "entypo", sans-serif;
+  color: #c14343;
+}
+
+* {
+  margin: 0px;
+  padding: 0px;
+  border: 0px;
+  outline: 0px;
+  box-shadow: 0px;
+}
+
+body {
+  background-color: white;
+}
+
+#container {
+  height: 300px;
+  margin-top: 0;
+}
+
+.entypo-search:before {
+  position: absolute;
+  top: 0.4em;
+  left: 0px;
+}
+
+#form {
+  background-color: white;
+  border: solid 1px #c14343;
+  border-radius: 30px;
+  padding: 10px 20px;
+  margin-top: 47px;
+  width: 13px;
+  overflow: hidden;
+  position: absolute;
+  height: 30px;
+  right: 5%;
+  -webkit-transition: width 0.55s ease;
+  -moz-transition: width 0.55s ease;
+  -ms-transition: width 0.55s ease;
+  -o-transition: width 0.55s ease;
+  transition: width 0.55s ease;
+}
+
+form {
+  position: relative;
+}
+
+input {
+  width: 0px;
+  height: 25px;
+  font-size: 15px;
+  margin-left: 30px;
+  /* margin-top: 3px; */
+  line-height: 30px;
+}
+
+.entypo-search {
+  position: absolute;
+  top: 20%;
+}
+
+#form:hover {
+  width: 200px;
+}
+
+#form:hover form input {
+  width: 200px;
+}
+
+#form form input:focus,
+#form form input:active {
+  outline: none;
+  width: 300px;
 }
