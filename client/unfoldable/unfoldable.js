@@ -52,6 +52,7 @@ class Unfoldable {
   }
 
   traverse(func, node) {
+    if (!node) node = this.root;
     let funcSaysStopRecursing = func(node) === false;
     let nodeHasChildrenArray = node["children"] && Array.isArray(node.children);
     if (!funcSaysStopRecursing && nodeHasChildrenArray)

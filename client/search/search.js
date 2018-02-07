@@ -8,7 +8,7 @@ function findNodes(name) {
     if (nodename.search(name) !== -1) {
       found.push(node);
     }
-  }, diagram.root);
+  }); // , diagram.root
   return found;
 }
 
@@ -46,7 +46,7 @@ function removeHighlights(exepArrNodes, doUpdate) {
   diagram.traverse(function(node) {
     delete node.highlight;
     diagram.update(node, diagram.root);
-  }, diagram.root);
+  }); // , diagram.root
 }
 
 (function($) {
