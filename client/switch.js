@@ -1,4 +1,5 @@
 var switch_is_present = true;
+var diagram;
 
 $(document).ready(function() {
   let jqMenu = $(`
@@ -36,7 +37,7 @@ $(document).ready(function() {
       if (name == "tree") {
         // unmountRadial()
         // unmountDiscovery()
-        mountTree();
+        diagram = mountTree();
       }
       if (name == "discovery") {
         unmountTree();

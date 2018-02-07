@@ -2,7 +2,7 @@ function findNodes(name) {
   caseSensitivity = false;
   if (!caseSensitivity) name = name.toLowerCase();
   var found = [];
-  traverse(root, function(node) {
+  diagram.traverse(diagram.root, function(node) {
     var nodename = node.data.name;
     if (!caseSensitivity) nodename = nodename.toLowerCase();
     if (nodename.search(name) !== -1) {
@@ -33,13 +33,19 @@ function highlight(arrNodes) {
   removeHighlights();
   arrNodes.forEach(function(node) {
     node.highlight = 1;
-    update(node);
+    diagram.update(node, diagram.root);
   });
 }
 
 function removeHighlights(exepArrNodes, doUpdate) {
-  traverse(root, function(node) {
+  diagram.traverse(diagram.root, function(node) {
     delete node.highlight;
-    update(node);
+    diagram.update(node, diagram.root);
   });
 }
+
+(function($) {
+  $(document).ready(function() {
+    showSearch();
+  });
+})(jQuery);
