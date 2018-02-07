@@ -64,6 +64,7 @@ function mountRadial() {
           .on("end", dragended));
 
   var lables = node.append("text")
+
       .text(function(d) {
         return d.name;
       })

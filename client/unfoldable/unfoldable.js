@@ -1,147 +1,106 @@
-function convertJson(data) {
-  let id = typeof data.root == "string" ? data.root : "root";
-  let processed = [];
-  let depth = 0;
+var unfo;
 
-  function replaceObjectIdsByActualObjects(id, data, processed, depth) {
-    let dataObjectId = id;
-    let alreadyProcessed = processed.indexOf(id) != -1;
-    processed.push(dataObjectId);
-    let actualDataObject = data[dataObjectId];
-    let newChildrenArray;
-    let childrenSupressedToAvoidRecursion;
-    if (!alreadyProcessed) {
-      newChildrenArray = actualDataObject.children.map(function(childId) {
-        return replaceObjectIdsByActualObjects(
-          childId,
-          data,
-          processed,
-          depth + 1
-        );
-      });
-      childrenSupressedToAvoidRecursion = false;
-    } else {
-      childrenSupressedToAvoidRecursion = actualDataObject.children.length > 0;
-      newChildrenArray = [];
-    }
-    let copyOfObjectWithNewChildren = Object.assign({}, actualDataObject, {
-      children: newChildrenArray
-    });
-    return copyOfObjectWithNewChildren;
-  }
-
-  let result = replaceObjectIdsByActualObjects(id, data, processed, depth);
-  return result;
-}
-
-const unfoldable = {
-  show: mountTree,
-  hide: unmountTree
+const mountTree = () => {
+  unfo = new Unfoldable();
+  return unfo;
 };
 
-function unmountTree() {
-  // @TODO: look for things to clean up and tidy them here
-}
+class Unfoldable {
+  constructor() {
+    let tree = this.prepareData(data);
+    let margin = { top: 20, right: 90, bottom: 30, left: 90 },
+      width = $("#graph").innerWidth() - margin.left - margin.right,
+      height = $("#graph").innerHeight() - margin.top - margin.bottom;
 
-function mountTree() {
-  loadedTreeData = data; // store old object
-  console.log(loadedTreeData);
-  var treeData = convertJson(loadedTreeData);
-  console.log(treeData);
-  // Set the dimensions and margins of the diagram
-  var margin = { top: 20, right: 90, bottom: 30, left: 90 },
-    width = 960 - margin.left - margin.right,
-    height = 500 - margin.top - margin.bottom;
+    this.svg = d3v4
+      .select("#graph")
+      .append("svg")
+      .attr("width", width + margin.right + margin.left)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  // append the svg object to the body of the page
-  // appends a 'group' element to 'svg'
-  // moves the 'group' element to the top left margin
-  var svg = d3v4
-    .select("#graph")
-    .append("svg")
-    .attr("width", width + margin.right + margin.left)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    this.treemap = d3v4.tree().size([height, width]);
 
-  var i = 0,
-    duration = 750,
-    root;
+    this.root = d3v4.hierarchy(tree, function(d) {
+      return d.children;
+    });
+    this.root.x0 = height / 2;
+    this.root.y0 = 0;
 
-  // declares a tree layout and assigns the size
-  var treemap = d3v4.tree().size([height, width]);
-
-  // Assigns parent, children, height, depth
-  root = d3v4.hierarchy(treeData, function(d) {
-    return d.children;
-  });
-  root.x0 = height / 2;
-  root.y0 = 0;
-
-  // Collapse after the second level
-  // root.children.forEach(collapse);
-  unfoldToLevel(root, 3);
-
-  function traverse(node, func) {
-    let goDeeper = func(node);
-    let toBeTraversed = node["children"] || node["_children"] || [];
-    if (goDeeper !== false)
-      toBeTraversed.forEach(function(node) {
-        traverse(node, func);
-      });
+    this.unfoldToLevel(this.root, 3);
+    this.update(this.root, this.root);
   }
 
-  function unfoldToLevel(root, toLevel) {
-    traverse(root, function(node) {
-      let hasUnfoldDepth = node.depth < toLevel;
-      if (hasUnfoldDepth) {
-        if (!node["children"]) node["children"] = node["_children"];
+  prepareData(data) {
+    const processed = [];
+
+    const transChildren = (id, depth = 0) => {
+      processed.push(id);
+      return Object.assign({}, data[id], {
+        depth,
+        children: data[id].children.map(childID => {
+          if (processed.includes(childID))
+            return Object.assign({}, data[childID], {
+              children: []
+            });
+          return transChildren(childID, depth + 1);
+        })
+      });
+    };
+    return transChildren("root");
+  }
+
+  traverse(node, func) {
+    let funcSaysStopRecursing = func(node) === false;
+    let nodeHasChildrenArray = node["children"] && Array.isArray(node.children);
+    if (!funcSaysStopRecursing && nodeHasChildrenArray)
+      node.children.forEach(node => this.traverse(node, func));
+  }
+
+  unfoldToLevel(root, toLevel) {
+    this.traverse(root, node => {
+      if (node.depth <= toLevel && node.children) {
+        return true;
       } else {
-        collapse(node);
+        this.collapse(node);
         return false;
       }
     });
   }
 
-  update(root);
-
-  // Collapse the node and all it's children
-  function collapse(d) {
-    if (d.children) {
-      d._children = d.children;
-      d._children.forEach(collapse);
-      d.children = null;
-    }
+  collapse(node) {
+    if (node.children)
+      node.children.forEach(child => this.collapse.call(this, child));
   }
 
-  function update(source) {
+  update(source, root) {
+    let i = 0;
+    let duration = 500;
+
     // Assigns the x and y position for the nodes
-    var treeData = treemap(root);
+    let tree = this.treemap(root);
 
-    // Compute the new tree layout.
-    var nodes = treeData.descendants(),
-      links = treeData.descendants().slice(1);
+    // Compute the new tree layout
+    let nodes = tree.descendants();
+    let links = tree.descendants().slice(1);
 
-    // Normalize for fixed-depth.
-    nodes.forEach(function(d) {
-      d.y = d.depth * 180;
-    });
+    // Normalize for fixed-depth
+    nodes.forEach(d => (d.y = d.depth * 180));
 
     // ****************** Nodes section ***************************
 
     // Update the nodes...
-    var node = svg.selectAll("g.node").data(nodes, function(d) {
-      return d.id || (d.id = ++i);
-    });
+    let node = this.svg
+      .selectAll("g.node")
+      .data(nodes, d => d.id || (d.id = ++i));
 
     // Enter any new modes at the parent's previous position.
-    var nodeEnter = node
+    let nodeEnter = node
       .enter()
       .append("g")
       .attr("class", "node")
-      .attr("transform", function(d) {
-        return "translate(" + source.y0 + "," + source.x0 + ")";
-      })
+      .attr("transform", d => "translate(" + source.y0 + "," + source.x0 + ")")
       .on("click", click);
 
     // Add Circle for the nodes
@@ -149,52 +108,41 @@ function mountTree() {
       .append("circle")
       .attr("class", "node")
       .attr("r", 1e-6)
-      .style("fill", function(d) {
-        return d._children ? "lightsteelblue" : "#fff";
-      });
+      .style("fill", d => (d._children ? "lightsteelblue" : "#fff"));
 
     // Add labels for the nodes
     nodeEnter
       .append("text")
       .attr("dy", ".35em")
-      .attr("x", function(d) {
-        return d.children || d._children ? -13 : 13;
-      })
-      .attr("text-anchor", function(d) {
-        return d.children || d._children ? "end" : "start";
-      })
-      .text(function(d) {
-        return d.data.name;
-      });
+      .attr("x", d => (d.children || d._children ? -13 : 13))
+      .attr("text-anchor", d => (d.children || d._children ? "end" : "start"))
+      .text(d => d.data.name);
 
     // UPDATE
-    var nodeUpdate = nodeEnter.merge(node);
+    let nodeUpdate = nodeEnter.merge(node);
 
     // Transition to the proper position for the node
     nodeUpdate
       .transition()
       .duration(duration)
-      .attr("transform", function(d) {
-        return "translate(" + d.y + "," + d.x + ")";
-      });
+      .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
 
     // Update the node attributes and style
     nodeUpdate
       .select("circle.node")
       .attr("r", 10)
-      .style("fill", function(d) {
+      .style("fill", d => {
+        if (d.highlight) return "#ea762d";
         return d._children ? "lightsteelblue" : "#fff";
       })
       .attr("cursor", "pointer");
 
     // Remove any exiting nodes
-    var nodeExit = node
+    let nodeExit = node
       .exit()
       .transition()
       .duration(duration)
-      .attr("transform", function(d) {
-        return "translate(" + source.y + "," + source.x + ")";
-      })
+      .attr("transform", d => "translate(" + source.y + "," + source.x + ")")
       .remove();
 
     // On exit reduce the node circles size to 0
@@ -206,51 +154,47 @@ function mountTree() {
     // ****************** links section ***************************
 
     // Update the links...
-    var link = svg.selectAll("path.link").data(links, function(d) {
-      return d.id;
-    });
+    let link = this.svg.selectAll("path.link").data(links, d => d.id);
 
     // Enter any new links at the parent's previous position.
-    var linkEnter = link
+    let linkEnter = link
       .enter()
       .insert("path", "g")
       .attr("class", "link")
-      .attr("d", function(d) {
-        var o = { x: source.x0, y: source.y0 };
+      .attr("d", d => {
+        let o = { x: source.x0, y: source.y0 };
         return diagonal(o, o);
       });
 
     // UPDATE
-    var linkUpdate = linkEnter.merge(link);
+    let linkUpdate = linkEnter.merge(link);
 
     // Transition back to the parent element position
     linkUpdate
       .transition()
       .duration(duration)
-      .attr("d", function(d) {
-        return diagonal(d, d.parent);
-      });
+      .attr("d", d => diagonal(d, d.parent));
 
     // Remove any exiting links
-    var linkExit = link
+    let linkExit = link
       .exit()
       .transition()
       .duration(duration)
-      .attr("d", function(d) {
-        var o = { x: source.x, y: source.y };
+      .attr("d", d => {
+        let o = { x: source.x, y: source.y };
         return diagonal(o, o);
       })
       .remove();
 
     // Store the old positions for transition.
-    nodes.forEach(function(d) {
+    nodes.forEach(d => {
       d.x0 = d.x;
       d.y0 = d.y;
     });
 
     // Creates a curved (diagonal) path from parent to the child nodes
     function diagonal(s, d) {
-      path = `M ${s.y} ${s.x}
+      let path = `M ${s.y} ${s.x}
       C ${(s.y + d.y) / 2} ${s.x},
       ${(s.y + d.y) / 2} ${d.x},
       ${d.y} ${d.x}`;
@@ -259,6 +203,7 @@ function mountTree() {
     }
 
     // Toggle children on click.
+    var that = this;
     function click(d) {
       if (d.children) {
         d._children = d.children;
@@ -267,11 +212,16 @@ function mountTree() {
         d.children = d._children;
         d._children = null;
       }
-      update(d);
+      that.update(d, root);
     }
   }
 }
 
-window.onload = function() {
-  if (typeof switch_is_present == "undefined") mountTree();
-};
+const unmountTree = () => {};
+
+(function($) {
+  $(document).ready(function() {
+    if (typeof switch_is_present == "undefined") mountTree();
+    //showSearch();
+  });
+})(jQuery);

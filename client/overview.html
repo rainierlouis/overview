@@ -6,68 +6,44 @@
   <title>Overview</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/skeleton.css">
-  <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/overview.css">
   <link rel="stylesheet" href="css/menu.css">
   <link rel="stylesheet" href="./unfoldable/unfoldable.css">
   <link rel="stylesheet" type="text/css" src='radial/radial.css'>
   <link rel="stylesheet" type="text/css" src='discovery/discovery.css'>
+		<link href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css" rel="stylesheet">
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300|Quicksand" rel="stylesheet">
 </head>
 <body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src='https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js'></script>
   <script>
-    d3v4 = d3
-    window.d3 = null
-  </script>
+  d3v4 = d3;
+window.d3 = null;
+</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.13/d3.min.js"></script>
   <script>
-    d3v3 = d3
-    window.d3 = null
-  </script>
+  d3v3 = d3;
+window.d3 = null;
+</script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.0.0/lodash.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
   <script src="./data/data.js"></script>
   <script src="./switch.js"></script>
-
-  <header><img src="./overview.png"></img></header>
     <div id="main">
-      <div id="switch">
-        <div class="menu">
-          <div class="btn trigger">
-            <span class="line"></span>
-          </div>
-          <div class="icons">
-            <div class="rotater">
-              <div class="btn btn-icon" id="discovery">
-                <img src="share.svg" class="fa clicker" id="discovery"></img>
-              </div>
-            </div>
-            <div class="rotater">
-              <div class="btn btn-icon">
-                <img src="plant.svg" class="fa clicker" id="tree"></img>
-              </div>
-            </div>
-            <div class="rotater">
-              <div class="btn btn-icon">
-                <img src="network.svg" class="fa clicker" id="radial"></img>
-              </div>
-            </div>
-          </div>
-        </div>
-        <script>
-          $(document).ready(function() {
-            $(".trigger").click(function() {
-              $(".menu").toggleClass("active");
-            });
-          });
-        </script>
-      </div>
-      <div id="graph"></div>
+      <div id="switch"></div>
+      <div id="graph"><div id="footer"><p class="love">Made with  <i class="icon ion-heart"></i> Powered by the <span class="overview-text">Overview Team</span></p></div></div>
       <script src="./discovery/discovery.js"></script>
       <script src='./unfoldable/unfoldable.js'></script>
       <script src='./radial/radial.js'></script>
+      <!-- <script src='./search/search.js'></script> -->
+<div id="container">
+    <div id="form">
+    <form action="#" class="entypo-search">
+      <fieldset><input id="search" placeholder="Search" /></fieldset>
+    </form>
+  </div>
+</div>
     </div>
 
 </body>

@@ -16,8 +16,7 @@ function mountDiscovery() {
     function main() {
         var range = 100
         var data = {
-            // nodes:d3v4.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3v4.randomUniform(8, 28)()}}),
-            nodes: d3v4.range(0,range).map( (d) => { return {label: "l"+d , r: 10 }}),
+            nodes:d3v4.range(0, range).map(function(d){ return {label: "l"+d ,r:~~d3v4.randomUniform(8, 28)()}}),
             links:d3v4.range(0, range).map(function(){ return {source:~~d3v4.randomUniform(range)(), target:~~d3v4.randomUniform(range)()} })
         }
 
@@ -68,7 +67,9 @@ function mountDiscovery() {
             .selectAll("circle")
             .data(data.nodes)
             .enter().append("circle")
-            .attr("r", function(d){ return d.r })
+            .attr("r", function(d){
+              return d.r
+            })
             .on("mouseover", mouseOver(.2))
             .on("mouseout", mouseOut)
             .call(d3v4.drag()
@@ -137,7 +138,6 @@ function mountDiscovery() {
         data.links.forEach(function(d) {
             linkedByIndex[d.source.index + "," + d.target.index] = 1;
         });
-        // console.log(linkedByIndex);
         // check the dictionary to see if nodes are linked
         function isConnected(a, b) {
             return linkedByIndex[a.index + "," + b.index] || linkedByIndex[b.index + "," + a.index] || a.index == b.index;
@@ -150,7 +150,6 @@ function mountDiscovery() {
                 // to this one. if so, keep the opacity at 1, otherwise
                 // fade
                 node.style("stroke-opacity", function(o) {
-                  // console.log("D&O",d,o);
                     let thisOpacity = isConnected(d, o) ? 1 : opacity;
                     return thisOpacity;
                 });
