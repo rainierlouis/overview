@@ -51,7 +51,6 @@ function mountRadial() {
   var simulation = d3v4.forceSimulation(tree.nodes)
       .force("charge", d3v4.forceManyBody())
       .force("collide",d3v4.forceCollide(15))
-      // .force("link", d3v4.forceLink(tree.links).strength(.09))
       .force("link", d3v4.forceLink(tree.links).strength(0.1))
       .force("center", d3v4.forceCenter(width / 2, height / 2))
       .on("tick", ticked);
@@ -76,23 +75,24 @@ function mountRadial() {
       .attr("fill", "lightsteelblue")
       .on("mouseover", mouseOver(.2))
       .on("mouseout", mouseOut)
-      .call(d3v4.drag())
-          // .on("start", dragstarted)
-          // .on("drag", dragged)
-          // .on("end", dragended));
+      .call(d3v4.drag()
+          .on("start", dragstarted)
+          .on("drag", dragged)
+          .on("end", dragended));
 
   var lables = node.append("text")
       .text(function(d) {
         return d.name;
       })
       .attr('x', 8)
-      .attr('y', 12);
+      .attr('y', 18);
 
   node.append("title")
       .text(function(d) { return d.name; });
 
   simulation
       .nodes(tree.nodes)
+      .alphaTarget(1).restart()
       .on("tick", ticked);
 
   simulation.force("link")
@@ -109,6 +109,23 @@ function mountRadial() {
         .attr("transform", function(d) {
           return "translate(" + d.x + "," + d.y + ")";
         })
+  }
+
+  function dragstarted(d) {
+    if (!d3v4.event.active) simulation.alphaTarget(0.5).restart();
+    d.fx = d.x;
+    d.fy = d.y;
+  }
+
+  function dragged(d) {
+    d.fx = d3v4.event.x;
+    d.fy = d3v4.event.y;
+  }
+
+  function dragended(d) {
+    if (!d3v4.event.active) simulation.alphaTarget(0);
+    d.fx = null;
+    d.fy = null;
   }
 
   tree.links.forEach((d) => {
