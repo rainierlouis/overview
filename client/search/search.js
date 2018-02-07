@@ -2,7 +2,7 @@ function findNodes(name) {
   caseSensitivity = false;
   if (!caseSensitivity) name = name.toLowerCase();
   var found = [];
-  traverse(root, function(node) {
+  diagram.traverse(this.root, function(node) {
     var nodename = node.data.name;
     if (!caseSensitivity) nodename = nodename.toLowerCase();
     if (nodename.search(name) !== -1) {
@@ -38,7 +38,7 @@ function highlight(arrNodes) {
 }
 
 function removeHighlights(exepArrNodes, doUpdate) {
-  traverse(root, function(node) {
+  diagram.traverse(this.root, function(node) {
     delete node.highlight;
     update(node);
   });
