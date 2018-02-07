@@ -32,41 +32,32 @@ async function parse(entryPoint) {
     const ast = babylon.parse(fileContent, babylonConfig);
     const state = await walker(ast, visitors);
     validNodes = [...validNodes, ...checkNodeValidity(state)];
-
     if (!state.imports.length) return;
 
     let filesToParse = await Promise.prototype.some(state.imports, node =>
       parseFilePath(node.path, getPathtoParentFolder(filePath))
     );
-    console.log(1);
     filesToParse.forEach(obj => {
       obj.result = Array.isArray(obj.result[0].result)
         ? obj.result[0].result[0]
         : obj.result[0].result;
     });
     filesToParse = createFileList(filesToParse, validNodes, visited);
-    console.log(2);
 
-    createNodes(validNodes, nodes, parent);
-    console.log(3);
-
+    createNodes(state, validNodes, nodes, parent);
     await Promise.all(
       filesToParse
         .map(el => {
           if (visited.includes(el.path)) return;
-          else return scan(el.path, el.name);
+          else {
+            return scan(el.path, el.name);
+          }
         })
         .filter(el => el)
-    );
+    ).catch(e => console.log("Promise.all error", e));
   }
-  await scan(entryPoint, "root").catch(err => console.log(err));
-  return JSON.stringify(nodes);
+  await scan(entryPoint, "root").catch(err => console.log("Scan error", err));
+  return nodes;
 }
-
-let testPath =
-  "/Users/karsten/Documents/CodeWorks/senior/overview/parser/test_apps/mapStories/src/Index.js";
-parse(testPath)
-  .then(data => console.log(data))
-  .catch(err => console.log(err));
 
 module.exports = parse;

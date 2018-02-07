@@ -1,3 +1,14 @@
+const config = {
+  importIgnoreList: [
+    "react-router",
+    "react-router-native",
+    "react-router-dom",
+    "react-redux",
+    "react"
+  ],
+  identifierIgnoreList: ["store"]
+};
+
 const babylonConfig = {
   sourceType: "module",
   plugins: ["jsx", "objectRestSpread", "classProperties"]
@@ -5,13 +16,7 @@ const babylonConfig = {
 
 const visitors = {
   ImportDeclaration(node, state) {
-    if (
-      node.source.value !== "react-router" &&
-      node.source.value !== "react-router-native" &&
-      node.source.value !== "react-router-dom" &&
-      node.source.value !== "react-redux" &&
-      node.source.value !== "react"
-    ) {
+    if (!config.importIgnoreList.includes(node.source.value)) {
       let importObj = {
         path: node.source.value,
         names: node.specifiers.map(spec => spec.local.name)
@@ -20,7 +25,9 @@ const visitors = {
     }
   },
   JSXIdentifier(node, state) {
-    if (node.name !== "store") state.identifiers.push(node.name);
+    if (!config.identifierIgnoreList.includes(node.name)) {
+      state.identifiers.push(node.name);
+    }
   },
   JSXElement(node, state) {
     if (

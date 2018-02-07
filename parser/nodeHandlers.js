@@ -8,9 +8,13 @@ class Node {
   }
 }
 
-const createNodes = (validNodes, nodes, parent) => {
-  validNodes.forEach(name => {
-    if (!nodes[name]) nodes[name] = new Node(name, name, "component", null, []);
+const createNodes = (state, validNodes, nodes, parent) => {
+  let importNames = state.imports.reduce((acc, el) => {
+    return [...acc, ...el.names];
+  }, []);
+  importNames.forEach(name => {
+    if (!nodes[name] && validNodes.includes(name))
+      nodes[name] = new Node(name, name, "component", null, []);
     if (!nodes[parent].children.includes(name))
       nodes[parent].children.push(name);
   });
