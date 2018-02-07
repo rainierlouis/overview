@@ -1,7 +1,7 @@
 const fs = require("fs-extra");
 const mkdirp = require("mkdirp");
 const path = require("path");
-const parse = require("../parser/parse");
+const parse = require(`${process.cwd()}/node_modules/app-overview/parser/parse`);
 
 const dataContent = {};
 
