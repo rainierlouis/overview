@@ -49,9 +49,10 @@ function mountRadial() {
 
   //V4
   var simulation = d3v4.forceSimulation(tree.nodes)
-      .force("charge", d3v4.forceManyBody(-400))
-      .force("collide",d3v4.forceCollide(25))
-      .force("link", d3v4.forceLink(tree.links).strength(.2))
+      .force("charge", d3v4.forceManyBody())
+      .force("collide",d3v4.forceCollide(15))
+      // .force("link", d3v4.forceLink(tree.links).strength(.09))
+      .force("link", d3v4.forceLink(tree.links).strength(0.1))
       .force("center", d3v4.forceCenter(width / 2, height / 2))
       .on("tick", ticked);
 
@@ -61,19 +62,21 @@ function mountRadial() {
     .selectAll("line")
     .data(tree.links)
     .enter().append("line")
-    .attr("stroke", "lightsteelblue")
+    .attr("stroke", "darkgrey")
     .attr("stroke-width", 2 );
 
   var node = svg.append("g")
-      .attr("class", "nodes")
+    .attr("class", "nodes")
     .selectAll("g")
     .data(tree.nodes)
     .enter().append("g")
 
   var circles = node.append("circle")
-      .attr("r", 5)
+      .attr("r", 10)
       .attr("fill", "lightsteelblue")
-      // .call(d3v4.drag())
+      .on("mouseover", mouseOver(.2))
+      .on("mouseout", mouseOut)
+      .call(d3v4.drag())
           // .on("start", dragstarted)
           // .on("drag", dragged)
           // .on("end", dragended));
@@ -82,8 +85,8 @@ function mountRadial() {
       .text(function(d) {
         return d.name;
       })
-      .attr('x', 6)
-      .attr('y', 3);
+      .attr('x', 8)
+      .attr('y', 12);
 
   node.append("title")
       .text(function(d) { return d.name; });
@@ -107,21 +110,14 @@ function mountRadial() {
           return "translate(" + d.x + "," + d.y + ")";
         })
   }
-  // var link = svg.append("g")
-  //     .attr("class", "links")
-  //     .selectAll("line")
-  //     .data(tree.links)
-  //     .enter()
-  //     .append("line")
-  //     .attr("stroke", "black")
-  //
+
   // var node = svg.selectAll("g.node")
   //     .data(tree.nodes)
   //     .enter().append("circle")
   //     .attr("r", 7.5)
   //     .attr("fill", "black")
-  //     .on("mouseover", mouseOver(.2))
-  //     .on("mouseout", mouseOut)
+      // .on("mouseover", mouseOver(.2))
+      // .on("mouseout", mouseOut)
   //
   // var text = node.append("text")
   //     .attr("dx", 12)
