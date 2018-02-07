@@ -6,19 +6,37 @@ function mountRadial() {
   let tree;
   let linkedNodes = {};
 
-  const force = d3v3.layout.force()
-    .charge(-800)
-    .size([width, height]);
+  // const force = d3v3.layout.force()//d3v4.forceSimulation
+  //   .charge(-800)//d3v4.forceManyBody() >>>> // manyBody.strength([strength]) // manyBody.theta([theta]) // manyBody.distanceMin([distance]) // manyBody.distanceMax([distance])
+  //   .size([width, height]); //x.x & y.y
 
-  let svg = d3v3.select("#graph").append("svg")
+  //V4
+  let simulation = d3v4.forceSimulation()
+    .force("charge", d3v4.forceManyBody())
+    // .strength(-100)
+
+
+  //V4
+  let svg = d3v4.select("#graph")
+    .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .call(d3v3.behavior.zoom()
+    .call(d3v4.zoom()
     .scaleExtent([0.4, 4])
-    .on("zoom", function () {
-      svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
+    .on("zoom", () => {
+      svg.attr("transform", d3v3.event.transform)
     }))
     .append("g")
+
+  // let svg = d3v3.select("#graph").append("svg")
+  //   .attr("width", width)
+  //   .attr("height", height)
+  //   .call(d3v3.behavior.zoom() // d3v4.zoom()
+  //   .scaleExtent([0.4, 4])
+  //   .on("zoom", function () {
+  //     svg.attr("transform", "translate(" + d3v3.event.translate + ")" + " scale(" + d3v3.event.scale + ")")
+  //   })) // event.tranform.x && event.transform.y // event.transform.k
+  //   .append("g")
 
   const render = (data) => {
     let arr = [];
@@ -46,10 +64,15 @@ function mountRadial() {
       depth: 0
     });
 
-    force
+    //V4
+
+    simulation
       .nodes(tree.nodes)
-      .links(tree.links)
-      .start();
+
+    // force
+    //   .nodes(tree.nodes)
+    //   .links(tree.links) //d3v4.forceLinks([links]) >>> // link.links([links]) // link.distance([distance]) // link.strength([strength]) // link.iterations([iterations])
+    //   .start();
 
     link.enter()
       .append("line")
@@ -105,8 +128,8 @@ function mountRadial() {
         link.style("stroke-opacity", 1);
         link.style("stroke", "#ddd");
     };
-
-    force.on("tick", function() {
+    //V4 force switched to simulation
+    simulation.on("tick", function() {
       link
         .attr("x1", function(d) {
           return d.source.x;
