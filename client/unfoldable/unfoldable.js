@@ -76,6 +76,9 @@ class Unfoldable {
   }
 
   update(source, root) {
+    if (!source) source = this.root;
+    if (!root) root = this.root;
+
     let i = 0;
     let duration = 500;
 
