@@ -1,11 +1,27 @@
 const fs = require("fs-extra");
 const path = require("path");
+const npmRoot = require("npm-root");
 
 module.exports = {
   visualData: async pwd => {
-    await fs.ensureDir(`${pwd}/visual`, err => {
-      if (err) throw err;
+    await npmRoot({ global: true }, async (err, globalPath) => {
+      await fs.ensureDir(`${pwd}/visual`, err => {
+        if (err) throw err;
+        fs.copy(`${globalPath}/app-overview/client`, `${pwd}/visual`, err => {
+          if (err) throw err;
+          fs.copy(
+            `${pwd}/visualTemp/data.js`,
+            `${pwd}/visual/data/data.js`,
+            err => {
+              if (err) throw err;
+              fs.remove(`${pwd}/visualTemp/data.js`, err => {
+                if (err) throw err;
+                fs.remove(`${pwd}/visualTemp`);
+              });
+            }
+          );
+        });
+      });
     });
-    await fs.copy(`${pwd}/node_modules/app-overview/client`, "/visual");
   }
 };
