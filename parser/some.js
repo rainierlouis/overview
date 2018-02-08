@@ -10,16 +10,14 @@ const some = function(array, callback) {
           success.push({ input: element, result });
           counter--;
           if (counter === 0) {
-            if (success.length) resolve(success);
-            else reject(error);
+            resolve(success);
           }
         })
         .catch(e => {
           error = e;
           counter--;
           if (counter === 0) {
-            if (success.length) resolve(success);
-            else reject(error);
+            resolve(success);
           }
         });
     });

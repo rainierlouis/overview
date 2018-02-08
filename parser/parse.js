@@ -37,14 +37,16 @@ async function parse(entryPoint) {
     let filesToParse = await Promise.prototype.some(state.imports, node =>
       parseFilePath(node.path, getPathtoParentFolder(filePath))
     );
+
     filesToParse.forEach(obj => {
-      obj.result = Array.isArray(obj.result[0].result)
-        ? obj.result[0].result[0]
-        : obj.result[0].result;
+      if (Array.isArray(obj.result)) {
+        obj.result = obj.result[0].result;
+      }
     });
     filesToParse = createFileList(filesToParse, validNodes, visited);
 
     createNodes(state, validNodes, nodes, parent);
+
     await Promise.all(
       filesToParse
         .map(el => {
@@ -54,7 +56,7 @@ async function parse(entryPoint) {
           }
         })
         .filter(el => el)
-    ).catch(e => console.log("Promise.all error", e));
+    );
   }
   await scan(entryPoint, "root").catch(err => console.log("Scan error", err));
   return nodes;
