@@ -12,6 +12,8 @@ class Unfoldable {
       width = $("#graph").innerWidth() - margin.left - margin.right,
       height = $("#graph").innerHeight() - margin.top - margin.bottom;
 
+    this.width = width;
+
     this.svg = d3v4
       .select("#graph")
       .append("svg")
@@ -89,8 +91,10 @@ class Unfoldable {
     let nodes = tree.descendants();
     let links = tree.descendants().slice(1);
 
+    let maxLevel = nodes[0].height;
+    let levelDistance = this.width / maxLevel;
     // Normalize for fixed-depth
-    nodes.forEach(d => (d.y = d.depth * 180));
+    nodes.forEach(d => (d.y = d.depth * levelDistance)); // 180
 
     // ****************** Nodes section ***************************
 
@@ -117,9 +121,14 @@ class Unfoldable {
     // Add labels for the nodes
     nodeEnter
       .append("text")
-      .attr("dy", ".35em")
+      .attr("dy", d => {
+        return d.depth === 0 ? "-1.5em" : ".35em";
+      })
       .attr("x", d => (d.children || d._children ? -13 : 13))
-      .attr("text-anchor", d => (d.children || d._children ? "end" : "start"))
+      .attr("text-anchor", d => {
+        if (d.depth === 0) return "middle";
+        return d.children || d._children ? "end" : "start";
+      })
       .text(d => d.data.name);
 
     // UPDATE
