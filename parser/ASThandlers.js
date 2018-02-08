@@ -25,7 +25,10 @@ const visitors = {
     }
   },
   JSXIdentifier(node, state) {
-    if (!config.identifierIgnoreList.includes(node.name)) {
+    if (
+      !config.identifierIgnoreList.includes(node.name) &&
+      !state.identifiers.includes(node.name)
+    ) {
       state.identifiers.push(node.name);
     }
   },

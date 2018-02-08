@@ -13,18 +13,23 @@ const createNodes = (state, validNodes, nodes, parent) => {
     return [...acc, ...el.names];
   }, []);
   importNames.forEach(name => {
-    if (!nodes[name] && validNodes.includes(name))
+    if (!nodes[name] && validNodes.includes(name)) {
       nodes[name] = new Node(name, name, "component", null, []);
-    if (!nodes[parent].children.includes(name))
-      nodes[parent].children.push(name);
+      if (!nodes[parent].children.includes(name))
+        nodes[parent].children.push(name);
+    }
   });
 };
 
-const checkNodeValidity = state => {
+const checkNodeValidity = (state, validNodes) => {
   let res = [];
   state.imports.forEach(el => {
     for (let i = 0; i < el.names.length; i++) {
-      if (state.identifiers.includes(el.names[i])) res.push(el.names[i]);
+      if (
+        state.identifiers.includes(el.names[i]) &&
+        !validNodes.includes(el.names[i])
+      )
+        res.push(el.names[i]);
     }
   });
   return res;

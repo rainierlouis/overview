@@ -31,7 +31,7 @@ async function parse(entryPoint) {
     const fileContent = await readFile(filePath);
     const ast = babylon.parse(fileContent, babylonConfig);
     const state = await walker(ast, visitors);
-    validNodes = [...validNodes, ...checkNodeValidity(state)];
+    validNodes = checkNodeValidity(state, validNodes);
     if (!state.imports.length) return;
 
     let filesToParse = await Promise.prototype.some(state.imports, node =>
@@ -44,7 +44,6 @@ async function parse(entryPoint) {
       }
     });
     filesToParse = createFileList(filesToParse, validNodes, visited);
-
     createNodes(state, validNodes, nodes, parent);
 
     await Promise.all(
