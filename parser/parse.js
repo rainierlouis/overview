@@ -1,7 +1,4 @@
 const babylon = require("babylon");
-const walk = require("babylon-walk");
-const fs = require("fs");
-const path = require("path");
 
 const createNodes = require("./nodeHandlers").createNodes;
 const checkNodeValidity = require("./nodeHandlers").checkNodeValidity;
