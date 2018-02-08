@@ -63,6 +63,5 @@ async function walker(ast, visitors) {
 module.exports = {
   babylonConfig,
   visitors,
-  node: Node,
   walker
 };
