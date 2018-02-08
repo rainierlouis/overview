@@ -12,6 +12,8 @@ class Unfoldable {
       width = $("#graph").innerWidth() - margin.left - margin.right,
       height = $("#graph").innerHeight() - margin.top - margin.bottom;
 
+    this.width = width;
+
     this.svg = d3v4
       .select("#graph")
       .append("svg")
@@ -89,8 +91,10 @@ class Unfoldable {
     let nodes = tree.descendants();
     let links = tree.descendants().slice(1);
 
+    let maxLevel = nodes[0].height;
+    let levelDistance = this.width / maxLevel;
     // Normalize for fixed-depth
-    nodes.forEach(d => (d.y = d.depth * 180));
+    nodes.forEach(d => (d.y = d.depth * levelDistance)); // 180
 
     // ****************** Nodes section ***************************
 
