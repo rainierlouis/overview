@@ -29,6 +29,9 @@ $(document).ready(function() {
   $(".trigger").click(function() {
     $(".menu").toggleClass("active");
   });
+  $(".btn-icon").on("click", function(e) {
+    $(".menu.active").removeClass("active");
+  });
 
   function addButton(text) {
     $("#" + text).click(function(e) {
