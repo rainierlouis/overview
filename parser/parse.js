@@ -3,21 +3,20 @@ const walk = require("babylon-walk");
 const fs = require("fs");
 const path = require("path");
 
-const createNodes = require("./parser/nodeHandlers").createNodes;
-const checkNodeValidity = require("./parser/nodeHandlers").checkNodeValidity;
-const Node = require("./parser/nodeHandlers").node;
-const createFileList = require("./parser/nodeHandlers").createFileList;
+const createNodes = require("./nodeHandlers").createNodes;
+const checkNodeValidity = require("./nodeHandlers").checkNodeValidity;
+const Node = require("./nodeHandlers").node;
+const createFileList = require("./nodeHandlers").createFileList;
 
-const babylonConfig = require("./parser/ASThandlers").babylonConfig;
-const visitors = require("./parser/ASThandlers").visitors;
-const walker = require("./parser/ASThandlers").walker;
+const babylonConfig = require("./ASThandlers").babylonConfig;
+const visitors = require("./ASThandlers").visitors;
+const walker = require("./ASThandlers").walker;
 
-const readFile = require("./parser/fileHandlers").readFile;
-const fsAccessAsync = require("./parser/fileHandlers").fsAccessAsync;
-const getPathtoParentFolder = require("./parser/fileHandlers")
-  .getPathtoParentFolder;
-const parseFilePath = require("./parser/fileHandlers").parseFilePath;
-Promise.prototype.some = require("./parser/some");
+const readFile = require("./fileHandlers").readFile;
+const fsAccessAsync = require("./fileHandlers").fsAccessAsync;
+const getPathtoParentFolder = require("./fileHandlers").getPathtoParentFolder;
+const parseFilePath = require("./fileHandlers").parseFilePath;
+Promise.prototype.some = require("./some");
 
 async function parse(entryPoint) {
   const nodes = {
