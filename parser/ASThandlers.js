@@ -1,3 +1,5 @@
+const walk = require("babylon-walk");
+
 const config = {
   importIgnoreList: [
     "react-router",
