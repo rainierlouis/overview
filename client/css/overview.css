@@ -45,3 +45,8 @@ body {
   height: 50px;
   padding: 5px;
 }
+
+svg g g circle {
+  stroke-width: 3;
+  stroke: red;
+}

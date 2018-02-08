@@ -12,6 +12,8 @@ class Unfoldable {
       width = $("#graph").innerWidth() - margin.left - margin.right,
       height = $("#graph").innerHeight() - margin.top - margin.bottom;
 
+    this.width = width;
+
     this.svg = d3v4
       .select("#graph")
       .append("svg")
@@ -51,22 +53,23 @@ class Unfoldable {
     return transChildren("root");
   }
 
-  traverse(node, func) {
+  traverse(func, node) {
+    if (!node) node = this.root;
     let funcSaysStopRecursing = func(node) === false;
     let nodeHasChildrenArray = node["children"] && Array.isArray(node.children);
     if (!funcSaysStopRecursing && nodeHasChildrenArray)
-      node.children.forEach(node => this.traverse(node, func));
+      node.children.forEach(node => this.traverse(func, node));
   }
 
   unfoldToLevel(root, toLevel) {
-    this.traverse(root, node => {
+    this.traverse(node => {
       if (node.depth <= toLevel && node.children) {
         return true;
       } else {
         this.collapse(node);
         return false;
       }
-    });
+    }, root);
   }
 
   collapse(node) {
@@ -75,6 +78,9 @@ class Unfoldable {
   }
 
   update(source, root) {
+    if (!source) source = this.root;
+    if (!root) root = this.root;
+
     let i = 0;
     let duration = 500;
 
@@ -85,8 +91,10 @@ class Unfoldable {
     let nodes = tree.descendants();
     let links = tree.descendants().slice(1);
 
+    let maxLevel = nodes[0].height;
+    let levelDistance = this.width / maxLevel;
     // Normalize for fixed-depth
-    nodes.forEach(d => (d.y = d.depth * 180));
+    nodes.forEach(d => (d.y = d.depth * levelDistance)); // 180
 
     // ****************** Nodes section ***************************
 
@@ -113,9 +121,14 @@ class Unfoldable {
     // Add labels for the nodes
     nodeEnter
       .append("text")
-      .attr("dy", ".35em")
+      .attr("dy", d => {
+        return d.depth === 0 ? "-1.5em" : ".35em";
+      })
       .attr("x", d => (d.children || d._children ? -13 : 13))
-      .attr("text-anchor", d => (d.children || d._children ? "end" : "start"))
+      .attr("text-anchor", d => {
+        if (d.depth === 0) return "middle";
+        return d.children || d._children ? "end" : "start";
+      })
       .text(d => d.data.name);
 
     // UPDATE
@@ -132,10 +145,15 @@ class Unfoldable {
       .select("circle.node")
       .attr("r", 10)
       .style("fill", d => {
-        if (d.highlight) return "#ea762d";
+        if (d.highlight) return "#c14343";
         return d._children ? "lightsteelblue" : "#fff";
       })
       .attr("cursor", "pointer");
+    // .attr("class", function(d) {
+    //   return d["highlight"] && d.highlight === 1
+    //     ? "highlighted"
+    //     : null;
+    // })
 
     // Remove any exiting nodes
     let nodeExit = node
