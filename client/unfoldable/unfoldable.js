@@ -117,9 +117,14 @@ class Unfoldable {
     // Add labels for the nodes
     nodeEnter
       .append("text")
-      .attr("dy", ".35em")
+      .attr("dy", d => {
+        return d.depth === 0 ? "-1.5em" : ".35em";
+      })
       .attr("x", d => (d.children || d._children ? -13 : 13))
-      .attr("text-anchor", d => (d.children || d._children ? "end" : "start"))
+      .attr("text-anchor", d => {
+        if (d.depth === 0) return "middle";
+        return d.children || d._children ? "end" : "start";
+      })
       .text(d => d.data.name);
 
     // UPDATE
