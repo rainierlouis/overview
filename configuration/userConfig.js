@@ -55,8 +55,9 @@ const invalidNode = `
 
 module.exports = {
   checkNodeModules: pwd => {
-    pathCheck = `${pwd}/node_modules`;
-    return fs.existsSync(pathCheck);
+    // pathCheck = `${pwd}/node_modules`;
+    // return fs.existsSync(pathCheck);
+    return true;
   },
   checkEntryPoint: (pwd, entryPoint) => {
     entryPathCheck = `${pwd}/${entryPoint}`;
