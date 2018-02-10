@@ -38,13 +38,13 @@ overview src/index.js
 This will build the config file and begin the visualization. Once complete, the visual file will open in your default browser. Click the menu and choose a view.
 
 Unfoldable tree view
-![Unfoldable tree view](./assets/Overflow tree view 09.02.18.jpg)
+![Unfoldable tree view](https://github.com/rainierlouis/overview/blob/development/assets/Overflow_tree_view_09.02.18.jpg)
 
 Radial view
-![Radial view](./assets/Overflow radial view 09.02.18.jpg)
+![Radial view](https://github.com/rainierlouis/overview/blob/development/assets/Overflow_radial_view_09.02.18.jpg)
 
 Hover to track connections
-![Hover to track connections](./assets/Overflow radial detail 09.02.18.jpg)
+![Hover to track connections](https://github.com/rainierlouis/overview/blob/development/assets/Overflow_radial_detail_09.02.18.jpg)
 
 Alternatively, you can go to `YourAppDirectory/visual/overview.html`.
 
