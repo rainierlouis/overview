@@ -30,8 +30,8 @@ class Unfoldable {
     this.root.x0 = height / 2;
     this.root.y0 = 0;
 
-    this.unfoldToLevel(this.root, 3);
     this.update(this.root, this.root);
+    this.unfoldToLevel(this.root, 3);
   }
 
   prepareData(data) {
@@ -61,15 +61,26 @@ class Unfoldable {
       node.children.forEach(node => this.traverse(func, node));
   }
 
-  unfoldToLevel(root, toLevel) {
-    this.traverse(node => {
-      if (node.depth <= toLevel && node.children) {
-        return true;
-      } else {
-        this.collapse(node);
-        return false;
+  unfoldToLevel(intLevel) {
+    // this.traverse(node => {
+    //   if (node.depth <= toLevel && node.children) {
+    //     return true;
+    //   } else {
+    //     this.collapse(node);
+    //     return false;
+    //   }
+    // }, root);
+
+    let nodes = this.root.descendants();
+    nodes.forEach(node => {
+      var isHigh = node.depth > 2;
+      console.log(isHigh, node.data.name, node.depth);
+      if (node.children && isHigh) {
+        node._children = node.children.slice(0);
+        node.children = null;
       }
-    }, root);
+    });
+    this.update();
   }
 
   collapse(node) {
@@ -92,7 +103,7 @@ class Unfoldable {
     let links = tree.descendants().slice(1);
 
     let maxLevel = nodes[0].height;
-    let levelDistance = this.width / maxLevel;
+    let levelDistance = this.width / maxLevel - 20;
     // Normalize for fixed-depth
     nodes.forEach(d => (d.y = d.depth * levelDistance)); // 180
 
