@@ -7,8 +7,6 @@
 
 ![Overview](https://i.imgur.com/gyTe5kp.png)
 
-**NOTE: STILL WIP - Expected v1.0.0 release by 9th Feb 2018 - Thank you**
-
 An invaluable tool for developers who will be able to immediately see the layout of the application folder and how the files within connect with one another.
 
 ## Table of contents
@@ -37,7 +35,16 @@ overview index.js
 overview src/index.js
 ```
 
-This will build the config file and begin the visualization. Once complete, the visual file will open in your default browser.
+This will build the config file and begin the visualization. Once complete, the visual file will open in your default browser. Click the menu and choose a view.
+
+Unfoldable tree view
+![Unfoldable tree view](./assets/Overflow tree view 09.02.18.jpg)
+
+Radial view
+![Radial view](./assets/Overflow radial view 09.02.18.jpg)
+
+Hover to track connections
+![Hover to track connections](./assets/Overflow radial detail 09.02.18.jpg)
 
 Alternatively, you can go to `YourAppDirectory/visual/overview.html`.
 
